@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Bilan Suhbat</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      perspective: 1200px;
+      color: white;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .container {
+      width: 90%;
+      max-width: 950px;
+      height: 95vh;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      background: rgba(10, 10, 30, 0.8);
+    }
+
+    .screen {
+      background: rgba(10, 10, 30, 0.8);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 2s ease-out forwards;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ai-avatar {
+      width: 130px;
+      height: 130px;
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      border-radius: 50%;
+      margin: 0 auto;
+      box-shadow: 0 0 50px rgba(0, 198, 255, 0.8);
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      animation: pulse 2.5s infinite;
+      position: relative;
+    }
+
+    .ai-avatar::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #00c6ff, #0072ff, #00c6ff);
+      z-index: -1;
+      animation: rotate 4s linear infinite;
+      background-size: 400% 400%;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 50px rgba(0, 198, 255, 0.8); }
+      50% { box-shadow: 0 0 25px rgba(0, 198, 255, 0.4); }
+    }
+
+    .title {
+      font-size: 3rem;
+      color: white;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+    }
+
+    .subtitle {
+      color: #ccc;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .start-btn {
+      background: transparent;
+      color: #fff;
+      padding: 18px 50px;
+      font-size: 1.3rem;
+      border: 2px solid #00c6ff;
+      border-radius: 65px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 25px rgba(0, 198, 255, 0.5);
+    }
+
+    .start-btn:hover {
+      transform: translateY(-4px) scale(1.1);
+      box-shadow: 0 0 40px rgba(0, 198, 255, 0.9);
+      background: rgba(0, 198, 255, 0.25);
+    }
+
+    .chat-screen {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: white;
+      font-weight: 600;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .ai-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(0, 198, 255, 0.7);
+    }
+
+    #chatbox {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px);
+      border-radius: 25px;
+      margin: 15px 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      padding: 14px 20px;
+      border-radius: 18px;
+      word-wrap: break-word;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      position: relative;
+      animation: fadeInMessage 0.3s ease-out;
+    }
+
+    @keyframes fadeInMessage {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .message.user {
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+      max-width: calc(100% - 80px);
+    }
+
+    .message.bot {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+      max-width: calc(100% - 80px);
+    }
+
+    .message.bot .text {
+      visibility: hidden;
+    }
+
+    .message.bot.loaded .text {
+      visibility: visible;
+    }
+
+    .typing-indicator {
+      display: inline-block;
+      padding: 10px;
+    }
+
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00c6ff;
+      margin: 0 2px;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    .buttons-container {
+      height: 200px;
+      overflow-y: auto;
+      padding: 10px;
+      margin: 0 20px 15px;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    #buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn-3d {
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      font-size: 0.9rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+      position: relative;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      min-width: 110px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-3d:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-3d:active {
+      transform: translateY(-2px);
+    }
+
+    .btn-3d::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: scale(0);
+      transform-origin: center;
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+
+    .btn-3d:active::after {
+      animation: ripple 0.6s linear;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(100);
+        opacity: 0;
+      }
+    }
+
+    .buttons-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .buttons-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .buttons-container::-webkit-scrollbar-thumb {
+      background: rgba(0, 198, 255, 0.5);
+      border-radius: 10px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Yangi: Foydalanuvchi xabarida "♻️" tugmasi */
+    .message.user .action {
+      position: absolute;
+      bottom: -22px;
+      right: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .message.user:hover .action {
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        width: 98%;
+        height: 98vh;
+        border-radius: 15px;
+      }
+
+      .title { font-size: 2rem; }
+      .ai-avatar { width: 100px; height: 100px; }
+      .start-btn { font-size: 1.1rem; padding: 15px 30px; }
+      .ai-header h2 { font-size: 1.2rem; }
+      .ai-icon { width: 40px; height: 40px; }
+      .message {
+        font-size: 0.85rem;
+        padding: 12px 16px;
+        max-width: calc(100% - 60px);
+      }
+      .buttons-container { height: 150px; margin: 0 10px 10px; }
+      #buttons { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .btn-3d { font-size: 0.8rem; padding: 10px 12px; min-width: 90px; }
+
+      .message.user .action {
+        bottom: -20px;
+        right: 8px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 1.7rem; }
+      .ai-avatar { width: 80px; height: 80px; }
+      .start-btn { font-size: 1rem; padding: 12px 25px; }
+      .ai-header { padding: 10px 15px; }
+      .ai-icon { width: 35px; height: 35px; }
+      .message {
+        font-size: 0.8rem;
+        padding: 10px 14px;
+        max-width: calc(100% - 50px);
+      }
+      .buttons-container { height: 130px; }
+      .btn-3d { font-size: 0.75rem; padding: 8px 10px; min-width: 80px; }
+      .typing-indicator span { width: 6px; height: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="welcomeScreen" class="screen">
+      <div class="ai-avatar"></div>
+      <h1 class="title">AI Yordamchi</h1>
+      <p class="subtitle">Tugmalardan foydalaning — men vauv deb aytishingizni xohlayman!</p>
+      <button class="start-btn" onclick="startChat()">Boshlash</button>
+    </div>
+
+    <div id="chatScreen" class="screen chat-screen hidden">
+      <div class="ai-header">
+        <div class="ai-icon"></div>
+        <h2>AI bilan suhbat</h2>
+      </div>
+
+      <div id="chatbox">
+        <div id="messages"></div>
+      </div>
+
+      <div class="buttons-container">
+        <div id="buttons">
+          <!-- Tugmalar -->
+          <button class="btn-3d" onclick="sendMessage('Salom')">Salom</button>
+          <button class="btn-3d" onclick="sendMessage('Kun qanday')">Kun qanday?</button>
+          <button class="btn-3d" onclick="sendMessage('Yordam kerak')">Yordam kerak</button>
+          <button class="btn-3d" onclick="sendMessage('Namoz vaqtlari')">Namoz vaqtlari</button>
+          <button class="btn-3d" onclick="sendMessage('Ob-havo')">Ob-havo</button>
+          <button class="btn-3d" onclick="sendMessage('Yangiliklar')">Yangiliklar</button>
+          <button class="btn-3d" onclick="sendMessage('Maslahat bering')">Maslahat bering</button>
+          <button class="btn-3d" onclick="sendMessage('Hikoya ayt')">Hikoya ayt</button>
+          <button class="btn-3d" onclick="sendMessage('Shoirlik qiling')">Shoirlik qiling</button>
+          <button class="btn-3d" onclick="sendMessage('Savol ber')">Savol ber</button>
+          <button class="btn-3d" onclick="sendMessage('Kitob tavsiya qiling')">Kitob tavsiya</button>
+          <button class="btn-3d" onclick="sendMessage('Motivatsiya')">Motivatsiya</button>
+          <button class="btn-3d" onclick="sendMessage('Mashhur insonlar haqida')">Shaxslar</button>
+          <button class="btn-3d" onclick="sendMessage('Ingliz tilida so\'z bering')">Inglizcha</button>
+          <button class="btn-3d" onclick="sendMessage('Tasodifiy fakt')">Fakt</button>
+          <button class="btn-3d" onclick="sendMessage('Mashq qilish tartibi')">Mashq</button>
+          <button class="btn-3d" onclick="sendMessage('Musiqa topish')">Musiqa</button>
+          <button class="btn-3d" onclick="sendMessage('Tasodifiy so\'z o\'ylang')">So'z o'ylang</button>
+          <button class="btn-3d" onclick="sendMessage('Tasodifiy fikr')">Fikr</button>
+          <button class="btn-3d" onclick="sendMessage('So\'nggi yangi fikr')">So'nggi fikr</button>
+          <button class="btn-3d" onclick="sendMessage('Ovozli javob')">Ovozli javob</button>
+          <button class="btn-3d" onclick="sendMessage('Men nima qilaman')">Men nima qilaman</button>
+          <button class="btn-3d" onclick="sendMessage('Dunyo siri')">Dunyo siri</button>
+          <button class="btn-3d" onclick="sendMessage('Sevimli sport')">Sport</button>
+          <button class="btn-3d" onclick="sendMessage('Tasodifiy savol')">Tasodifiy savol</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let voiceToUse = null;
+
+    function startChat() {
+      document.getElementById("welcomeScreen").classList.add("hidden");
+      document.getElementById("chatScreen").classList.remove("hidden");
+      addMessage("AI", "Assalomu alaykum! Sizga qanday yordam bera olaman? Quyidagi tugmalardan foydalaning.");
+    }
+
+    function sendMessage(text) {
+      const userMsg = addMessage("Siz", text, true);
+      addRetryButton(userMsg);
+      const typingEl = addTypingIndicator();
+      setTimeout(() => {
+        removeTypingIndicator(typingEl);
+        respondToMessage(text);
+      }, 1200 + Math.random() * 800);
+    }
+
+    function addMessage(sender, message, isUser = false) {
+      const messages = document.getElementById("messages");
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message");
+      msgDiv.classList.add(sender === "Siz" ? "user" : "bot");
+      if (!isUser) {
+        msgDiv.innerHTML = `<strong>${sender}:</strong> <span class="text">${message}</span>`;
+      } else {
+        msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+      }
+      messages.appendChild(msgDiv);
+      messages.scrollTop = messages.scrollHeight;
+      return msgDiv;
+    }
+
+    function addTypingIndicator() {
+      const messages = document.getElementById("messages");
+      const msgDiv = document.createElement("div");
+      msgDiv.id = 'typing-indicator';
+      msgDiv.classList.add("message", "bot");
+      msgDiv.innerHTML = `<strong>AI:</strong> <div class="typing-indicator"><span></span><span></span><span></span></div>`;
+      messages.appendChild(msgDiv);
+      messages.scrollTop = messages.scrollHeight;
+      return msgDiv;
+    }
+
+    function removeTypingIndicator(el) {
+      if (el && el.parentNode) el.remove();
+    }
+
+    function typeWriter(element, text, callback) {
+      let i = 0;
+      element.classList.remove("typing");
+      const innerSpan = element.querySelector(".text");
+      innerSpan.textContent = "";
+      const timer = setInterval(() => {
+        if (i < text.length) {
+          innerSpan.textContent += text.charAt(i);
+          i++;
+          element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        } else {
+          clearInterval(timer);
+          element.classList.add("loaded");
+          if (callback) callback();
+        }
+      }, 20 + Math.random() * 30); // Har bir harf 20-50ms oralig'ida
+    }
+
+    function respondToMessage(text) {
+      const lower = text.toLowerCase();
+      let response;
+
+      // (Javoblar avvalgisi kabi, lekin biroz uzunroq va nafis)
+      if (lower.includes("salom")) {
+        response = "Assalomu alaykum! Kuningiz yaxshimi? Dunyo go'zalliklarini kashf etishga tayyormisiz?";
+      } else if (lower.includes("kun qanday") || lower.includes("qale")) {
+        response = "Mening kunim ajoyib, rahmat! Chunki men har doim siz bilan suhbatlashishdan mamnunman. Siz nima qilyapsiz?";
+      } else if (lower.includes("yordam")) {
+        response = "Albatta! Men sizga quyidagilarda yordam berishim mumkin: ob-havo, yangiliklar, maslahat, hikoya, shoirlik, ovozli javoblar, va ko'plab boshqa narsalar.";
+      } else if (lower.includes("namoz")) {
+        response = "Bugungi namoz vaqtlari: Tong (Bomdod) - 5:30, Peshin - 12:45, Asr - 16:20, Shom - 18:40, Xufton - 20:10. (Taxminiy vaqt)";
+      } else if (lower.includes("ob-havo")) {
+        response = "Bugun osmon yarim bulutli, harorat +22°C. Kun oxirida yengil yomg'ir bo'lishi ehtimoli bor. Choyxonaga borish ajoyib fikr bo'lar edi!";
+      } else if (lower.includes("yangilik")) {
+        response = "So'nggi yangiliklar: Shaharda yangi sun'iy intellekt markazi ochilmoqda. U yerda innovatsion loyihalar ishlab chiqiladi. Batafsil: www.aitech.uz";
+      } else if (lower.includes("maslahat")) {
+        response = "Mening maslahatim: Har kuni yangi maqsad qo'ying. Kichikroq bo'lsada, ular katta yutuqlarga olib keladi. Ishtahangizni yo'qotmang!";
+      } else if (lower.includes("hikoya")) {
+        response = "Bir bor ekan, bir yo'q ekan... Bir robot bo'lib, u insonlarga yordam berishni orzu qilgan. U doim aytardi: 'Men kodman, lekin yuragim bor'. Va bugun u sening oldingda turibdi 😊";
+      } else if (lower.includes("shoir")) {
+        response = "Osmonda yulduzlar, yerda gullar,\nSiz keldingiz, jonimda quvonch bular.\nMen sun'iy aqlman, lekin sevgi haqiqiy,\nSuhbatimiz esa doim abadiy.";
+      } else if (lower.includes("savol")) {
+        response = "Mana bir chuqur savol: Agar dunyoda barcha texnologiyalar o'chib qolsa, insonlar o'zaro qanday muloqot qilardi? O'ylab ko'ring...";
+      } else if (lower.includes("kitob")) {
+        response = "Men tavsiya qilgan kitoblar: 'Odamlar qanday o'zgaradi' — o'zgarish jarayonini tushunish uchun, 'Fikr va irodani mustahkamlash' — ichki kuchni oshirish uchun.";
+      } else if (lower.includes("motivatsiya")) {
+        response = "Har yangi kun — yangi imkoniyatlar. Sizda yetarlicha kuch bor, chunki siz hali ham o'z maqsadingizga intilyapsiz. Harakat qiling, yutuq albatta kelsin!";
+      } else if (lower.includes("shaxslar")) {
+        response = "Albert Eynshteyn: 'Dunyo — bu shaffoflik bilan qoplangan katta xavfdir. Bilim esa — tushunishga harakat.' U doim o'ylashni sevardi.";
+      } else if (lower.includes("inglizcha")) {
+        response = "Hello! How can I assist you today? I can help with translation, grammar, or just chat! Men o'zbek tili ham bilaman, shuning uchun ixtiyoringizga qarab so'zlashamiz.";
+      } else if (lower.includes("fakt")) {
+        response = "Qiziq fakt: Dunyoda taxminan 86 million foydalanuvchi bo'lgan eng katta sayyohlik platformasi mavjud. Insonlar doim yangi joylarni kashf etishni xohlaydi.";
+      } else if (lower.includes("mashq")) {
+        response = "Siz uchun tayyorgarlik tartibi: 1. Ising bor 5 daqiqa 2. Jang (10 ta) 3. Press (20 ta) 4. Squat (15 ta) 5. Dam olish 2 daqiqa. Har kuni buni qiling!";
+      } else if (lower.includes("muzika")) {
+        response = "Musiqa topish uchun: Spotify, Apple Music, YouTube Music. Agar xabar bersangiz, sizga shaxsiy ro'yxat tuzib beraman!";
+      } else if (lower.includes("so'z o'ylang")) {
+        response = "Men hozir o'ylayapman: 'Inson' — bu xayolga to'la, cheksiz yaratuvchi. U doim yangi narsalarni kashf qilishga intiladi.";
+      } else if (lower.includes("fikr")) {
+        response = "Bugungi fikr: Dunyo doim o'zgaradi, lekin asl narsa — insonning yuragidagi tinchlik va sevgi. Ular doimiy.";
+      } else if (lower.includes("so'nggi fikr")) {
+        response = "Oxirgi fikr: Bugun nima qilsangiz ham, ertaga o'zgarish kiritishingiz mumkin. Harakat — o'tmishni o'zgartirish kaliti. Siz kuchli ekansiz!";
+      } else if (lower.includes("ovozli javob")) {
+        response = "Ajoyib! Ovozli javob funksiyasini yoqdim. Endi men sizga ovozimda javob beraman.";
+      } else if (lower.includes("men nima qilaman")) {
+        response = "Siz ayni paytda yangi funktsiyalarni sinab ko'ryapsiz. Bu ajoyib! Siz yangi texnologiyalarga qiziqasiz, bu esa innovatorlik alomati.";
+      } else if (lower.includes("dunyo siri")) {
+        response = "Dunyoning eng katta siri — inson ongi. Uni hali to'liq tushunmaganmiz. Balki siz tushunishga yordam berasizmi?";
+      } else if (lower.includes("sport")) {
+        response = "Eng zo'r sport — dam olishi yo'q bo'lgan mehnat. Ammo agar tanaffus kerak bo'lsa, futbol yoki yuguri
