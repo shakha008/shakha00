@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elektron kitobni o'qib beruvchi — O'zbekiston tarixi</title>
+  <style>
+    /* O'zbekiston ranglari: ko'k (#1a73e8), qizil (#d32f2f), oq (#ffffff), qora (#111) */
+    :root {
+      --primary: #1a73e8;
+      --secondary: #d32f2f;
+      --light: #f9f9f9;
+      --dark: #111;
+      --accent: #fff3b0;
+      --text: #222;
+      --card-bg: #ffffff;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --border-radius: 16px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--light);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M20,20 L80,20 L80,80 L20,80 Z" fill="none" stroke="%23e0e0e0" stroke-width="0.5"/><path d="M30,30 L70,30 L70,70 L30,70 Z" fill="none" stroke="%23e0e0e0" stroke-width="0.5"/><path d="M40,40 L60,40 L60,60 L40,60 Z" fill="none" stroke="%23e0e0e0" stroke-width="0.5"/></svg>');
+      background-size: 200px;
+      transition: background-color 0.4s ease;
+    }
+
+    body.dark-mode {
+      background: #111;
+      color: #f0f0f0;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 20px 0 15px;
+      color: var(--primary);
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--secondary);
+      border-radius: 3px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    .container {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin: 20px auto;
+      max-width: 1000px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 120px;
+      height: 120px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%231a73e8" stroke-width="1" opacity="0.1"/></svg>') no-repeat;
+      opacity: 0.3;
+    }
+
+    .container::after {
+      content: '';
+      position: absolute;
+      bottom: -50px;
+      left: -50px;
+      width: 120px;
+      height: 120px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,20 L80,20 L80,80 L20,80 Z" fill="none" stroke="%23d32f2f" stroke-width="1" opacity="0.1"/></svg>') no-repeat;
+      opacity: 0.3;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+      padding: 18px;
+      background: rgba(26, 115, 232, 0.05);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(26, 115, 232, 0.1);
+      backdrop-filter: blur(8px);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 1 1 200px;
+    }
+
+    label {
+      font-size: 15px;
+      color: var(--text);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    body.dark-mode label {
+      color: #ccc;
+    }
+
+    button {
+      padding: 12px 20px;
+      border-radius: var(--border-radius);
+      border: none;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+      position: relative;
+      overflow: hidden;
+      min-width: 140px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(26, 115, 232, 0.4);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    input, select {
+      padding: 12px 16px;
+      border-radius: var(--border-radius);
+      border: 1px solid #ddd;
+      background: white;
+      font-size: 15px;
+      color: var(--text);
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    body.dark-mode input, body.dark-mode select {
+      background: #333;
+      color: #fff;
+      border-color: #555;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+    }
+
+    input[type="range"] {
+      width: 100px;
+      height: 6px;
+      border-radius: 10px;
+      background: #e0e0e0;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .small {
+      font-size: 15px;
+      color: #555;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    body.dark-mode .small {
+      color: #ccc;
+    }
+
+    #textArea {
+      width: 100%;
+      height: 420px;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      border: 1px solid #ddd;
+      overflow: auto;
+      white-space: pre-wrap;
+      background: var(--card-bg);
+      font-size: 17px;
+      line-height: 1.9;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      font-family: 'Segoe UI', 'Times New Roman', serif;
+      position: relative;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+      resize: none;
+    }
+
+    body.dark-mode #textArea {
+      background: #222;
+      color: #f0f0f0;
+      border-color: #555;
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+    }
+
+    .highlight {
+      background: var(--accent);
+      padding: 3px 6px;
+      border-radius: 6px;
+      border-left: 4px solid var(--secondary);
+      animation: highlightPulse 1.5s infinite alternate;
+      display: inline-block;
+      margin: 0 -3px;
+    }
+
+    @keyframes highlightPulse {
+      from { opacity: 0.8; transform: scale(1); }
+      to { opacity: 1; transform: scale(1.02); }
+    }
+
+    .status {
+      margin: 12px 0;
+      font-size: 16px;
+      color: #555;
+      text-align: center;
+      font-weight: 500;
+      padding: 10px;
+      border-radius: var(--border-radius);
+      background: rgba(26, 115, 232, 0.08);
+      border: 1px solid rgba(26, 115, 232, 0.1);
+    }
+
+    body.dark-mode .status {
+      background: rgba(26, 115, 232, 0.1);
+      border-color: rgba(26, 115, 232, 0.2);
+      color: #d0e7ff;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      border-top: 1px solid #eee;
+    }
+
+    body.dark-mode footer {
+      color: #888;
+      border-color: #444;
+    }
+
+    .progress-container {
+      margin: 16px 0;
+      background: #e0e0e0;
+      border-radius: 10px;
+      height: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(26, 115, 232, 0.5);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #666;
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(26, 115, 232, 0.05);
+      border-radius: var(--border-radius);
+    }
+
+    body.dark-mode .stats {
+      background: rgba(26, 115, 232, 0.1);
+      color: #d0e7ff;
+    }
+
+    .history-btns, .test-section, .pagination, .search-section, .book-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+      padding: 16px;
+      background: rgba(26, 115, 232, 0.05);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(26, 115, 232, 0.1);
+    }
+
+    body.dark-mode .history-btns, body.dark-mode .test-section, body.dark-mode .pagination, body.dark-mode .search-section, body.dark-mode .book-list {
+      background: rgba(26, 115, 232, 0.1);
+      border-color: rgba(26, 115, 232, 0.2);
+    }
+
+    .history-btns button, .test-section button, .pagination button, .book-list button {
+      font-size: 13px;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    body.dark-mode .history-btns button, body.dark-mode .test-section button, body.dark-mode .pagination button, body.dark-mode .book-list button {
+      background: rgba(255,255,255,0.1);
+      border-color: #555;
+      color: #f0f0f0;
+    }
+
+    .history-btns button:hover, .test-section button:hover, .pagination button:hover, .book-list button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .search-section input {
+      flex: 1;
+      max-width: 220px;
+      padding: 12px 16px;
+    }
+
+    .test-section {
+      margin-top: 24px;
+      padding: 20px;
+      background: rgba(211, 47, 47, 0.05);
+      border-left: 4px solid var(--secondary);
+      border-radius: var(--border-radius);
+    }
+
+    body.dark-mode .test-section {
+      background: rgba(211, 47, 47, 0.1);
+      border-left-color: var(--secondary);
+    }
+
+    .test-section h3 {
+      margin: 0 0 12px 0;
+      color: var(--secondary);
+      font-weight: 600;
+      padding-left: 10px;
+      border-left: 4px solid var(--secondary);
+    }
+
+    .test-section label {
+      display: block;
+      margin: 8px 0;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.3s;
+      background: rgba(255,255,255,0.8);
+    }
+
+    .test-section label:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .bold-stress {
+      font-weight: bold;
+      color: #d35400;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 100;
+      transition: all 0.3s;
+    }
+
+    body.dark-mode .theme-toggle {
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1) rotate(10deg);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .book-list h3, .test-section h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: var(--primary);
+      border-bottom: 2px solid rgba(26, 115, 232, 0.2);
+      padding-bottom: 6px;
+    }
+
+    .container > *:not(.theme-toggle) {
+      opacity: 0;
+      animation-delay: 0.1s;
+    }
+
+    .container > *:nth-child(2) { animation-delay: 0.2s; }
+    .container > *:nth-child(3) { animation-delay: 0.3s; }
+    .container > *:nth-child(4) { animation-delay: 0.4s; }
+    .container > *:nth-child(5) { animation-delay: 0.5s; }
+    .container > *:nth-child(6) { animation-delay: 0.6s; }
+    .container > *:nth-child(7) { animation-delay: 0.7s; }
+    .container > *:nth-child(8) { animation-delay: 0.8s; }
+    .container > *:nth-child(9) { animation-delay: 0.9s; }
+    .container > *:nth-child(10) { animation-delay: 1.0s; }
+    .container > *:nth-child(11) { animation-delay: 1.1s; }
+    .container > *:nth-child(12) { animation-delay: 1.2s; }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+        margin: 12px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .controls, .history-btns, .test-section, .pagination, .search-section, .book-list {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      button {
+        width: 100%;
+        margin: 8px 0;
+      }
+
+      .row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .progress-container {
+        margin: 12px 0;
+      }
+
+      .stats {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+      }
+
+      #textArea {
+        height: 320px;
+        font-size: 16px;
+      }
+    }
+
+    /* O'zbek naqshlarini CSS bilan simulyatsiya qilish */
+    .container::before, .container::after {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background-repeat: no-repeat;
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    .container::before {
+      top: -50px;
+      right: -50px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,10 L90,10 L90,90 L10,90 Z M20,20 L80,20 L80,80 L20,80 Z M30,30 L70,30 L70,70 L30,70 Z" fill="none" stroke="%231a73e8" stroke-width="1"/></svg>');
+    }
+
+    .container::after {
+      bottom: -50px;
+      left: -50px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,10 L90,10 L90,90 L10,90 Z M20,20 L80,20 L80,80 L20,80 Z M30,30 L70,30 L70,70 L30,70 Z" fill="none" stroke="%23d32f2f" stroke-width="1"/></svg>');
+    }
+
+    /* O'qilayotgan matn "nur" efekti */
+    #textArea:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.2);
+    }
+
+    /* Animatsiya boshlanishi */
+    body.loaded .container > *:not(.theme-toggle) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle">🌙</button>
+
+  <div class="container">
+    <h1>Elektron kitobni ovozga o‘qib beruvchi — O‘zbekiston tarixi</h1>
+
+    <div class="controls fade-in">
+      <div class="row">
+        <label for="file">Fayl yuklash:</label>
+        <input id="file" type="file" accept=".txt,.pdf" />
+      </div>
+
+      <div class="row">
+        <label for="voiceSelect">Ovoz:</label>
+        <select id="voiceSelect"></select>
+      </div>
+
+      <div class="row">
+        <label for="rate">Tezlik:</label>
+        <input id="rate" type="range" min="0.5" max="2" step="0.1" value="1" />
+        <span id="rateVal" class="small">1.0x</span>
+      </div>
+
+      <div class="row">
+        <button id="playBtn">O‘qishni boshlash ▶</button>
+        <button id="pauseBtn" disabled>To‘xtatish ⏸</button>
+        <button id="resumeBtn" disabled>Davom ettirish ▶</button>
+        <button id="stopBtn" disabled>To‘xtatish ■</button>
+      </div>
+    </div>
+
+    <div class="controls search-section fade-in">
+      <input type="text" id="searchInput" placeholder="Matn ichidan qidirish (masalan: 'Amir Temur')">
+      <button id="searchBtn">Qidirish</button>
+    </div>
+
+    <div class="controls fade-in">
+      <button id="loadSample">Namuna matn yuklash</button>
+      <button id="readSelection">Tanlangan joyni o'qish</button>
+      <button id="clearBtn">Tozalash</button>
+      <button id="exportPDF">PDF sifatida saqlash</button>
+      <button id="exportAudio">Ovozni saqlash</button>
+      <button id="addBookmark">Sahifani saqlash</button>
+      <button id="shareQR">QR bilan ulashish</button>
+    </div>
+
+    <div class="controls pagination fade-in">
+      <button id="prevPage">◀ Oldingi</button>
+      <span id="pageInfo">Sahifa 1 / 1</span>
+      <button id="nextPage">Keyingi ▶</button>
+    </div>
+
+    <div class="book-list fade-in">
+      <h3>📚 Kitoblar ro'yxati:</h3>
+      <button id="book1">Amir Temur davri</button>
+      <button id="book2">Samanilar davlati</button>
+      <button id="book3">Mustaqillik tarixi</button>
+      <button id="book4">O'zbek madaniyati</button>
+    </div>
+
+    <div class="history-btns fade-in">
+      <button id="uzbHistory1">O'zbekiston tarixi - Asosiy ma'lumotlar</button>
+      <button id="uzbHistory2">Timurlar davri</button>
+      <button id="uzbHistory3">Amir Temur - shaxsiyati</button>
+      <button id="uzbHistory4">Xiva xonligi</button>
+      <button id="uzbHistory5">Buxoro amirligi</button>
+      <button id="uzbHistory6">Jaloliddin Manguberdi</button>
+      <button id="uzbHistory7">Samanilar davlati</button>
+      <button id="uzbHistory8">Qoraqalpog'iston tarixi</button>
+      <button id="uzbHistory9">Mustaqillik yo'lidagi kurash (1917–1924)</button>
+      <button id="uzbHistory10">Ikkinchi jahon urushida O'zbekiston</button>
+      <button id="uzbHistory11">Mustaqillik (1991-yildan hozirgacha)</button>
+      <button id="uzbHistory12">O'zbekiston madaniy merosi</button>
+    </div>
+
+    <div class="status fade-in" id="status">Matn yuklang yoki joylashtiring</div>
+
+    <div class="progress-container fade-in">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div id="textArea" contenteditable="true" aria-label="Matn maydoni" spellcheck="false">
+Bu yerda matn o'qiladi. Siz bu maydon ichidan .txt fayl yuklashingiz yoki matn joylashtirishingiz mumkin. O'qilayotgan gap sariq bilan belgilanadi.
+    </div>
+
+    <div class="stats fade-in">
+      <span id="sentenceCount">G'aplar: 0</span>
+      <span id="charCount">Belgilar: 0</span>
+      <span id="readingStats">O'qish: 0 so'z / 0 daqiqa</span>
+    </div>
+
+    <div class="test-section fade-in">
+      <h3>📚 Test: O'zbekiston tarixi</h3>
+      <p><strong>1. Amir Temur qaysi yilda tug'ilgan?</strong></p>
+      <label><input type="radio" name="q1" value="1336"> 1336</label>
+      <label><input type="radio" name="q1" value="1338"> 1338</label>
+      <label><input type="radio" name="q1" value="1340"> 1340</label>
+      <button id="checkTest1">Tekshirish</button>
+
+      <p><strong>2. Samonilar davlati qaysi yilda tashkil topgan?</strong></p>
+      <label><input type="radio" name="q2" value="875"> 875</label>
+      <label><input type="radio" name="q2" value="900"> 900</label>
+      <label><input type="radio" name="q2" value="950"> 950</label>
+      <button id="checkTest2">Tekshirish</button>
+
+      <p><strong>3. O'zbekiston Respublikasi qanday kuni mustaqillikka erishgan?</strong></p>
+      <label><input type="radio" name="q3" value="31-avgust"> 31-avgust</label>
+      <label><input type="radio" name="q3" value="1-sentabr"> 1-sentabr</label>
+      <label><input type="radio" name="q3" value="9-may"> 9-may</label>
+      <button id="checkTest3">Tekshirish</button>
+
+      <p><strong>4. Ulug‘bek qanday sohada ilmiy faoliyat olib borgan?</strong></p>
+      <label><input type="radio" name="q4" value="astronomiya"> astronomiya</label>
+      <label><input type="radio" name="q4" value="tibbiyot"> tibbiyot</label>
+      <label><input type="radio" name="q4" value="musiqa"> musiqa</label>
+      <button id="checkTest4">Tekshirish</button>
+
+      <p><strong>5. O'zbekiston SSR qachon tashkil etilgan?</strong></p>
+      <label><input type="radio" name="q5" value="1924"> 1924</label>
+      <label><input type="radio" name="q5" value="1936"> 1936</label>
+      <la
