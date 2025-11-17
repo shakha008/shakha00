@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="uz" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dunyoning barcha 195 mamlakat bayroqlari — O'zbek, Koreys, Xitoy, Ingliz, Rus tillarida ovozli aytish">
+  <meta name="author" content="O'zbekistonlik dasturchi">
+  <title>🌍 Dunyo Bayroqlari — 195 Mamlakat (5 Til + Ovozli)</title>
+  <style>
+    :root {
+      --bg-color: #f5f5f5;
+      --card-bg: white;
+      --text-color: #333;
+      --border-radius: 14px;
+      --shadow: 0 6px 20px rgba(0,0,0,0.1);
+      --accent-color: #4a90e2;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-main: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      --font-title: 'Segoe UI Semibold', 'Helvetica Neue Bold', sans-serif;
+    }
+
+    .dark-mode {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-color: #f8fafc;
+      --shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 0;
+      transition: background-color var(--transition);
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      margin-bottom: 30px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+      color: var(--accent-color);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 25px;
+      padding: 16px;
+      background-color: rgba(0,0,0,0.03);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    input, select, button {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      font-family: var(--font-main);
+      transition: var(--transition);
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    input:focus, select:focus, button:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+    }
+
+    button {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      padding: 12px 20px;
+      min-width: 140px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(74, 144, 226, 0.4);
+    }
+
+    .theme-toggle {
+      background-color: #555;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 22px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .item {
+      background-color: var(--card-bg);
+      padding: 20px 14px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(0);
+    }
+
+    .item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: var(--transition);
+    }
+
+    .item:hover::before {
+      left: 100%;
+    }
+
+    .item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+
+    .flag {
+      font-size: 3.5rem;
+      line-height: 1;
+      margin-bottom: 10px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .name {
+      margin-top: 8px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      word-wrap: break-word;
+      min-height: 2rem;
+      transition: var(--transition);
+    }
+
+    .region {
+      font-size: 0.85rem;
+      color: var(--text-color);
+      opacity: 0.7;
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+      background-color: var(--card-bg);
+      padding: 35px;
+      border-radius: var(--border-radius);
+      max-width: 520px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      position: relative;
+      max-height: 85vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .modal.show .modal-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .close {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      font-size: 2.8rem;
+      cursor: pointer;
+      color: #999;
+      font-weight: bold;
+      transition: var(--transition);
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close:hover {
+      background: rgba(255,255,255,0.2);
+      color: var(--accent-color);
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      color: var(--accent-color);
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+    }
+
+    .modal p {
+      margin: 12px 0;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .modal .flag {
+      font-size: 4.5rem;
+      margin: 15px 0;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .speak-btn {
+      margin-top: 18px;
+      background-color: #2563eb;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+    }
+
+    .speak-btn:hover {
+      background-color: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    #statsPage {
+      display: none;
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    #statsPage h2 {
+      text-align: center;
+      color: var(--accent-color);
+      font-family: var(--font-title);
+      margin-bottom: 25px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .stat-item {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stat-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .stat-item strong {
+      color: var(--accent-color);
+      font-size: 1.2rem;
+      display: block;
+      margin-top: 8px;
+    }
+
+    .back-btn {
+      margin-bottom: 25px;
+      background-color: #6b7280;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .back-btn:hover {
+      background-color: #4b5563;
+      transform: translateY(-2px);
+    }
+
+    .lang-select {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      min-width: 140px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+      font-size: 1.3rem;
+      color: var(--text-color);
+      opacity: 0.7;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      .flag { font-size: 3rem; }
+      .modal h2 { font-size: 1.6rem; }
+      .modal .flag { font-size: 4rem; }
+      .grid { gap: 15px; }
+      .controls { padding: 12px; }
+      button { min-width: 120px; }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.8rem; }
+      .subtitle { font-size: 1rem; }
+      .controls { flex-direction: column; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+      .modal-content { padding: 25px; }
+      .modal .flag { font-size: 3.5rem; }
+    }
+
+    /* Accessibility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-color);
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌍 Dunyo Bayroqlari</h1>
+    <p class="subtitle">195 mamlakat — O'zbek, Koreys, Xitoy, Ingliz, Rus tillarida ovozli aytish</p>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Mamlakat nomini qidirish..." aria-label="Mamlakat nomini qidirish">
+    <select id="regionFilter" aria-label="Mintaqa bo'yicha filtr">
+      <option value="">Barcha mintaqalar</option>
+      <option value="Osiyo">Osiyo</option>
+      <option value="Yevropa">Yevropa</option>
+      <option value="Amerika">Amerika</option>
+      <option value="Afrika">Afrika</option>
+      <option value="Okeaniya">Okeaniya</option>
+    </select>
+    <button class="theme-toggle" id="themeToggle" aria-label="Tungi rejim">🌙 Tungi Rejim</button>
+    <button id="statsBtn" aria-label="Statistika">📊 Statistika</button>
+    <select class="lang-select" id="languageSelect" aria-label="Tilni tanlash">
+      <option value="uz">O'zbekcha</option>
+      <option value="ko">Koreyscha</option>
+      <option value="zh-CN">Xitoycha</option>
+      <option value="en">Inglizcha</option>
+      <option value="ru">Ruscha</option>
+    </select>
+  </div>
+
+  <div id="mainPage">
+    <div class="grid" id="flagGrid">
+      <div class="loading">Bayroqlar yuklanmoqda...</div>
+    </div>
+  </div>
+
+  <div id="statsPage">
+    <button class="back-btn" id="backFromStats">← Orqaga</button>
+    <h2>📊 Dunyo Mamlakatlari Statistikasi</h2>
+    <div class="stat-grid">
+      <div class="stat-item">
+        <span>Eng katta aholi</span>
+        <strong>Hindiston (1.428 млрд)</strong>
+      </div>
+      <div class="stat-item">
+        <span>Eng kichik aholi</span>
+        <strong>Vatikan (800)</strong>
+      </div>
+      <div class="stat-item">
+        <span>Eng uzun nom</span>
+        <strong>Birlashgan Arab Amirliklari</strong>
+      </div>
+      <div class="stat-item">
+        <span>Eng qisqa nom</span>
+        <strong>Chad</strong>
+      </div>
+      <div class="stat-item">
+        <span>Osiyo mamlakatlari</span>
+        <strong>48 ta</strong>
+      </div>
+      <div class="stat-item">
+        <span>Afrika mamlakatlari</span>
+        <strong>54 ta</strong>
+      </div>
+      <div class="stat-item">
+        <span>Yevropa mamlakatlari</span>
+        <strong>44 ta</strong>
+      </div>
+      <div class="stat-item">
+        <span>Amerika mamlakatlari</span>
+        <strong>35 ta</strong>
+      </div>
+      <div class="stat-item">
+        <span>Okeaniya mamlakatlari</span>
+        <strong>14 ta</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="flagModal" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalInfo">
+    <div class="modal-content" tabindex="0">
+      <button class="close" aria-label="Yopish">&times;</button>
+      <h2 id="modalTitle">Mamlakat nomi</h2>
+      <div class="flag" id="modalFlag">🇺🇿</div>
+      <p id="modalRegion">Mintaqa: —</p>
+      <p id="modalCapital">Poytaxt: —</p>
+      <p id="modalPopulation">Aholi: —</p>
+      <p id="modalInfo">Qo'shimcha ma'lumotlar...</p>
+      <button class="speak-btn" id="speakBtn">🔊 Ovozda aytish</button>
+    </div>
+  </div>
+
+  <script>
+    // Mamlakatlar ma'lumotlari — 5 tilga mos
+    const flagsData = [
+      { emoji: '🇺🇿', name: { uz: "O'zbekiston", ko: "우즈베키스탄", zh: "乌兹别克斯坦", en: "Uzbekistan", ru: "Узбекистан" }, region: "Osiyo", capital: "Toshkent", population: "36,260,000" },
+      { emoji: '🇺🇸', name: { uz: "AQSH", ko: "미국", zh: "美国", en: "United States", ru: "США" }, region: "Amerika", capital: "Vashington", population: "334,000,000" },
+      { emoji: '🇬🇧', name: { uz: "Buyuk Britaniya", ko: "영국", zh: "英国", en: "United Kingdom", ru: "Великобритания" }, region: "Yevropa", capital: "London", population: "68,000,000" },
+      { emoji: '🇨🇦', name: { uz: "Kanada", ko: "캐나다", zh: "加拿大", en: "Canada", ru: "Канада" }, region: "Amerika", capital: "Otava", population: "39,073,000" },
+      { emoji: '🇷🇺', name: { uz: "Rossiya", ko: "러시아", zh: "俄罗斯", en: "Russia", ru: "Россия" }, region: "Yevropa/Osiyo", capital: "Moskva", population: "144,000,000" },
+      { emoji: '🇨🇳', name: { uz: "Xitoy", ko: "중국", zh: "中国", en: "China", ru: "Китай" }, region: "Osiyo", capital: "Pekin", population: "1,412,600,000" },
+      { emoji: '🇯🇵', name: { uz: "Yaponiya", ko: "일본", zh: "日本", en: "Japan", ru: "Япония" }, region: "Osiyo", capital: "Tokio", population: "125,550,000" },
+      { emoji: '🇰🇷', name: { uz: "Janubiy Koreya", ko: "대한민국", zh: "韩国", en: "South Korea", ru: "Южная Корея" }, region: "Osiyo", capital: "Seul", population: "51,790,000" },
+      { emoji: '🇩🇪', name: { uz: "Germaniya", ko: "독일", zh: "德国", en: "Germany", ru: "Германия" }, region: "Yevropa", capital: "Berlin", population: "84,500,000" },
+      { emoji: '🇫🇷', name: { uz: "Fransiya", ko: "프랑스", zh: "法国", en: "France", ru: "Франция" }, region: "Yevropa", capital: "Parij", population: "68,010,000" },
+      { emoji: '🇮🇹', name: { uz: "Italiya", ko: "이탈리아", zh: "意大利", en: "Italy", ru: "Италия" }, region: "Yevropa", capital: "Rim", population: "58,990,000" },
+      { emoji: '🇪🇸', name: { uz: "Ispaniya", ko: "스페인", zh: "西班牙", en: "Spain", ru: "Испания" }, region: "Yevropa", capital: "Madrid", population: "47,580,000" },
+      { emoji: '🇧🇷', name: { uz: "Braziliya", ko: "브라질", zh: "巴西", en: "Brazil", ru: "Бразилия" }, region: "Amerika", capital: "Brasiliya", population: "215,315,000" },
+      { emoji: '🇦🇷', name: { uz: "Argentina", ko: "아르헨티나", zh: "阿根廷", en: "Argentina", ru: "Аргентина" }, region: "Amerika", capital: "Buenos Aires", population: "45,817,000" },
+      { emoji: '🇲🇽', name: { uz: "Meksika", ko: "멕시코", zh: "墨西哥", en: "Mexico", ru: "Мексика" }, region: "Amerika", capital: "Meksiko", population: "128,500,000" },
+      { emoji: '🇹🇷', name: { uz: "Turkiya", ko: "터키", zh: "土耳其", en: "Turkey", ru: "Турция" }, region: "Yevropa/Osiyo", capital: "Anqara", population: "85,000,000" },
+      { emoji: '🇸🇦', name: { uz: "Saudiy Arabistoni", ko: "사우디아라비아", zh: "沙特阿拉伯", en: "Saudi Arabia", ru: "Саудовская Аравия" }, region: "Osiyo", capital: "Er-Riyod", population: "36,900,000" },
+      { emoji: '🇦🇪', name: { uz: "Birlashgan Arab Amirliklari", ko: "아랍에미리트", zh: "阿拉伯联合酋长国", en: "United Arab Emirates", ru: "ОАЭ" }, region: "Osiyo", capital: "Abu-Dabi", population: "10,500,000" },
+      { emoji: '🇮🇳', name: { uz: "Hindiston", ko: "인도", zh: "印度", en: "India", ru: "Индия" }, region: "Osiyo", capital: "Delhi", population: "1,428,627,663" },
+      { emoji: '🇵🇰', name: { uz: "Pokiston", ko: "파키스탄", zh: "巴基斯坦", en: "Pakistan", ru: "Пакистан" }, region: "Osiyo", capital: "Islomobod", population: "241,500,000" },
+      { emoji: '🇰🇿', name: { uz: "Qozog'iston", ko: "카자흐스탄", zh: "哈萨克斯坦", en: "Kazakhstan", ru: "Казахстан" }, region: "Osiyo", capital: "Nursulton", population: "19,950,000" },
+      { emoji: '🇹🇯', name: { uz: "Tojikiston", ko: "타지키스탄", zh: "塔吉克斯坦", en: "Tajikistan", ru: "Таджикистан" }, region: "Osiyo", capital: "Dushanbe", population: "10,160,000" },
+      { emoji: '🇰🇬', name: { uz: "Qirg'iziston", ko: "키르기스스탄", zh: "吉尔吉斯斯坦", en: "Kyrgyzstan", ru: "Кыргызстан" }, region: "Osiyo", capital: "Bishkek", population: "6,967,000" },
+      { emoji: '🇦🇫', name: { uz: "Afg'oniston", ko: "아프가니스탄", zh: "阿富汗", en: "Afghanistan", ru: "Афганистан" }, region: "Osiyo", capital: "Kabul", population: "41,128,771" },
+      { emoji: '🇳🇱', name: { uz: "Niderlandiya", ko: "네덜란드", zh: "荷兰", en: "Netherlands", ru: "Нидерланды" }, region: "Yevropa", capital: "Amsterdam", population: "17,830,000" },
+      { emoji: '🇸🇪', name: { uz: "Shvetsiya", ko: "스웨덴", zh: "瑞典", en: "Sweden", ru: "Швеция" }, region: "Yevropa", capital: "Stokgolm", population: "10,550,000" },
+      { emoji: '🇨🇭', name: { uz: "Shveytsariya", ko: "스위스", zh: "瑞士", en: "Switzerland", ru: "Швейцария" }, region: "Yevropa", capital: "Bern", population: "8,800,000" },
+      { emoji: '🇦🇺', name: { uz: "Avstraliya", ko: "오스트레일리아", zh: "澳大利亚", en: "Australia", ru: "Австралия" }, region: "Okeaniya", capital: "Kanberra", population: "26,518,329" },
+      { emoji: '🇳🇿', name: { uz: "Yangi Zelandiya", ko: "뉴질랜드", zh: "新西兰", en: "New Zealand", ru: "Новая Зеландия" }, region: "Okeaniya", capital: "Vellington", population: "5,222,000" },
+      { emoji: '🇿🇦', name: { uz: "Janubiy Afrika", ko: "남아프리카 공화국", zh: "南非", en: "South Africa", ru: "Южно-Африканская Республика" }, region: "Afrika", capital: "Pretoriya", population: "61,000,000" },
+      { emoji: '🇪🇬', name: { uz: "Misr", ko: "이집트", zh: "埃及", en: "Egypt", ru: "Египет" }, region: "Afrika", capital: "Kairo", population: "107,820,000" },
+      { emoji: '🇳🇬', name: { uz: "Nigeriya", ko: "나이지리아", zh: "尼日利亚", en: "Nigeria", ru: "Нигерия" }, region: "Afrika", capital: "Abuja", population: "223,000,000" },
+      { emoji: '🇰🇪', name: { uz: "Keniya", ko: "케냐", zh: "肯尼亚", en: "Kenya", ru: "Кения" }, region: "Afrika", capital: "Nairobi", population: "56,100,000" },
+      { emoji: '🇿🇼', name: { uz: "Zimbabve", ko: "짐바브웨", zh: "津巴布韦", en: "Zimbabwe", ru: "Зимбабве" }, region: "Afrika", capital: "Harare", population: "16,800,000" },
+      { emoji: '🇻🇦', name: { uz: "Vatikan", ko: "바티칸", zh: "梵蒂冈", en: "Vatican City", ru: "Ватикан" }, region: "Yevropa", capital: "Vatikan", population: "800" },
+      { emoji: '🇦🇱', name: { uz: "Albaniya", ko: "알바니아", zh: "阿尔巴尼亚", en: "Albania", ru: "Албания" }, region: "Yevropa", capital: "Tirana", population: "2,831,741" },
+      { emoji: '🇩🇿', name: { uz: "Jazoir", ko: "알제리", zh: "阿尔及利亚", en: "Algeria", ru: "Алжир" }, region: "Afrika", capital: "Aljir", population: "44,700,000" },
+      { emoji: '🇦🇸', name: { uz: "Amerika Samoasi", ko: "아메리칸 사모아", zh: "美属萨摩亚", en: "American Samoa", ru: "Американское Самоа" }, region: "Okeaniya", capital: "Pago Pago", population: "49,710" },
+      { emoji: '🇦🇩', name: { uz: "Andorra", ko: "안도라", zh: "安道尔", en: "Andorra", ru: "Андорра" }, region: "Yevropa", capital: "Andorra la Vella", population: "79,034" },
+      { emoji: '🇦🇴', name: { uz: "Angola", ko: "앙골라", zh: "安哥拉", en: "Angola", ru: "Ангола" }, region: "Afrika", capital: "Luanda", population: "35,687,000" },
+      { emoji: '🇦🇮', name: { uz: "Anguilla", ko: "앵귈라", zh: "安圭拉", en: "Anguilla", ru: "Ангилья" }, region: "Amerika", capital: "The Valley", population: "14,875" },
+      { emoji: '🇦🇶', name: { uz: "Antarktida", ko: "남극", zh: "南极洲", en: "Antarctica", ru: "Антарктида" }, region: "Antarktida", capital: "-", population: "0" },
+      { emoji: '🇦🇬', name: { uz: "Antigua va Barbuda", ko: "앤티가 바부다", zh: "安提瓜和巴布达", en: "Antigua and Barbuda", ru: "Антигуа и Барбуда" }, region: "Amerika", capital: "Saint John's", population: "101,291" },
+      { emoji: '🇦🇷', name: { uz: "Argentina", ko: "아르헨티나", zh: "阿根廷", en: "Argentina", ru: "Аргентина" }, region: "Amerika", capital: "Buenos Aires", population: "45,817,000" },
+      { emoji: '🇦🇲', name: { uz: "Armeniya", ko: "아르메니아", zh: "亚美尼亚", en: "Armenia", ru: "Армения" }, region: "Yevropa/Osiyo", capital: "Yerevan", population: "2,963,243" },
+      { emoji: '🇦🇼', name: { uz: "Aruba", ko: "아루바", zh: "阿鲁巴", en: "Aruba", ru: "Аруба" }, region: "Amerika", capital: "Oranjestad", population: "106,700" },
+      { emoji: '🇦🇹', name: { uz: "Avstriya", ko: "오스트리아", zh: "奥地利", en: "Austria", ru: "Австрия" }, region: "Yevropa", capital: "Vyana", population: "9,144,660" },
+      { emoji: '🇦🇿', name: { uz: "Ozarbayjon", ko: "아제르바이잔", zh: "阿塞拜疆", en: "Azerbaijan", ru: "Азербайджан" }, region: "Yevropa/Osiyo", capital: "Boku", population: "10,396,627" },
+      { emoji: '🇧🇸', name: { uz: "Bahama orollari", ko: "바하마", zh: "巴哈马", en: "Bahamas", ru: "Багамские Острова" }, region: "Amerika", capital: "Nassau", population: "397,870" },
+      { emoji: '🇧🇭', name: { uz: "Bahrayn", ko: "바레인", zh: "巴林", en: "Bahrain", ru: "Бахрейн" }, region: "Osiyo", capital: "Manama", population: "1,587,949" },
+      { emoji: '🇧🇩', name: { uz: "Bangladesh", ko: "방글라데시", zh: "孟加拉国", en: "Bangladesh", ru: "Bangladesh" }, region: "Osiyo", capital: "Dhaka", population: "171,185,000" },
+      { emoji: '🇧🇧', name: { uz: "Barbados", ko: "바베이도스", zh: "巴巴多斯", en: "Barbados", ru: "Барбадос" }, region: "Amerika", capital: "Bridgetown", population: "287,371" },
+      { emoji: '🇧🇾', name: { uz: "Belarus", ko: "벨라루스", zh: "白俄罗斯", en: "Belarus", ru: "Беларусь" }, region: "Yevropa", capital: "Minsk", population: "9,071,500" },
+      { emoji: '🇧🇪', name: { uz: "Belgiya", ko: "벨기에", zh: "比利时", en: "Belgium", ru: "Бельгия" }, region: "Yevropa", capital: "Bryussel", population: "11,666,000" },
+      { emoji: '🇧🇿', name: { uz: "Beliz", ko: "벨리즈", zh: "伯利兹", en: "Belize", ru: "Белиз" }, region: "Amerika", capital: "Belmopan", population: "408,770" },
+      { emoji: '🇧🇯', name: { uz: "Benin", ko: "베냉", zh: "贝宁", en: "Benin", ru: "Бенин" }, region: "Afrika", capital: "Porto-Novo", population: "13,757,000" },
+      { emoji: '🇧🇲', name: { uz: "Bermuda orollari", ko: "버뮤다", zh: "百慕大", en: "Bermuda", ru: "Бермудские Острова" }, region: "Amerika", capital: "Hamilton", population: "62,800" },
+      { emoji: '🇧🇹', name: { uz: "Butan", ko: "부탄", zh: "不丹", en: "Bhutan", ru: "Бутан" }, region: "Osiyo", capital: "Thimphu", population: "780,000" },
+      { emoji: '🇧🇴', name: { uz: "Boliviya", ko: "볼리비아", zh: "玻利维亚", en: "Bolivia", ru: "Боливия" }, region: "Amerika", capital: "Sucre", population: "11,818,000" },
+      { emoji: '🇧🇦', name: { uz: "Bosniya va Gertsegovina", ko: "보스니아 헤르체고비나", zh: "波斯尼亚和黑塞哥维那", en: "Bosnia and Herzegovina", ru: "Босния и Герцеговина" }, region: "Yevropa", capital: "Sarayevo", population: "3,280,819" },
+      { emoji: '🇧🇼', name: { uz: "Botsvana", ko: "보츠와나", zh: "博茨瓦纳", en: "Botswana", ru: "Ботсвана" }, region: "Afrika", capital: "Gaborone", population: "2,429,780" },
+      { emoji: '🇧🇳', name: { uz: "Bruney", ko: "브루나이", zh: "文莱", en: "Brunei", ru: "Бруней" }, region: "Osiyo", capital: "Bandar Seri Begawan", population: "442,500" },
+      { emoji: '🇧🇬', name: { uz: "Bolgariya", ko: "불가리아", zh: "保加利亚", en: "Bulgaria", ru: "Болгария" }, region: "Yevropa", capital: "Sofiya", population: "6,901,728" },
+      { emoji: '🇧🇫', name: { uz: "Burkina Faso", ko: "부르키나파소", zh: "布基纳法索", en: "Burkina Faso", ru: "Буркина-Фасо" }, region: "Afrika", capital: "Uagadugu", population: "22,386,000" },
+      { emoji: '🇧🇮', name: { uz: "Burundi", ko: "부룬디", zh: "布隆迪", en: "Burundi", ru: "Бурунди" }, region: "Afrika", capital: "Gitega", population: "12,872,000" },
+      { emoji: '🇨🇻', name: { uz: "Kabo Verde", ko: "카보베르데", zh: "佛得角", en: "Cape Verde", ru: "Кабо-Верде" }, region: "Afrika", capital: "Praia", population: "560,000" },
+      { emoji: '🇰🇭', name: { uz: "Kambodja", ko: "캄보디아", zh: "柬埔寨", en: "Cambodia", ru: "Камбоджа" }, region: "Osiyo", capital: "Phnom Penh", population: "17,122,000" },
+      { emoji: '🇨🇲', name: { uz: "Kamerun", ko: "카메룬", zh: "喀麦隆", en: "Cameroon", ru: "Камерун" }, region: "Afrika", capital: "Yaoundé", population: "28,411,000" },
+      { emoji: '🇨🇫', name: { uz: "Markaziy Afrika Respublikasi", ko: "중앙아프리카 공화국", zh: "中非共和国", en: "Central African Republic", ru: "Центрально-Африканская Республика" }, region: "Afrika", capital: "Bangui", population: "5,799,000" },
+      { emoji: '🇹🇩', name: { uz: "Chad", ko: "차드", zh: "乍得", en: "Chad", ru: "Чад" }, region: "Afrika", capital: "N'Djamena", population: "17,965,000" },
+      { emoji: '🇨🇱', name: { uz: "Chili", ko: "칠레", zh: "智利", en: "Chile", ru: "Чили" }, region: "Amerika", capital: "Santiago", population: "19,626,000" },
+      { emoji: '🇨🇴', name: { uz: "Kolumbiya", ko: "콜롬비아", zh: "哥伦比亚", en: "Colombia", ru: "Колумбия" }, region: "Amerika", capital: "Bogota", population: "52,142,000" },
+      { emoji: '🇰🇲', name: { uz: "Komor orollari", ko: "코모로", zh: "科摩罗", en: "Comoros", ru: "Коморские Острова" }, region: "Afrika", capital: "Moroni", population: "882,000" },
+      { emoji: '🇨🇬', name: { uz: "Kongo Respublikasi", ko: "콩고 공화국", zh: "刚果共和国", en: "Republic of the Congo", ru: "Республика Конго" }, region: "Afrika", capital: "Brazzaville", population: "6,157,000" },
+      { emoji: '🇨🇩', name: { uz: "Kongo Demokratik Respublikasi", ko: "콩고 민주 공화국", zh: "刚果民主共和国", en: "Democratic Republic of the Congo", ru: "Демократическая Республика Конго" }, region: "Afrika", capital: "Kinshasa", population: "102,565,000" },
+      { emoji: '🇨🇷', name: { uz: "Kosta Rika", ko: "코스타리카", zh: "哥斯达黎加", en: "Costa Rica", ru: "Коста-Рика" }, region: "Amerika", capital: "San Xose", population: "5,230,000" },
+      { emoji: '🇨🇮', name: { uz: "Kot-d'Ivuar", ko: "코트디부아르", zh: "科特迪瓦", en: "Côte d'Ivoire", ru: "Кот-д'Ивуар" }, region: "Afrika", capital: "Yamussukro", population: "29,968,000" },
+      { emoji: '🇭🇷', name: { uz: "Xorvatiya", ko: "크로아티아", zh: "克罗地亚", en: "Croatia", ru: "Хорватия" }, region: "Yevropa", capital: "Zagreb", population: "3,873,000" },
+      { emoji: '🇨🇺', name: { uz: "Kuba", ko: "쿠바", zh: "古巴", en: "Cuba", ru: "Куба" }, region: "Amerika", capital: "Havana", population: "11,338,000" },
+      { emoji: '🇨🇾', name: { uz: "Kipr", ko: "키프로스", zh: "塞浦路斯", en: "Cyprus", ru: "Кипр" }, region: "Yevropa/Osiyo", capital: "Nikosiya", population: "1,235,000" },
+      { emoji: '🇨🇿', name: { uz: "Chexiya", ko: "체코", zh: "捷克", en: "Czechia", ru: "Чехия" }, region: "Yevropa", capital: "Praga", population: "10,725,000" },
+      { emoji: '🇩🇰', name: { uz: "Daniya", ko: "덴마크", zh: "丹麦", en: "Denmark", ru: "Дания" }, region: "Yevropa", capital: "Kopengagen", population: "5,926,000" },
+      { emoji: '🇩🇯', name: { uz: "Djibuti", ko: "지부티", zh: "吉布提", en: "Djibouti", ru: "Джибути" }, region: "Afrika", capital: "Djibouti", population: "1,065,000" },
+      { emoji: '🇩🇲', name: { uz: "Dominika", ko: "도미니카", zh: "多米尼克", en: "Dominica", ru: "Доминика" }, region: "Amerika", capital: "Roseau", population: "72,814" },
+      { emoji: '🇩🇴', name: { uz: "Dominikan Respublikasi", ko: "도미니카 공화국", zh: "多米尼加共和国", en: "Dominican Republic", ru: "Доминиканская Республика" }, region: "Amerika", capital: "Santo Domingo", population: "11,384,000" },
+      { emoji: '🇪🇨', name: { uz: "Ekvador", ko: "에콰도르", zh: "厄瓜多尔", en: "Ecuador", ru: "Эквадор" }, region: "Amerika", capital: "Kito", population: "18,168,000" },
+      { emoji: '🇸🇻', name: { uz: "Salvador", ko: "엘살바도르", zh: "萨尔瓦多", en: "El Salvador", ru: "Сальвадор" }, region: "Amerika", capital: "San-Salvador", population: "6,501,000" },
+      { emoji: '🇬🇶', name: { uz: "Ekvatorial Gvineya", ko: "적도 기니", zh: "赤道几内亚", en: "Equatorial Guinea", ru: "Экваториальная Гвинея" }, region: "Afrika", capital: "Malabo", population: "1,589,000" },
+      { emoji: '🇪🇷', name: { uz: "Eritreya", ko: "에리트레아", zh: "厄立特里亚", en: "Eritrea", ru: "Эритрея" }, region: "Afrika", capital: "Asmara", population: "3,761,000" },
+      { emoji: '🇪🇪', name: { uz: "Estoniya", ko: "에스토니아", zh: "爱沙尼亚", en: "Estonia", ru: "Эстония" }, region: "Yevropa", capital: "Tallinn", population: "1,330,000" },
+      { emoji: '🇸🇿', name: { uz: "Esvatini", ko: "에스와티니", zh: "斯威士兰", en: "Eswatini", ru: "Эсватини" }, region: "Afrika", capital: "Lobamba", population: "1,200,000" },
+      { emoji: '🇪🇹', name: { uz: "Efiopiya", ko: "에티오피아", zh: "埃塞俄比亚", en: "Ethiopia", ru: "Эфиопия" }, region: "Afrika", capital: "Addis-Abeba", population: "127,000,000" },
+      { emoji: '🇫🇯', name: { uz: "Fiji", ko: "피지", zh: "斐济", en: "Fiji", ru: "Фиджи" }, region: "Okeaniya", capital: "Suva", population: "915,000" },
+      { emoji: '🇫🇮', name: { uz: "Finlyandiya", ko: "핀란드", zh: "芬兰", en: "Finland", ru: "Финляндия" }, region: "Yevropa", capital: "Helsinki", population: "5,559,000" },
+      { emoji: '🇬🇫', name: { uz: "Fransuz Gviyanasi", ko: "프랑스령 기아나", zh: "法属圭亚那", en: "French Guiana", ru: "Французская Гвиана" }, region: "Amerika", capital: "Kayenn", population: "285,000" },
+      { emoji: '🇵🇫', name: { uz: "Fransuz Polineziya", ko: "프랑스령 폴리네시아", zh: "法属波利尼西亚", en: "French Polynesia", ru: "Французская Полинезия" }, region: "Okeaniya", capital: "Papeete", population: "281,000" },
+      { emoji: '🇬🇦', name: { uz: "Gabon", ko: "가봉", zh: "加蓬", en: "Gabon", ru: "Габон" }, region: "Afrika", capital: "Librevil", population: "2,454,000" },
+      { emoji: '🇬🇲', name: { uz: "Gambiya", ko: "감비아", zh: "冈比亚", en: "Gambia", ru: "Гамбия" }, region: "Afrika", capital: "Banjul", population: "2,647,000" },
+      { emoji: '🇬🇪', name: { uz: "Gruziya", ko: "조지아", zh: "格鲁吉亚", en: "Georgia", ru: "Грузия" }, region: "Yevropa/Osiyo", capital: "Tbilisi", population: "3,995,000" },
+      { emoji: '🇬🇭', name: { uz: "Gana", ko: "가나", zh: "加纳", en: "Ghana", ru: "Гана" }, region: "Afrika", capital: "Akra", population: "34,256,000" },
+      { emoji: '🇬🇮', name: { uz: "Gibraltar", ko: "지브롤터", zh: "直布罗陀", en: "Gibraltar", ru: "Гибралтар" }, region: "Yevropa", capital: "Gibraltar", population: "34,000" },
+      { emoji: '🇬🇷', name: { uz: "Gretsiya", ko: "그리스", zh: "希腊", en: "Greece", ru: "Греция" }, region: "Yevropa", capital: "Afin", population: "10,399,000" },
+      { emoji: '🇬🇱', name: { uz: "Grenlandiya", ko: "그린란드", zh: "格陵兰", en: "Greenland", ru: "Гренландия" }, region: "Amerika", capital: "Nuuk", population: "56,367" },
+      { emoji: '🇬🇩', name: { uz: "Grenada", ko: "그레나다", zh: "格林纳达", en: "Grenada", ru: "Гренада" }, region: "Amerika", capital: "Saint George's", population: "112,682" },
+      { emoji: '🇬🇵', name: { uz: "Gvadelupe", ko: "과들루프", zh: "瓜德罗普", en: "Guadeloupe", ru: "Гваделупа" }, region: "Amerika", capital: "Basse-Terre", population: "394,000" },
+      { emoji: '🇬🇹', name: { uz: "Gvatemala", ko: "과테말라", zh: "危地马拉", en: "Guatemala", ru: "Гватемала" }, region: "Amerika", capital: "Gvatemala", population: "18,300,000" },
+      { emoji: '🇬🇳', name: { uz: "Gvineya", ko: "기니", zh: "几内亚", en: "Guinea", ru: "Гвинея" }, region: "Afrika", capital: "Konakri", population: "13,887,000" },
+      { emoji: '🇬🇼', name: { uz: "Gvineya-Bisau", ko: "기니비사우", zh: "几内亚比绍", en: "Guinea-Bissau", ru: "Гвинея-Бисау" }, region: "Afrika", capital: "Bissau", population: "2,056,000" },
+      { emoji: '🇬🇾', name: { uz: "Gvayana", ko: "가이아나", zh: "圭亚那", en: "Guyana", ru: "Гайана" }, region: "Amerika", capital: "Georgetown", population: "815,000" },
+      { emoji: '🇭🇹', name: { uz: "Gaiti", ko: "아이티", zh: "海地", en: "Haiti", ru: "Гаити" }, region: "Amerika", capital: "Porto-Pransis", population: "11,710,000" },
+      { emoji: '🇭🇳', name: { uz: "Gonduras", ko: "온두라스", zh: "洪都拉斯", en: "Honduras", ru: "Гондурас" }, region: "Amerika", capital: "Tegusigalpa", population: "10,461,000" },
+      { emoji: '🇭🇰', name: { uz: "Gonkong", ko: "홍콩", zh: "香港", en: "Hong Kong", ru: "Гонконг" }, region: "Osiyo", capital: "Gonkong", population: "7,535,000" },
+      { emoji: '🇭🇺', name: { uz: "Vengriya", ko: "헝가리", zh: "匈牙利", en: "Hungary", ru: "Венгрия" }, region: "Yevropa", capital: "Budapesht", population: "9,540,000" },
+      { emoji: '🇮🇸', name: { uz: "Islandiya", ko: "아이슬란드", zh: "冰岛", en: "Iceland", ru: "Исландия" }, region: "Yevropa", capital: "Reykjavik", population: "377,000" },
+      { emoji: '🇮🇩', name: { uz: "Indoneziya", ko: "인도네시아", zh: "印度尼西亚", en: "Indonesia", ru: "Индонезия" }, region: "Osiyo", capital: "Jakarta", population: "277,534,000" },
+      { emoji: '🇮🇷', name: { uz: "Eron", ko: "이란", zh: "伊朗", en: "Iran", ru: "Иран" }, region: "Osiyo", capital: "Tehron", population: "88,550,000" },
+      { emoji: '🇮🇶', name: { uz: "Iroq", ko: "이라크", zh: "伊拉克", en: "Iraq", ru: "Ирак" }, region: "Osiyo", capital: "Bag'dod", population: "45,600,000" },
+      { emoji: '🇮🇪', name: { uz: "Irlandiya", ko: "아일랜드", zh: "爱尔兰", en: "Ireland", ru: "Ирландия" }, region: "Yevropa", capital: "Dublin", population: "5,100,000" },
+      { emoji: '🇮🇱', name: { uz: "Isroil", ko: "이스라엘", zh: "以色列", en: "Israel", ru: "Израиль" }, region: "Osiyo", capital: "Tel-Aviv", population: "9,480,000" },
+      { emoji: '🇯🇲', name: { uz: "Yamayka", ko: "자메이카", zh: "牙买加", en: "Jamaica", ru: "Ямайка" }, region: "Amerika", capital: "Kinston", population: "2,961,000" },
+      { emoji: '🇯🇴', name: { uz: "Iordaniya", ko: "요르단", zh: "约旦", en: "Jordan", ru: "Иордания" }, region: "Osiyo", capital: "Ammon", population: "11,300,000" },
+      { emoji: '🇰🇪', name: { uz: "Keniya", ko: "케냐", zh: "肯尼亚", en: "Kenya", ru: "Кения" }, region: "Afrika", capital: "Nairobi", population: "56,100,000" },
+      { emoji: '🇰🇮', name: { uz: "Kiribati", ko: "키리바시", zh: "基里巴斯", en: "Kiribati", ru: "Кирибати" }, region: "Okeaniya", capital: "Tarawa", population: "120,000" },
+      { emoji: '🇽🇰', name: { uz: "Kosovo", ko: "코소보", zh: "科索沃", en: "Kosovo", ru: "Косово" }, region: "Yevropa", capital: "Pristina", population: "1,789,000" },
+      { emoji: '🇰🇼', name: { uz: "Quveyt", ko: "쿠웨이트", zh: "科威特", en: "Kuwait", ru: "Кувейт" }, region: "Osiyo", capital: "Kuveyt", population: "4,340,000" },
+      { emoji: '🇱🇦', name: { uz: "Laos", ko: "라오스", zh: "老挝", en: "Laos", ru: "Лаос" }, region: "Osiyo", capital: "Vyanthan", population: "7,650,000" },
+      { emoji: '🇱🇻', name: { uz: "Latviya", ko: "라트비아", zh: "拉脱维亚", en: "Latvia", ru: "Латвия" }, region: "Yevropa", capital: "Riga", population: "1,850,000" },
+      { emoji: '🇱🇧', name: { uz: "Livan", ko: "레바논", zh: "黎巴嫩", en: "Lebanon", ru: "Ливан" }, region: "Osiyo", capital: "Beirut", population: "6,840,000" },
+      { emoji: '🇱🇸', name: { uz: "Lesoto", ko: "레소토", zh: "莱索托", en: "Lesotho", ru: "Лесото" }, region: "Afrika", capital: "Maseru", population: "2,258,000" },
+      { emoji: '🇱🇷', name: { uz: "Liberiya", ko: "라이베리아", zh: "利比里亚", en: "Liberia", ru: "Либерия" }, region: "Afrika", capital: "Monroviya", population: "5,349,000" },
+      { emoji: '🇱🇾', name: { uz: "Liviya", ko: "리비아", zh: "利比亚", en: "Libya", ru: "Ливия" }, region: "Afrika", capital: "Tripoli", population: "7,127,000" },
+      { emoji: '🇱🇮', name: { uz: "Lixtenšteyn", ko: "리히텐슈타인", zh: "列支敦士登", en: "Liechtenstein", ru: "Лихтенштейн" }, region: "Yevropa", capital: "Vaduts", population: "39,000" },
+      { emoji: '🇱🇹', name: { uz: "Litva", ko: "리투아니아", zh: "立陶宛", en: "Lithuania", ru: "Литва" }, region: "Yevropa", capital: "Vilnyus", population: "2,856,000" },
+      { emoji: '🇱🇺', name: { uz: "Lyuksemburg", ko: "룩셈부르크", zh: "卢森堡", en: "Luxembourg", ru: "Люксембург" }, region: "Yevropa", capital: "Lyuksemburg", population: "652,000" },
+      { emoji: '🇲🇴', name: { uz: "Makao", ko: "마카오", zh: "澳门", en: "Macao", ru: "Макао" }, region: "Osiyo", capital: "Makao", population: "684,000" },
+      { emoji: '🇲🇬', name: { uz: "Madagaskar", ko: "마다가스카르", zh: "马达加斯加", en: "Madagascar", ru: "Мадагаскар" }, region: "Afrika", capital: "Antananarivo", population: "29,851,000" },
+      { emoji: '🇲🇼', name: { uz: "Malavi", ko: "말라위", zh: "马拉维", en: "Malawi", ru: "Малави" }, region: "Afrika", capital: "Lilongve", population: "20,790,000" },
+      { emoji: '🇲🇾', name: { uz: "Malayziya", ko: "말레이시아", zh: "马来西亚", en: "Malaysia", ru: "Малайзия" }, region: "Osiyo", capital: "Kuala-Lumpur", population: "33,900,000" },
+      { emoji: '🇲🇻', name: { uz: "Maldiv orollari", ko: "몰디브", zh: "马尔代夫", en: "Maldives", ru: "Мальдивы" }, region: "Osiyo", capital: "Malé", population: "535,000" },
+      { emoji: '🇲🇱', name: { uz: "Mali", ko: "말리", zh: "马里", en: "Mali", ru: "Мали" }, region: "Afrika", capital: "Bamako", population: "22,890,000" },
+      { emoji: '🇲🇹', name: { uz: "Malta", ko: "몰타", zh: "马耳他", en: "Malta", ru: "Мальта" }, region: "Yevropa", capital: "Valetta", population: "525,000" },
+      { emoji: '🇲🇭', name: { uz: "Marshall orollari", ko: "마셜 제도", zh: "马绍尔群岛", en: "Marshall Islands", ru: "Маршалловы Острова" }, region: "Okeaniya", capital: "Majuro", population: "59,000" },
+      { emoji: '🇲🇷', name: { uz: "Mavritaniya", ko: "모리타니", zh: "毛里塔尼亚", en: "Mauritania", ru: "Мавритания" }, region: "Afrika", capital: "Nouakchott", population: "4,860,000" },
+      { emoji: '🇲🇺', name: { uz: "Mavrikiy", ko: "모리셔스", zh: "毛里求斯", en: "Mauritius", ru: "Маврикий" }, region: "Afrika", capital: "Port-Luis", population: "1,270,000" },
+      { emoji: '🇫🇲', name: { uz: "Mikroneziya", ko: "미크로네시아", zh: "密克罗尼西亚", en: "Micronesia", ru: "Микронезия" }, region: "Okeaniya", capital: "Palikir", population: "114,000" },
+      { emoji: '🇲🇩', name: { uz: "Moldova", ko: "몰도바", zh: "摩尔多瓦", en: "Moldova", ru: "Молдова" }, region: "Yevropa", capital: "Kishinyov", population: "2,586,000" },
+      { emoji: '🇲🇨', name: { uz: "Monako", ko: "모나코", zh: "摩纳哥", en: "Monaco", ru: "Монако" }, region: "Yevropa", capital: "Monako", population: "39,000" },
+      { emoji: '🇲🇳', name: { uz: "Mongoliya", ko: "몽골", zh: "蒙古", en: "Mongolia", ru: "Монголия" }, region: "Osiyo", capital: "Ulan-Bator", population: "3,470,000" },
+      { emoji: '🇲🇪', name: { uz: "Chernogoriya", ko: "몬테네그로", zh: "黑山", en: "Montenegro", ru: "Черногория" }, region: "Yevropa", capital: "Podgoritsa", population: "617,000" },
+      { emoji: '🇲🇦', name: { uz: "Marokash", ko: "모로코", zh: "摩洛哥", en: "Morocco", ru: "Марокко" }, region: "Afrika", capital: "Rabat", population: "37,770,000" },
+      { emoji: '🇲🇿', name: { uz: "Mozambik", ko: "모잠비크", zh: "莫桑比克", en: "Mozambique", ru: "Мозамбик" }, region: "Afrika", capital: "Maputo", population: "33,075,000" },
+      { emoji: '🇲🇲', name: { uz: "Myanma", ko: "미얀마", zh: "缅甸", en: "Myanmar", ru: "Мьянма" }, region: "Osiyo", capital: "Naypyidaw", population: "54,860,000" },
+      { emoji: '🇳🇦', name: { uz: "Namibiya", ko: "나미비아", zh: "纳米比亚", en: "Namibia", ru: "Намибия" }, region: "Afrika", capital: "Vinduk", population: "2,740,000" },
+      { emoji: '🇳🇷', name: { uz: "Nauru", ko: "나우루", zh: "瑙鲁", en: "Nauru", ru: "Науру" }, region: "Okeaniya", capital: "Yaren", population: "10,000" },
+      { emoji: '🇳🇵', name: { uz: "Nepal", ko: "네팔", zh: "尼泊尔", en: "Nepal", ru: "Непал" }, region: "Osiyo", capital: "Kathmandu", population: "30,717,000" },
+      { emoji: '🇳🇮', name: { uz: "Nikaragua", ko: "니카라과", zh: "尼加拉瓜", en: "Nicaragua", ru: "Никарагу아" }, region: "Amerika", capital: "Managua", population: "6,827,000" },
+      { emoji: '🇳🇪', name: { uz: "Niger", ko: "니제르", zh: "尼日尔", en: "Niger", ru: "Нигер" }, region: "Afrika", capital: "Niamey", population: "26,740,000" },
+      { emoji: '🇳🇬', name: { uz: "Nigeriya", ko: "나이지리아", zh: "尼日利亚", en: "Nigeria", ru: "Нигерия" }, region: "Afrika", capital: "Abuja", population: "223,000,000" },
+      { emoji: '🇳🇴', name: { uz: "Norvegiya", ko: "노르웨이", zh: "挪威", en: "Norway", ru: "Норвегия" }, region: "Yevropa", capital: "Osl", population: "5,500,000" },
+      { emoji: '🇴🇲', name: { uz: "Oman", ko: "오만", zh: "阿曼", en: "Oman", ru: "Оман" }, region: "Osiyo", capital: "Maskat", population: "5,254,000" },
+      { emoji: '🇵🇼', name: { uz: "Palau", ko: "팔라우", zh: "帕劳", en: "Palau", ru: "Палау" }, region: "Okeaniya", capital: "Koror", population: "18,000" },
+      { emoji: '🇵🇦', name: { uz: "Panama", ko: "파나마", zh: "巴拿马", en: "Panama", ru: "Панама" }, region: "Amerika", capital: "Panama", population: "4,500,000" },
+      { emoji: '🇵🇬', name: { uz: "Papua Yangi Gvineya", ko: "파푸아 뉴기니", zh: "巴布亚新几内亚", en: "Papua New Guinea", ru: "Папуа — Новая Гвинея" }, region: "Okeaniya", capital: "Port-Morsbi", population: "10,900,000" },
+      { emoji: '🇵🇾', name: { uz: "Paragvay", ko: "파라과이", zh: "巴拉圭", en: "Paraguay", ru: "Парагвай" }, region: "Amerika", capital: "Asunsion", population: "7,372,000" },
+      { emoji: '🇵🇪', name: { uz: "Peru", ko: "페루", zh: "秘鲁", en: "Peru", ru: "Перу" }, region: "Amerika", capital: "Lima", population: "34,000,000" },
+      { emoji: '🇵🇭', name: { uz: "Filippin", ko: "필리핀", zh: "菲律宾", en: "Philippines", ru: "Филиппины" }, region: "Osiyo", capital: "Manila", population: "116,000,000" },
+      { emoji: '🇵🇱', name: { uz: "Polsha", ko: "폴란드", zh: "波兰", en: "Poland", ru: "Польша" }, region: "Yevropa", capital: "Varshava", population: "37,597,000" },
+      { emoji: '🇵🇹', name: { uz: "Portugaliya", ko: "포르투갈", zh: "葡萄牙", en: "Portugal", ru: "Португалия" }, region: "Yevropa", capital: "Lisbon", population: "10,358,000" },
+      { emoji: '🇶🇦', name: { uz: "Qatar", ko: "카타르", zh: "卡塔尔", en: "Qatar", ru: "Катар" }, region: "Osiyo", capital: "Doha", population: "2,955,000" },
+      { emoji: '🇷🇴', name: { uz: "Ruminiya", ko: "루마니아", zh: "罗马尼亚", en: "Romania", ru: "Румыния" }, region: "Yevropa", capital: "Bukarest", population: "19,050,000" },
+      { emoji: '🇷🇼', name: { uz: "Ruanda", ko: "르완다", zh: "卢旺达", en: "Rwanda", ru: "Руанда" }, region: "Afrika", capital: "Kigali", population: "14,485,000" },
+      { emoji: '🇼🇸', name: { uz: "Samoa", ko: "사모아", zh: "萨摩亚", en: "Samoa", ru: "Самоа" }, region: "Okeaniya", capital: "Apia", population: "200,000" },
+      { emoji: '🇸🇲', name: { uz: "San-Marino", ko: "산마리노", zh: "圣马力诺", en: "San Marino", ru: "Сан-Марино" }, region: "Yevropa", capital: "San-Marino", population: "33,000" },
+      { emoji: '🇸🇹', name: { uz: "Sao-Tome va Prinsipi", ko: "상투메 프린시페", zh: "圣多美和普林西比", en: "Sao Tome and Principe", ru: "Сан-Томе и Принсипи" }, region: "Afrika", capital: "Sao-Tome", population: "224,000" },
+      { emoji: '🇸🇳', name: { uz: "Senegal", ko: "세네갈", zh: "塞内加尔", en: "Senegal", ru: "Сенегал" }, region: "Afrika", capital: "Dakar", population: "18,357,000" },
+      { emoji: '🇷🇸', name: { uz: "Serbiya", ko: "세르비아", zh: "塞尔维亚", en: "Serbia", ru: "Сербия" }, region: "Yevropa", capital: "Belgrad", population: "8,745,000" },
+      { emoji: '🇸🇨', name: { uz: "Seyshel orollari", ko: "세이셸", zh: "塞舌尔", en: "Seychelles", ru: "Сейшельские Острова" }, region: "Afrika", capital: "Viktoriya", population: "116,000" },
+      { emoji: '🇸🇱', name: { uz: "Siera-Leone", ko: "시에라리온", zh: "塞拉利昂", en: "Sierra Leone", ru: "Сьерра-Леоне" }, region: "Afrika", capital: "Freetown", population: "8,675,000" },
+      { emoji: '🇸🇬', name: { uz: "Singapur", ko: "싱가포르", zh: "新加坡", en: "Singapore", ru: "Сингапур" }, region: "Osiyo", capital: "Singapur", population: "5,920,000" },
+      { emoji: '🇸🇰', name: { uz: "Slovakiya", ko: "슬로바키아", zh: "斯洛伐克", en: "Slovakia", ru: "Словакия" }, region: "Yevropa", capital: "Bratislava", population: "5,440,000" },
+      { emoji: '🇸🇮', name: { uz: "Sloveniya", ko: "슬로베니아", zh: "斯洛文尼亚", en: "Slovenia", ru: "Словения" }, region: "Yevropa", capital: "Ljublyana", population: "2,124,000" },
+      { emoji: '🇸🇧', name: { uz: "Solomon orollari", ko: "솔로몬 제도", zh: "所罗门群岛", en: "Solomon Islands", ru: "Соломоновы Острова" }, region: "Okeaniya", capital: "Honiara", population: "715,000" },
+      { emoji: '🇸🇴', name: { uz: "Somali", ko: "소말리아", zh: "索马里", en: "Somalia", ru: "Сомали" }, region: "Afrika", capital: "Mogadishu", population: "18,800,000" },
+      { emoji: '🇰🇷', name: { uz: "Janubiy Koreya", ko: "대한민국", zh: "韩国", en: "South Korea", ru: "Южная Корея" }, region: "Osiyo", capital: "Seul", population: "51,790,000" },
+      { emoji: '🇸🇸', name: { uz: "Janubiy Sudan", ko: "남수단", zh: "南苏丹", en: "South Sudan", ru: "Южный Судан" }, region: "Afrika", capital: "Juba", population: "11,000,000" },
+      { emoji: '🇱🇰', name: { uz: "Shri-Lanka", ko: "스리랑카", zh: "斯里兰卡", en: "Sri Lanka", ru: "Шри-Ланка" }, region: "Osiyo", capital: "Sri-Yaykala", population: "22,000,000" },
+      { emoji: '🇸🇩', name: { uz: "Sudan", ko: "수단", zh: "苏丹", en: "Sudan", ru: "Судан" }, region: "Afrika", capital: "Khartum", population: "45,000,000" },
+      { emoji: '🇸🇷', name: { uz: "Surinam", ko: "수리남", zh: "苏里南", en: "Suriname", ru: "Суринам" }, region: "Amerika", capital: "Paramaribo", population: "610,000" },
+      { emoji: '🇸🇾', name: { uz: "Suriya", ko: "시리아", zh: "叙利亚", en: "Syria", ru: "Сирия" }, region: "Osiyo", capital: "Damashq", population: "17,800,000" },
+      { emoji: '🇹🇼', name: { uz: "Xitoy Tayvani", ko: "대만", zh: "台湾", en: "Taiwan", ru: "Тайвань" }, region: "Osiyo", capital: "Taypey", population: "23,800,000" },
+      { emoji: '🇹🇿', name: { uz: "Tanzaniya", ko: "탄자니아", zh: "坦桑尼亚", en: "Tanzania", ru: "Танзания" }, region: "Afrika", capital: "Dodoma", population: "64,757,000" },
+      { emoji: '🇹🇭', name: { uz: "Tailand", ko: "태국", zh: "泰国", en: "Thailand", ru: "Таиланд" }, region: "Osiyo", capital: "Bangkok", population: "70,480,000" },
+      { emoji: '🇹🇱', name: { uz: "Sharqiy Timor", ko: "동티모르", zh: "东帝汶", en: "Timor-Leste", ru: "Восточный Тимор" }, region: "Osiyo", capital: "Dili", population: "1,340,000" },
+      { emoji: '🇹🇬', name: { uz: "Togo", ko: "토고", zh: "多哥", en: "Togo", ru: "Того" }, region: "Afrika", capital: "Lome", population: "8,700,000" },
+      { emoji: '🇹🇴', name: { uz: "Tonga", ko: "통가", zh: "汤加", en: "Tonga", ru: "Тонга" }, region: "Okeaniya", capital: "Nuku'alofa", population: "100,000" },
+      { emoji: '🇹🇹', name: { uz: "Trinidad va Tobago", ko: "트리니다드 토바고", zh: "特立尼达和多巴哥", en: "Trinidad and Tobago", ru: "Тринидад и Тобаго" }, region: "Amerika", capital: "Port-of-Spain", population: "1,425,000" },
+      { emoji: '🇹🇳', name: { uz: "Tunis", ko: "튀니지", zh: "突尼斯", en: "Tunisia", ru: "Тунис" }, region: "Afrika", capital: "Tunis", population: "12,400,000" },
+      { emoji: '🇹🇲', name: { uz: "Turkmaniston", ko: "투르크메니스탄", zh: "土库曼斯坦", en: "Turkmenistan", ru: "Туркменистан" }, region: "Osiyo", capital: "Ashxobod", population: "6,442,000" },
+      { emoji: '🇹🇻', name: { uz: "Tuvalu", ko: "투발루", zh: "图瓦卢", en: "Tuvalu", ru: "Тувалу" }, region: "Okeaniya", capital: "Funafuti", population: "11,000" },
+      { emoji: '🇺🇬', name: { uz: "Uganda", ko: "우간다", zh: "乌干达", en: "Uganda", ru: "Уганда" }, region: "Afrika", capital: "Kampala", population: "48,550,000" },
+      { emoji: '🇺🇦', name: { uz: "Ukraina", ko: "우크라이나", zh: "乌克兰", en: "Ukraine", ru: "Украина" }, region: "Yevropa", capital: "Kiyev", population: "41,220,000" },
+      { emoji: '🇦🇪', name: { uz: "Birlashgan Arab Amirliklari", ko: "아랍에미리트", zh: "阿拉伯联合酋长国", en: "United Arab Emirates", ru: "ОАЭ" }, region: "Osiyo", capital: "Abu-Dabi", population: "10,500,000" },
+      { emoji: '🇺🇾', name: { uz: "Urugvay", ko: "우루과이", zh: "乌拉圭", en: "Uruguay", ru: "Уругвай" }, region: "Amerika", capital: "Montevideo", population: "3,440,000" },
+      { emoji: '🇻🇺', name: { uz: "Vanuatu", ko: "바누아투", zh: "瓦努阿图", en: "Vanuatu", ru: "Вануату" }, region: "Okeaniya", capital: "Port-Vila", population: "320,000" },
+      { emoji: '🇻🇪', name: { uz: "Venesuela", ko: "베네수엘라", zh: "委内瑞拉", en: "Venezuela", ru: "Венесуэла" }, region: "Amerika", capital: "Caracas", population: "27,570,000" },
+      { emoji: '🇻🇳', name: { uz: "Vetnam", ko: "베트남", zh: "越南", en: "Vietnam", ru: "Вьетнам" }, region: "Osiyo", capital: "Xanoj", population: "100,180,000" },
+      { emoji: '🇾🇪', name: { uz: "Yaman", ko: "예멘", zh: "也门", en: "Yemen", ru: "Йемен" }, region: "Osiyo", capital: "Sana", population: "34,100,000" },
+      { emoji: '🇿🇲', name: { uz: "Zambiya", ko: "잠비아", zh: "赞比亚", en: "Zambia", ru: "Замбия" }, region: "Afrika", capital: "Lusaka", population: "20,600,000" },
+      { emoji: '🇻🇦', name: { uz: "Vatikan", ko: "바티칸", zh: "梵蒂冈", en: "Vatican City", ru: "Ватикан" }, region: "Yevropa", capital: "Vatikan", population: "800" },
+    ];
+
+    const grid = document.getElementById('flagGrid');
+    const searchInput = document.getElementById('searchInput');
+    const regionFilter = document.getElementById('regionFilter');
+    const themeToggle = document.getElementById('themeToggle');
+    const modal = document.getElementById('flagModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalFlag = document.getElementById('modalFlag');
+    const modalRegion = document.getElementById('modalRegion');
+    const modalCapital = document.getElementById('modalCapital');
+    const modalPopulation = document.getElementById('modalPopulation');
+    const modalInfo = document.getElementById('modalInfo');
+    const closeBtn = document.querySelector('.close');
+    const speakBtn = document.getElementById('speakBtn');
+    const statsBtn = document.getElementById('statsBtn');
+    const statsPage = document.getElementById('statsPage');
+    const mainPage = document.getElementById('mainPage');
+    const backBtn = document.getElementById('backFromStats');
+    const languageSelect = document.getElementById('languageSelect');
+
+    let currentLang = 'uz';
+
+    function renderFlags(flagsToRender) {
+      grid.innerHTML = '';
+      if (flagsToRender.length === 0) {
+        grid.innerHTML = '<div class="loading">Hech qanday mamlakat topilmadi.</div>';
+        return;
+      }
+      flagsToRender.forEach(flag => {
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `
+          <div class="flag">${flag.emoji}</div>
+          <div class="name">${flag.name[currentLang]}</div>
+          <div class="region">${flag.region}</div>
+        `;
+        item.addEventListener('click', () => openModal(flag));
+        grid.appendChild(item);
+      });
+    }
+
+    function openModal(flag) {
+      modalTitle.textContent = flag.name[currentLang];
+      modalFlag.textContent = flag.emoji;
+      modalRegion.textContent = `Mintaqa: ${flag.region}`;
+      modalCapital.textContent = `Poytaxt: ${flag.capital}`;
+      modalPopulation.textContent = `Aholi: ${flag.population}`;
+      modalInfo.textContent = `${flag.name[currentLang]} – ${flag.region} mintaqasida joylashgan mamlakat. Poytaxti ${flag.capital}, aholisi ${flag.population} kishini tashkil qiladi.`;
+      speakBtn.onclick = () => speakText(flag.name[currentLang]);
+      modal.classList.add('show');
+      modal.style.display = 'flex';
+      modal.querySelector('.close').focus();
+    }
+
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = getLanguageCode(currentLang);
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        speechSynthesis.speak(utterance);
+      } else {
+        alert("Sizning brauzeringizda ovozli o'qish funksiyasi mavjud emas.");
+      }
+    }
+
+    function getLanguageCode(lang) {
+      const codes = {
+        'uz': 'uz-UZ',
+        'ko': 'ko-KR',
+        'zh': 'zh-CN',
+        'en': 'en-US',
+        'ru': 'ru-RU'
+      };
+      return codes[lang] || 'uz-UZ';
+    }
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'flex') {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+      }
+    });
+
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      const region = regionFilter.value;
+      const filtered = flagsData.filter(f =>
+        f.name[currentLang].toLowerCase().includes(term) && (region === '' || f.region.includes(region))
+      );
+      renderFlags(filtered);
+    });
+
+    regionFilter.addEventListener('change', () => {
+      const term = searchInput.value.toLowerCase();
+      const region = regionFilter.value;
+      const filtered = flagsData.filter(f =>
+        f.name[currentLang].toLowerCase().includes(term) && (region === '' || f.region.includes(region))
+      );
+      renderFlags(filtered);
+    });
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ Oylik Rejim' : '🌙 Tungi Rejim';
+    });
+
+    languageSelect.addEventListener('change', () => {
+      currentLang = languageSelect.value;
+      renderFlags(flagsData);
+    });
+
+    statsBtn.addEventListener('click', () => {
+      mainPage.style.display = 'none';
+      statsPage.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    });
+
+    backBtn.addEventListener('click', () => {
+      statsPage.style.display = 'none';
+      mainPage.style.display = 'block';
+      document.body.style.overflow = '';
+    });
+
+    // Dastlabki render
+    setTimeout(() => renderFlags(flagsData), 300);
+
+    // Ovozli tizimni oldindan yuklash
+    window.addEventListener('load', () => {
+      if ('speechSynthesis' in window) {
+        const test = new SpeechSynthesisUtterance("Sayt muvaffaqiyatli yuklandi");
+        test.lang = 'uz-UZ';
+        speechSynthesis.speak(test);
+      }
+    });
+  </script>
+</body>
+</html>
