@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title id="pageTitle">🌍 Butun Dunyo Bayroqlari — Super Mega Versiya</title>
+    <style>
+        /* Umumiy stillar */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background: linear-gradient(135deg, #eef3f7 0%, #dce4eb 100%); /* Yumshoq gradient */
+            color: #333;
+        }
+        header { 
+            background: #0057b7; 
+            color: white; 
+            padding: 25px 20px; /* Kattaroq padding */
+            text-align: center; 
+            font-size: 32px; 
+            font-weight: 900; /* Qalinroq shrift */
+            position: relative; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Navigatsiya */
+        nav { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            background: white; 
+            padding: 12px; 
+            position: sticky; 
+            top: 0; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Kuchliroq soya */
+            z-index: 1000; 
+        }
+        nav button { 
+            padding: 10px 20px; 
+            border: none; 
+            background: #0057b7; 
+            color: white; 
+            border-radius: 20px; /* Yumaloq burchaklar */
+            cursor: pointer; 
+            font-size: 15px; 
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s; 
+        }
+        nav button:hover { 
+            background: #00448c; 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        nav button.active-btn { 
+            background: #e3000f; 
+            box-shadow: 0 0 0 3px #fff, 0 0 0 5px #e3000f; /* Aktiv rangda soya */
+            transform: translateY(0);
+        }
+
+        /* Til tanlash */
+        .language-selector { 
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            padding: 8px 12px; 
+            border-radius: 15px; 
+            border: 2px solid white; 
+            background: rgba(255, 255, 255, 0.2); 
+            color: white; 
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .language-selector:hover {
+            background: rgba(255, 255, 255, 0.4); 
+        }
+        .language-selector option { color: #000; }
+
+        /* Asboblar (qidiruv/filtr) */
+        .tools { display: flex; justify-content: center; gap: 20px; margin: 25px; flex-wrap: wrap; }
+        .tools input, .tools select { 
+            padding: 12px 18px; 
+            font-size: 16px; 
+            border-radius: 25px; 
+            border: 1px solid #ccc; 
+            width: 280px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .tools input:focus, .tools select:focus {
+            border-color: #0057b7;
+            box-shadow: 0 0 8px rgba(0, 87, 183, 0.3);
+            outline: none;
+        }
+
+        /* Sektsiyalar */
+        .section { padding: 30px; animation: fadeIn 0.8s ease-out; }
+        .section h2 { 
+            text-align: center; 
+            color: #0057b7; 
+            font-size: 24px; 
+            margin-bottom: 25px; 
+            border-bottom: 3px solid #e3000f; 
+            display: inline-block; 
+            padding-bottom: 5px;
+        }
+
+        /* Grid va Kartalar */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 25px; 
+            /* 3D effekt uchun asosiy konteyner */
+            perspective: 1500px; 
+        }
+        
+        .card { 
+            background: white; 
+            border-radius: 15px; 
+            padding: 15px; 
+            text-align: center; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            cursor: pointer; 
+            height: 100%;
+            text-decoration: none; 
+            color: inherit; 
+            
+            /* 3D aylanish uchun o'tish */
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            /* 3D transformatsiyalar uchun kerak */
+            transform-style: preserve-3d; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            
+            /* Orqa fon elementi - effektni kuchaytirish uchun */
+            position: relative;
+        }
+        
+        /* Hover effekti - statik transformatsiya */
+        .card:hover { 
+            transform: translateZ(20px) scale(1.05); /* Z o'qi bo'ylab oldinga chiqish */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3); 
+        }
+        
+        .flag-img { 
+            width: 100%; 
+            height: 130px; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            margin-bottom: 15px; 
+            border: 3px solid #f0f0f0; /* Bayroqqa oq hoshiya */
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .flag-img {
+            transform: translateZ(30px); /* Rasmni kartaning ichida ham oldinga chiqarish */
+        }
+        
+        .emoji-flag { font-size: 64px; margin: 15px 0; }
+        .name { font-weight: 700; margin-top: 8px; font-size: 18px; color: #0057b7; }
+        .card div:not(.name, .emoji-flag) { font-size: 14px; color: #555; margin-top: 5px; }
+
+        /* Modal */
+        .modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(5px); }
+        .modal { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            width: 90%; 
+            max-width: 450px; 
+            text-align: center; 
+            animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+        }
+        .modal img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 15px; margin-bottom: 20px; border: 4px solid #f0f0f0; }
+        .modal h2 { margin-top: 0; color: #e3000f; font-size: 28px; }
+        .modal p { line-height: 1.6; }
+        .close { 
+            margin-top: 25px; 
+            padding: 12px 30px; 
+            background: #0057b7; 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold;
+            transition: background 0.3s, transform 0.1s; 
+        }
+        .close:hover { background: #00448c; transform: scale(1.05); }
+
+        /* Animatsiyalar */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(-100px) rotateX(-10deg); opacity: 0; } to { transform: translateY(0) rotateX(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <span id="headerTitle">🌍 Butun Dunyo Bayroqlari — Super Mega Versiya</span>
+    <select class="language-selector" id="languageSelector" onchange="setLanguage(this.value)">
+        <option value="uz">🇺🇿 Oʻzbek</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="ru">🇷🇺 Русский</option>
+        <option value="cn">🇨🇳 中文</option>
+        <option value="kr">🇰🇷 한국어</option>
+    </select>
+</header>
+
+<nav id="navBar">
+    <button id="btnRasm" onclick="showSection('rasm', this)" class="active-btn">📘 Rasmli</button>
+    <button id="btnInfo" onclick="showSection('info', this)">📚 Maʼlumotli</button>
+    <button id="btnEmoji" onclick="showSection('emoji', this)">😊 Emoji</button>
+</nav>
+
+<div class="tools">
+    <input type="text" id="search" placeholder="🔍 Davlat qidirish..." />
+    <select id="filter">
+        <option value="all" data-lang-key="all_continents">🌎 Barcha qit'alar</option>
+        <option value="Asia" data-lang-key="asia">Osiyo</option>
+        <option value="Europe" data-lang-key="europe">Yevropa</option>
+        <option value="Africa" data-lang-key="africa">Afrika</option>
+        <option value="North America" data-lang-key="north_america">Shimoliy Amerika</option>
+        <option value="South America" data-lang-key="south_america">Janubiy Amerika</option>
+        <option value="Oceania" data-lang-key="oceania">Okeaniya</option>
+    </select>
+</div>
+
+<div id="rasm" class="section active"><h2 data-lang-key="title_rasm">Rasmli Bayroqlar</h2><div class="grid" id="rasmGrid"></div></div>
+<div id="info" class="section"><h2 data-lang-key="title_info">Maʼlumotli Bayroqlar</h2><div class="grid" id="infoGrid"></div></div>
+<div id="emoji" class="section"><h2 data-lang-key="title_emoji">Emoji Bayroqlar</h2><div class="grid" id="emojiGrid"></div></div>
+
+<div id="modalBg" class="modal-bg">
+    <div class="modal" id="modal"></div>
+</div>
+
+<script>
+// ===========================================
+// 🌐 TARJIMA MA'LUMOTLARI
+// ===========================================
+
+// Qit'alar nomlarining tarjimalari
+const regionTranslations = {
+    'Asia': { uz: 'Osiyo', en: 'Asia', ru: 'Азия', cn: '亚洲', kr: '아시아' },
+    'Europe': { uz: 'Yevropa', en: 'Europe', ru: 'Европа', cn: '欧洲', kr: '유럽' },
+    'Africa': { uz: 'Afrika', en: 'Africa', ru: 'Африка', cn: '非洲', kr: '아프리카' },
+    'North America': { uz: 'Shimoliy Amerika', en: 'North America', ru: 'Северная Америка', cn: '北美洲', kr: '북미' },
+    'South America': { uz: 'Janubiy Amerika', en: 'South America', ru: 'Южная Америка', cn: '南美洲', kr: '남미' },
+    'Oceania': { uz: 'Okeaniya', en: 'Oceania', ru: 'Океания', cn: '大洋洲', kr: '오세아니아' }
+};
+
+// UI Matnlarining tarjimasi
+const translations = {
+    uz: {
+        pageTitle: "🌍 Butun Dunyo Bayroqlari — Super Mega Versiya", headerTitle: "🌍 Butun Dunyo Bayroqlari — Super Mega Versiya",
+        btn_rasm: "📘 Rasmli", btn_info: "📚 Maʼlumotli", btn_emoji: "😊 Emoji",
+        search_placeholder: "🔍 Davlat qidirish...", all_continents: "🌎 Barcha qit'alar",
+        title_rasm: "Rasmli Bayroqlar", title_info: "Maʼlumotli Bayroqlar", title_emoji: "Emoji Bayroqlar",
+        modal_capital: "Poytaxt:", modal_continent: "Qitʼa:", modal_population: "Aholi:", modal_area: "Maydon:", modal_close: "Yopish"
+    },
+    en: {
+        pageTitle: "🌍 World Flags — Super Mega Version", headerTitle: "🌍 World Flags — Super Mega Version",
+        btn_rasm: "📘 Image Flags", btn_info: "📚 Data Flags", btn_emoji: "😊 Emoji Flags",
+        search_placeholder: "🔍 Search Country...", all_continents: "🌎 All Continents",
+        title_rasm: "Image Flags", title_info: "Data Flags", title_emoji: "Emoji Flags",
+        modal_capital: "Capital:", modal_continent: "Continent:", modal_population: "Population:", modal_area: "Area:", modal_close: "Close"
+    },
+    ru: {
+        pageTitle: "🌍 Флаги Мира — Супер Мега Версия", headerTitle: "🌍 Флаги Мира — Супер Мега Версия",
+        btn_rasm: "📘 Флаги (Картинки)", btn_info: "📚 Флаги (Данные)", btn_emoji: "😊 Флаги (Эмодзи)",
+        search_placeholder: "🔍 Поиск страны...", all_continents: "🌎 Все континенты",
+        title_rasm: "Флаги (Картинки)", title_info: "Флаги (Данные)", title_emoji: "Флаги (Эмодзи)",
+        modal_capital: "Столица:", modal_continent: "Континент:", modal_population: "Население:", modal_area: "Площадь:", modal_close: "Закрыть"
+    },
+    cn: {
+        pageTitle: "🌍 世界国旗 — 超级巨型版", headerTitle: "🌍 世界国旗 — 超级巨型版",
+        btn_rasm: "📘 图片国旗", btn_info: "📚 信息国旗", btn_emoji: "😊 表情国旗",
+        search_placeholder: "🔍 搜索国家...", all_continents: "🌎 所有大洲",
+        title_rasm: "图片国旗", title_info: "信息国旗", title_emoji: "表情国旗",
+        modal_capital: "首都:", modal_continent: "大洲:", modal_population: "人口:", modal_area: "面积:", modal_close: "关闭"
+    },
+    kr: {
+        pageTitle: "🌍 전 세계 국기 — 슈퍼 메가 버전", headerTitle: "🌍 전 세계 국기 — 슈퍼 메가 버전",
+        btn_rasm: "📘 이미지 국기", btn_info: "📚 정보 국기", btn_emoji: "😊 이모지 국기",
+        search_placeholder: "🔍 국가 검색...", all_continents: "🌎 모든 대륙",
+        title_rasm: "이미지 국기", title_info: "정보 국기", title_emoji: "이모지 국기",
+        modal_capital: "수도:", modal_continent: "대륙:", modal_population: "인구:", modal_area: "면적:", modal_close: "닫기"
+    }
+};
+
+let currentLang = 'uz'; // Standart til
+
+// HTML elementlariga murojaat
+const rasmGrid = document.getElementById('rasmGrid');
+const infoGrid = document.getElementById('infoGrid');
+const emojiGrid = document.getElementById('emojiGrid');
+const modalBg = document.getElementById('modalBg');
+const modal = document.getElementById('modal');
+const search = document.getElementById('search');
+const filter = document.getElementById('filter');
+
+// ===========================================
+// 📊 KENGAYTIRILGAN DAVLAT MA'LUMOTLARI (To'liq ro'yxat)
+// ===========================================
+const countries = [
+    {name_uz:'Oʻzbekiston', name_en:'Uzbekistan', name_ru:'Узбекистан', name_cn:'乌兹别克斯坦', name_kr:'우즈베키스탄', code:'uz', flag:'🇺🇿', region:'Asia', capital:'Toshkent', population:36000000, area:'447,400 km²'},
+    {name_uz:'Xitoy', name_en:'China', name_ru:'Китай', name_cn:'中国', name_kr:'중국', code:'cn', flag:'🇨🇳', region:'Asia', capital:'Beijing', population:1425000000, area:'9,597,000 km²'},
+    {name_uz:'Hindiston', name_en:'India', name_ru:'Индия', name_cn:'印度', name_kr:'인도', code:'in', flag:'🇮🇳', region:'Asia', capital:'New Delhi', population:1428000000, area:'3,287,000 km²'},
+    {name_uz:'Yaponiya', name_en:'Japan', name_ru:'Япония', name_cn:'日本', name_kr:'일본', code:'jp', flag:'🇯🇵', region:'Asia', capital:'Tokyo', population:123000000, area:'377,975 km²'},
+    {name_uz:'Koreya Respublikasi', name_en:'South Korea', name_ru:'Южная Корея', name_cn:'韩国', name_kr:'대한민국', code:'kr', flag:'🇰🇷', region:'Asia', capital:'Seoul', population:51700000, area:'100,210 km²'},
+    {name_uz:'Qozogʻiston', name_en:'Kazakhstan', name_ru:'Казахстан', name_cn:'哈萨克斯坦', name_kr:'카자흐스탄', code:'kz', flag:'🇰🇿', region:'Asia', capital:'Astana', population:19000000, area:'2,725,000 km²'},
+    {name_uz:'Turkiya', name_en:'Turkey', name_ru:'Турция', name_cn:'土耳其', name_kr:'터키', code:'tr', flag:'🇹🇷', region:'Europe', capital:'Ankara', population:86000000, area:'783,562 km²'},
+    {name_uz:'Saudiya Arabistoni', name_en:'Saudi Arabia', name_ru:'Саудовская Аравия', name_cn:'沙特阿拉伯', name_kr:'사우디아라비아', code:'sa', flag:'🇸🇦', region:'Asia', capital:'Riyadh', population:37000000, area:'2,150,000 km²'},
+    {name_uz:'Rossiya', name_en:'Russia', name_ru:'Россия', name_cn:'俄罗斯', name_kr:'러시아', code:'ru', flag:'🇷🇺', region:'Europe', capital:'Moscow', population:144000000, area:'17,100,000 km²'},
+    {name_uz:'Buyuk Britaniya', name_en:'UK', name_ru:'Великобритания', name_cn:'英国', name_kr:'영국', code:'gb', flag:'🇬🇧', region:'Europe', capital:'London', population:67000000, area:'242,495 km²'},
+    {name_uz:'Fransiya', name_en:'France', name_ru:'Франция', name_cn:'法国', name_kr:'프랑스', code:'fr', flag:'🇫🇷', region:'Europe', capital:'Paris', population:64800000, area:'551,695 km²'},
+    {name_uz:'Germaniya', name_en:'Germany', name_ru:'Германия', name_cn:'德国', name_kr:'독일', code:'de', flag:'🇩🇪', region:'Europe', capital:'Berlin', population:84000000, area:'357,588 km²'},
+    {name_uz:'Italiya', name_en:'Italy', name_ru:'Италия', name_cn:'意大利', name_kr:'이탈리아', code:'it', flag:'🇮🇹', region:'Europe', capital:'Rome', population:58700000, area:'301,340 km²'},
+    {name_uz:'Ukraina', name_en:'Ukraine', name_ru:'Украина', name_cn:'乌克兰', name_kr:'우크라이나', code:'ua', flag:'🇺🇦', region:'Europe', capital:'Kyiv', population:40000000, area:'603,628 km²'},
+    {name_uz:'Ispaniya', name_en:'Spain', name_ru:'Испания', name_cn:'西班牙', name_kr:'스페인', code:'es', flag:'🇪🇸', region:'Europe', capital:'Madrid', population:47800000, area:'505,992 km²'},
+    {name_uz:'AQSH', name_en:'USA', name_ru:'США', name_cn:'美国', name_kr:'미국', code:'us', flag:'🇺🇸', region:'North America', capital:'Washington D.C.', population:340000000, area:'9,833,517 km²'},
+    {name_uz:'Kanada', name_en:'Canada', name_ru:'Канада', name_cn:'加拿大', name_kr:'캐나다', code:'ca', flag:'🇨🇦', region:'North America', capital:'Ottawa', population:40000000, area:'9,984,670 km²'},
+    {name_uz:'Meksika', name_en:'Mexico', name_ru:'Мексика', name_cn:'墨西哥', name_kr:'멕시코', code:'mx', flag:'🇲🇽', region:'North America', capital:'Mexico City', population:129000000, area:'1,964,375 km²'},
+    {name_uz:'Braziliya', name_en:'Brazil', name_ru:'Бразилия', name_cn:'巴西', name_kr:'브라질', code:'br', flag:'🇧🇷', region:'South America', capital:'Brasilia', population:217000000, area:'8,515,767 km²'},
+    {name_uz:'Argentina', name_en:'Argentina', name_ru:'Аргентина', name_cn:'阿根廷', name_kr:'아르헨티나', code:'ar', flag:'🇦🇷', region:'South America', capital:'Buenos Aires', population:46000000, area:'2,780,400 km²'},
+    {name_uz:'Misr', name_en:'Egypt', name_ru:'Египет', name_cn:'埃及', name_kr:'이집트', code:'eg', flag:'🇪🇬', region:'Africa', capital:'Cairo', population:114000000, area:'1,002,450 km²'},
+    {name_uz:'Nigeriya', name_en:'Nigeria', name_ru:'Нигерия', name_cn:'尼日利亚', name_kr:'나이지리아', code:'ng', flag:'🇳🇬', region:'Africa', capital:'Abuja', population:230000000, area:'923,768 km²'},
+    {name_uz:'Janubiy Afrika', name_en:'South Africa', name_ru:'Южная Африка', name_cn:'南非', name_kr:'남아프리카', code:'za', flag:'🇿🇦', region:'Africa', capital:'Pretoria', population:62000000, area:'1,221,037 km²'},
+    {name_uz:'Avstraliya', code:'au', flag:'🇦🇺', region:'Oceania', capital:'Canberra', name_en:'Australia', name_ru:'Австралия', name_cn:'澳大利亚', name_kr:'호주', population:27000000, area:'7,692,024 km²'},
+    {name_uz:'Yangi Zelandiya', code:'nz', flag:'🇳🇿', region:'Oceania', capital:'Wellington', name_en:'New Zealand', name_ru:'Новая Зеландия', name_cn:'新西兰', name_kr:'뉴질랜드', population:5300000, area:'268,021 km²'},
+    {name_uz:'Qirgʻiziston', name_en:'Kyrgyzstan', name_ru:'Кыргызстан', name_cn:'吉尔吉斯斯坦', name_kr:'키르기스스탄', code:'kg', flag:'🇰🇬', region:'Asia', capital:'Bishkek', population:7000000, area:'199,900 km²'},
+    {name_uz:'Tojikiston', name_en:'Tajikistan', name_ru:'Таджикистан', name_cn:'塔吉克斯坦', name_kr:'타지키스탄', code:'tj', flag:'🇹🇯', region:'Asia', capital:'Dushanbe', population:10000000, area:'143,100 km²'},
+    {name_uz:'Turkmaniston', name_en:'Turkmenistan', name_ru:'Туркменистан', name_cn:'土库曼斯坦', name_kr:'투르크메니스탄', code:'tm', flag:'🇹🇲', region:'Asia', capital:'Ashgabat', population:7000000, area:'488,100 km²'},
+    {name_uz:'Afgʻoniston', name_en:'Afghanistan', name_ru:'Афганистан', name_cn:'阿富汗', name_kr:'아프가니스탄', code:'af', flag:'🇦🇫', region:'Asia', capital:'Kabul', population:41000000, area:'652,860 km²'},
+    {name_uz:'Armaniston', name_en:'Armenia', name_ru:'Армения', name_cn:'亚美尼亚', name_kr:'아르메니아', code:'am', flag:'🇦🇲', region:'Asia', capital:'Yerevan', population:3000000, area:'29,743 km²'},
+    {name_uz:'Ozarbayjon', name_en:'Azerbaijan', name_ru:'Азербайджан', name_cn:'阿塞拜疆', name_kr:'아제르바이잔', code:'az', flag:'🇦🇿', region:'Asia', capital:'Baku', population:10000000, area:'86,600 km²'},
+    {name_uz:'Filippin', name_en:'Philippines', name_ru:'Филиппины', name_cn:'菲律宾', name_kr:'필리핀', code:'ph', flag:'🇵🇭', region:'Asia', capital:'Manila', population:118000000, area:'300,000 km²'},
+    {name_uz:'Pokiston', name_en:'Pakistan', name_ru:'Пакистан', name_cn:'巴基斯坦', name_kr:'파키스탄', code:'pk', flag:'🇵🇰', region:'Asia', capital:'Islamabad', population:240000000, area:'881,913 km²'},
+    {name_uz:'Vyetnam', name_en:'Vietnam', name_ru:'Вьетнам', name_cn:'越南', name_kr:'베트남', code:'vn', flag:'🇻🇳', region:'Asia', capital:'Hanoi', population:99000000, area:'331,212 km²'},
+    {name_uz:'Indoneziya', name_en:'Indonesia', name_ru:'Индонезия', name_cn:'印度尼西亚', name_kr:'인도네시아', code:'id', flag:'🇮🇩', region:'Asia', capital:'Jakarta', population:277000000, area:'1,904,569 km²'},
+    {name_uz:'Keniya', name_en:'Kenya', name_ru:'Кения', name_cn:'肯尼亚', name_kr:'케냐', code:'ke', flag:'🇰🇪', region:'Africa', capital:'Nairobi', population:56000000, area:'580,367 km²'},
+    {name_uz:'Gana', name_en:'Ghana', name_ru:'Гана', name_cn:'加纳', name_kr:'가나', code:'gh', flag:'🇬🇭', region:'Africa', capital:'Accra', population:34000000, area:'238,533 km²'},
+    {name_uz:'Shvetsiya', name_en:'Sweden', name_ru:'Швеция', name_cn:'瑞典', name_kr:'스웨덴', code:'se', flag:'🇸🇪', region:'Europe', capital:'Stockholm', population:10500000, area:'450,295 km²'},
+    {name_uz:'Shveytsariya', name_en:'Switzerland', name_ru:'Швейцария', name_cn:'瑞士', name_kr:'스위스', code:'ch', flag:'🇨🇭', region:'Europe', capital:'Bern', population:8800000, area:'41,285 km²'},
+    {name_uz:'Gvatemala', name_en:'Guatemala', name_ru:'Гватемала', name_cn:'危地马拉', name_kr:'과테말라', code:'gt', flag:'🇬🇹', region:'North America', capital:'Guatemala City', population:18000000, area:'108,889 km²'},
+    {name_uz:'Chili', name_en:'Chile', name_ru:'Чили', name_cn:'智利', name_kr:'칠레', code:'cl', flag:'🇨🇱', region:'South America', capital:'Santiago', population:19700000, area:'756,102 km²'},
+    {name_uz:'Paragvay', name_en:'Paraguay', name_ru:'Парагвай', name_cn:'巴拉圭', name_kr:'파라과이', code:'py', flag:'🇵🇾', region:'South America', capital:'Asunción', population:6800000, area:'406,752 km²'},
+    {name_uz:'Singapur', name_en:'Singapore', name_ru:'Сингапур', name_cn:'新加坡', name_kr:'싱가포르', code:'sg', flag:'🇸🇬', region:'Asia', capital:'Singapore', population:6000000, area:'710 km²'},
+    {name_uz:'Tailand', name_en:'Thailand', name_ru:'Таиланд', name_cn:'泰国', name_kr:'태국', code:'th', flag:'🇹🇭', region:'Asia', capital:'Bangkok', population:71000000, area:'513,120 km²'},
+    {name_uz:'Eron', name_en:'Iran', name_ru:'Иран', name_cn:'伊朗', name_kr:'이란', code:'ir', flag:'🇮🇷', region:'Asia', capital:'Tehran', population:89000000, area:'1,648,195 km²'},
+    {name_uz:'Iroq', name_en:'Iraq', name_ru:'Ирак', name_cn:'伊拉克', name_kr:'이라크', code:'iq', flag:'🇮🇶', region:'Asia', capital:'Baghdad', population:46000000, area:'438,317 km²'},
+    {name_uz:'Isroil', name_en:'Israel', name_ru:'Израиль', name_cn:'以色列', name_kr:'이스라엘', code:'il', flag:'🇮🇱', region:'Asia', capital:'Jerusalem', population:9900000, area:'22,072 km²'},
+    {name_uz:'Malayziya', name_en:'Malaysia', name_ru:'Малайзия', name_cn:'马来西亚', name_kr:'말레이시아', code:'my', flag:'🇲🇾', region:'Asia', capital:'Kuala Lumpur', population:34000000, area:'330,803 km²'},
+    {name_uz:'Bangladesh', name_en:'Bangladesh', name_ru:'Бангладеш', name_cn:'孟加拉国', name_kr:'방글라데시', code:'bd', flag:'🇧🇩', region:'Asia', capital:'Dhaka', population:174000000, area:'147,570 km²'},
+    {name_uz:'Nepal', name_en:'Nepal', name_ru:'Непал', name_cn:'尼泊尔', name_kr:'네팔', code:'np', flag:'🇳🇵', region:'Asia', capital:'Kathmandu', population:30000000, area:'147,181 km²'},
+    {name_uz:'Gretsiya', name_en:'Greece', name_ru:'Греция', name_cn:'希腊', name_kr:'그리스', code:'gr', flag:'🇬🇷', region:'Europe', capital:'Athens', population:10400000, area:'131,957 km²'},
+    {name_uz:'Polsha', name_en:'Poland', name_ru:'Польша', name_cn:'波兰', name_kr:'폴란드', code:'pl', flag:'🇵🇱', region:'Europe', capital:'Warsaw', population:37700000, area:'312,696 km²'},
+    {name_uz:'Ruminiya', name_en:'Romania', name_ru:'Румыния', name_cn:'罗马尼亚', name_kr:'루마니아', code:'ro', flag:'🇷🇴', region:'Europe', capital:'Bucharest', population:19000000, area:'238,397 km²'},
+    {name_uz:'Niderlandiya', name_en:'Netherlands', name_ru:'Нидерланды', name_cn:'荷兰', name_kr:'네덜란드', code:'nl', flag:'🇳🇱', region:'Europe', capital:'Amsterdam', population:17800000, area:'41,850 km²'},
+    {name_uz:'Belgiya', name_en:'Belgium', name_ru:'Бельгия', name_cn:'比利时', name_kr:'벨기에', code:'be', flag:'🇧🇪', region:'Europe', capital:'Brussels', population:11800000, area:'30,689 km²'},
+    {name_uz:'Portugaliya', name_en:'Portugal', name_ru:'Португалия', name_cn:'葡萄牙', name_kr:'포르투갈', code:'pt', flag:'🇵🇹', region:'Europe', capital:'Lisbon', population:10400000, area:'92,212 km²'},
+    {name_uz:'Avstriya', name_en:'Austria', name_ru:'Австрия', name_cn:'奥地利', name_kr:'오스트리아', code:'at', flag:'🇦🇹', region:'Europe', capital:'Vienna', population:9100000, area:'83,879 km²'},
+    {name_uz:'Vengriya', name_en:'Hungary', name_ru:'Венгрия', name_cn:'匈牙利', name_kr:'헝가리', code:'hu', flag:'🇭🇺', region:'Europe', capital:'Budapest', population:9600000, area:'93,030 km²'},
+    {name_uz:'Marokash', name_en:'Morocco', name_ru:'Марокко', name_cn:'摩洛哥', name_kr:'모로코', code:'ma', flag:'🇲🇦', region:'Africa', capital:'Rabat', population:38000000, area:'446,550 km²'},
+    {name_uz:'Jazoir', name_en:'Algeria', name_ru:'Алжир', name_cn:'阿尔及利亚', name_kr:'알제리', code:'dz', flag:'🇩🇿', region:'Africa', capital:'Algiers', population:47000000, area:'2,381,741 km²'},
+    {name_uz:'Kongo (DRK)', name_en:'DR Congo', name_ru:'ДР Конго', name_cn:'刚果（金）', name_kr:'콩고민주공화국', code:'cd', flag:'🇨🇩', region:'Africa', capital:'Kinshasa', population:105000000, area:'2,345,410 km²'},
+    {name_uz:'Efiopiya', name_en:'Ethiopia', name_ru:'Эфиопия', name_cn:'埃塞俄比亚', name_kr:'에티오피아', code:'et', flag:'🇪🇹', region:'Africa', capital:'Addis Ababa', population:128000000, area:'1,104,300 km²'},
+    {name_uz:'Tanzaniya', name_en:'Tanzania', name_ru:'Танзания', name_cn:'坦桑尼亚', name_kr:'탄자니아', code:'tz', flag:'🇹🇿', region:'Africa', capital:'Dodoma', population:68000000, area:'947,303 km²'},
+    {name_uz:'Puerto-Riko', name_en:'Puerto Rico', name_ru:'Пуэрто-Рико', name_cn:'波多黎各', name_kr:'푸에르토리코', code:'pr', flag:'🇵🇷', region:'North America', capital:'San Juan', population:3200000, area:'8,870 km²'},
+    {name_uz:'Kuba', name_en:'Cuba', name_ru:'Куба', name_cn:'古巴', name_kr:'쿠바', code:'cu', flag:'🇨🇺', region:'North America', capital:'Havana', population:11000000, area:'109,884 km²'},
+    {name_uz:'Kolumbiya', name_en:'Colombia', name_ru:'Колумбия', name_cn:'哥伦比亚', name_kr:'콜롬비아', code:'co', flag:'🇨🇴', region:'South America', capital:'Bogotá', population:52000000, area:'1,141,748 km²'},
+    {name_uz:'Peru', name_en:'Peru', name_ru:'Перу', name_cn:'秘鲁', name_kr:'페루', code:'pe', flag:'🇵🇪', region:'South America', capital:'Lima', population:34000000, area:'1,285,216 km²'},
+    {name_uz:'Venesuela', name_en:'Venezuela', name_ru:'Венесуэла', name_cn:'委内瑞拉', name_kr:'베네수엘라', code:'ve', flag:'🇻🇪', region:'South America', capital:'Caracas', population:29000000, area:'916,445 km²'},
+    {name_uz:'Fiji', name_en:'Fiji', name_ru:'Фиджи', name_cn:'斐济', name_kr:'피지', code:'fj', flag:'🇫🇯', region:'Oceania', capital:'Suva', population:900000, area:'18,272 km²'},
+    {name_uz:'Samoa', name_en:'Samoa', name_ru:'Самоа', name_cn:'萨摩亚', name_kr:'사모아', code:'ws', flag:'🇼🇸', region:'Oceania', capital:'Apia', population:220000, area:'2,842 km²'},
+];
+
+
+// ===========================================
+// 🛠️ FUNKSIYALAR
+// ===========================================
+
+/**
+ * Aholi sonini o'qilishi oson formatga o'tkazadi
+ * @param {number} num 
+ */
+function formatPopulation(num) {
+    if (typeof num === 'number') {
+        // Tilga mos lokal format
+        const locale = currentLang === 'cn' ? 'zh-CN' : currentLang === 'kr' ? 'ko-KR' : 'en-US'; 
+        return num.toLocaleString(locale);
+    }
+    return num;
+}
+
+/**
+ * Saytning barcha statik UI elementlarini tarjima qiladi va kontentni yangilaydi.
+ */
+function translateUI() {
+    const lang = translations[currentLang];
+    
+    // Asosiy sarlavhalar
+    document.getElementById('pageTitle').textContent = lang.pageTitle;
+    document.getElementById('headerTitle').textContent = lang.headerTitle;
+    
+    // Navigatsiya tugmalari
+    document.getElementById('btnRasm').textContent = lang.btn_rasm;
+    document.getElementById('btnInfo').textContent = lang.btn_info;
+    document.getElementById('btnEmoji').textContent = lang.btn_emoji;
+    
+    // Qidiruv joyi
+    search.placeholder = lang.search_placeholder;
+    
+    // Filtrlash menyusi (Qit'alar)
+    document.querySelectorAll('#filter option').forEach(option => {
+        const key = option.getAttribute('data-lang-key');
+        if (option.value !== 'all' && regionTranslations[option.value]) {
+            option.textContent = regionTranslations[option.value][currentLang] || option.value;
+        } else if (lang[key]) {
+             option.textContent = lang[key];
+        }
+    });
+
+    // Sektsiya sarlavhalari
+    document.querySelectorAll('.section h2').forEach(h2 => {
+        const key = h2.getAttribute('data-lang-key');
+        if (key && lang[key]) {
+            h2.textContent = lang[key];
+        }
+    });
+
+    // Til o'zgarganda ma'lumotlarni qayta yuklash
+    filterCountries();
+}
+
+/**
+ * Tilni almashtiradi va UI ni yangilaydi
+ * @param {string} langCode 
+ */
+function setLanguage(langCode) {
+    currentLang = langCode;
+    translateUI();
+}
+
+
+/**
+ * Berilgan davlatlar ro'yxati asosida Grid'larni to'ldiradi.
+ * @param {Array} list 
+ */
+function fillGrids(list) {
+    const nameKey = `name_${currentLang}`;
+    const lang = translations[currentLang];
+
+    // Card HTML generatsiyasi
+    const generateCardHtml = (c, type) => {
+        const regionName = regionTranslations[c.region][currentLang] || c.region; 
+        let content = '';
+
+        // Rasm va Ma'lumotli bo'limlarda rasm ishlatiladi
+        if (type === 'rasm' || type === 'info') {
+             // Bayroq rasmini flagcdn.com saytidan olamiz
+            content = `<img class='flag-img' src='https://flagcdn.com/w320/${c.code}.png' alt='${c.name_uz} bayrogʻi'>`;
+        } else if (type === 'emoji') {
+            content = `<div class='emoji-flag'>${c.flag}</div>`;
+        }
+        
+        let infoHtml = '';
+        if (type === 'info') {
+            // Ma'lumotli kartochkalar uchun qo'shimcha ma'lumot
+            infoHtml = `
+                <div>${lang.modal_continent} ${regionName}</div>
+                <div>${lang.modal_capital} ${c.capital}</div>
+                <div>${lang.modal_population} ${formatPopulation(c.population)}</div>
+            `;
+        }
+
+        // 'data-name' kartochkalarni aniqlash uchun qo'shildi
+        return `
+            <a href="#" class='card' data-name='${c.name_uz.replace(/'/g, "\\'")}' onmousemove="handleMouseMove(event, this)" onmouseleave="handleMouseLeave(this)" onclick='event.preventDefault(); openModal("${c.name_uz.replace(/'/g, "\\'")}")'>
+                ${content}
+                <div class='name'>${c[nameKey] || c.name_uz}</div>
+                ${infoHtml}
+            </a>`;
+    };
+
+    rasmGrid.innerHTML = list.map(c => generateCardHtml(c, 'rasm')).join('');
+    infoGrid.innerHTML = list.map(c => generateCardHtml(c, 'info')).join(''); 
+    emojiGrid.innerHTML = list.map(c => generateCardHtml(c, 'emoji')).join('');
+
+    // **3D Interaksiya uchun:** Barcha grid kartochkalari sichqoncha harakatini tinglash uchun tayyorlanadi.
+    document.querySelectorAll('.grid .card').forEach(card => {
+        card.addEventListener('mousemove', (e) => handleMouseMove(e, card));
+        card.addEventListener('mouseleave', () => handleMouseLeave(card));
+    });
+}
+
+
+// ===========================================
+// 🖱️ 3D INTERAKSIYA FUNKSIYALARI
+// ===========================================
+
+/**
+ * Sichqoncha harakatiga qarab kartochkani aylantiradi (3D tilt effekti).
+ * @param {Event} e 
+ * @param {HTMLElement} card 
+ */
+function handleMouseMove(e, card) {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left; 
+    const y = e.clientY - rect.top; 
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // -1 dan 1 gacha bo'lgan diapazonga normallashtirish
+    const normalizedX = (x - centerX) / centerX;
+    const normalizedY = (y - centerY) / centerY;
+    
+    // Maksimal aylanish burchagi
+    const rotateY = normalizedX * 10; 
+    const rotateX = normalizedY * -10; // X o'qi atrofida aylanadi (teskari)
+    
+    const transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    
+    card.style.transform = transform;
+    
+    // Ichki rasmni ham biroz siljitish (chuqurlik effekti uchun)
+    const img = card.querySelector('.flag-img');
+    if(img) {
+        // translateZ(30px) rasmning kartochkadan oldinga chiqishini ta'minlaydi
+        img.style.transform = `translateZ(30px) translateX(${-normalizedX * 5}px) translateY(${-normalizedY * 5}px)`;
+    }
+}
+
+/**
+ * Sichqoncha kartochkadan chiqqanda uni asl holatiga qaytaradi.
+ * @param {HTMLElement} card 
+ */
+function handleMouseLeave(card) {
+    // Asl holatga qaytarish
+    card.style.transform = 'translateZ(0) scale(1)';
+    
+    // Ichki rasmni asl holatga qaytarish
+    const img = card.querySelector('.flag-img');
+    if(img) {
+        img.style.transform = 'translateZ(0) translateX(0) translateY(0)';
+    }
+}
+
+
+// ===========================================
+// 🔍 FILTRLASH VA QIDIRUV
+// ===========================================
+
+function filterCountries(){
+    const text = search.value.toLowerCase();
+    const qit = filter.value;
+    
+    const filtered = countries.filter(c => {
+        const regionMatch = (qit === 'all' || c.region === qit);
+        let searchMatch = false;
+        if (text === '') {
+            searchMatch = true;
+        } else {
+            // Barcha til variantlarida qidiruv
+            for (const key in c) {
+                if (key.startsWith('name_') && String(c[key]).toLowerCase().includes(text)) {
+                    searchMatch = true;
+                    break;
+                }
+            }
+        }
+        return regionMatch && searchMatch;
+    });
+    
+    fillGrids(filtered);
+}
+
+// Qidiruvni sekinlashtirish (Debounce)
+let timeoutId;
+function debounce(func, delay) {
+    return function(...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
+const debouncedUpdate = debounce(filterCountries, 300);
+
+search.oninput = debouncedUpdate;
+filter.onchange = debouncedUpdate;
+
+
+// ===========================================
+// 🖼️ MODAL VA UI BOSHQARUVI
+// ===========================================
+
+function openModal(name_uz){
+    // O'zbekcha nomi orqali ob'ektni topish
+    const c = countries.find(x => x.name_uz === name_uz); 
+    if (!c) return;
+
+    const lang = translations[currentLang];
+    const nameKey = `name_${currentLang}`;
+    const regionName = regionTranslations[c.region][currentLang] || c.region; // Dinamik qit'a nomi
+
+    modal.innerHTML = `
+        <h2>${c[nameKey] || c.name_uz}</h2>
+        <img src='https://flagcdn.com/w320/${c.code}.png' alt='${c.name_uz} bayrogʻi'>
+        <p><b>${lang.modal_capital}</b> ${c.capital}</p>
+        <p><b>${lang.modal_continent}</b> ${regionName}</p>
+        <p><b>${lang.modal_population}</b> ${formatPopulation(c.population)}</p>
+        <p><b>${lang.modal_area}</b> ${c.area}</p>
+        <button class='close' onclick='closeModal()'>${lang.modal_close}</button>`;
+
+    modalBg.style.display = "flex";
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){ 
+    modalBg.style.display = "none"; 
+    document.body.style.overflow = 'auto';
+}
+
+function showSection(id, element){
+    // Bo'limlarni ko'rsatish/yashirish
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    // Aktiv tugmani belgilash
+    document.querySelectorAll('#navBar button').forEach(btn => btn.classList.remove('active-btn'));
+    element.classList.add('active-btn');
+}
+
+// Modalni fon bosilganda yopish
+modalBg.onclick = function(event) {
+    if (event.target === modalBg) {
+        closeModal();
+    }
+}
+
+// Sahifa yuklanganda boshlang'ich tilni o'rnatish
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('appLang') || 'uz'; 
+    currentLang = savedLang;
+    setLanguage(currentLang);
+    document.getElementById('languageSelector').value = currentLang;
+
+    // Tilni almashtirishni saqlash
+    document.getElementById('languageSelector').onchange = function() {
+        setLanguage(this.value);
+        localStorage.setItem('appLang', this.value);
+    };
+});
+</script>
+
+</body>
+</html>
