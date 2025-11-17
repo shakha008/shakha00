@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
@@ -109,4 +109,221 @@
 </div>
 
 <!-- Modal -->
-  
+<div id="modal">
+  <div id="modalContent">
+    <h2 id="modalText"></h2>
+    <p id="modalScore"></p>
+    <button onclick="closeModal()">Yangi o‘yin</button>
+  </div>
+</div>
+
+<!-- Ovozlar -->
+<audio id="correctSound" src="https://freesound.org/data/previews/320/320181_5260876-lq.mp3"></audio>
+
+<script>
+// --- So'zlar ---
+const wordLists = {
+  uz: {
+    basic:["salom","dunyo","kitob","maktab","bola","ota","ona","uy","meva","do‘st"],
+    animals:["it","mushuk","quyon","sher","qush","delfin"],
+    fruits:["olma","anor","banan","olcha","nok"],
+    famous:["temur","navoiy","ulugbek","amir temur"]
+  },
+  en: {
+    basic:["hello","world","book","school","child","father","mother","home","fruit","friend"],
+    animals:["cat","dog","rabbit","lion","bird","dolphin"],
+    fruits:["apple","banana","cherry","pear","orange"],
+    famous:["shakespeare","einstein","newton","galileo"]
+  },
+  ru: {
+    basic:["привет","мир","книга","школа","ребенок","отец","мать","дом","фрукт","друг"],
+    animals:["кот","собака","кролик","лев","птица","дельфин"],
+    fruits:["яблоко","банан","вишня","груша","апельсин"],
+    famous:["пушкин","ленин","петр","галилей"]
+  }
+};
+
+let selectedWordType = "basic";
+let selectedWord = "";
+let guessedLetters = [];
+let lives = 6;
+let score = 0;
+
+// DOM
+const wordDisplay = document.getElementById("wordDisplay");
+const lettersContainer = document.getElementById("lettersContainer");
+const livesDisplay = document.getElementById("lives");
+const scoreDisplay = document.getElementById("score");
+const restartBtn = document.getElementById("restartBtn");
+const languageSelect = document.getElementById("languageSelect");
+const startBtn = document.getElementById("startBtn");
+const landing = document.getElementById("landing");
+const settings = document.getElementById("settings");
+const applySettingsBtn = document.getElementById("applySettingsBtn");
+const wordTypeSelect = document.getElementById("wordTypeSelect");
+const gameDiv = document.getElementById("game");
+const modal = document.getElementById("modal");
+const modalText = document.getElementById("modalText");
+const modalScore = document.getElementById("modalScore");
+const correctSound = document.getElementById("correctSound");
+
+// --- Musiqa ---
+const musicInput = document.getElementById("musicInput");
+const musicCarousel = document.getElementById("musicCarousel");
+const toggleMusic = document.getElementById("toggleMusic");
+const bgMusic = document.getElementById("bgMusic");
+let musicFiles = JSON.parse(localStorage.getItem("musicFiles")||"[]");
+let currentMusicIndex=0;
+
+// --- Kirish ---
+startBtn.addEventListener("click", () => {
+  landing.style.display="none";
+  settings.style.display="block";
+});
+
+applySettingsBtn.addEventListener("click", () => {
+  selectedWordType = wordTypeSelect.value;
+  landing.style.display="none";
+  settings.style.display="none";
+  gameDiv.style.display="block";
+  startGame();
+  loadMusicList();
+  if(musicFiles.length>0){
+    bgMusic.src = musicFiles[currentMusicIndex].url;
+    bgMusic.play();
+    toggleMusic.textContent="Musiqani O‘chirish";
+  }
+});
+
+// --- O'yin funksiyalari ---
+function startGame() {
+  guessedLetters=[]; lives=6; score=0;
+  livesDisplay.textContent=lives; scoreDisplay.textContent=score;
+  const lang=languageSelect.value;
+  const words=wordLists[lang][selectedWordType];
+  selectedWord=words[Math.floor(Math.random()*words.length)];
+  createLetterButtons(lang);
+  updateDisplay(lang);
+}
+
+function createLetterButtons(lang){
+  lettersContainer.innerHTML="";
+  let letters=[];
+  if(lang==="ru"){ letters = Array.from("абвгдеёжзийклмнопрстуфхцчшщъыьэюя"); }
+  else{ letters = Array.from("abcdefghijklmnopqrstuvwxyz"); }
+
+  letters.forEach(letter=>{
+    const btn=document.createElement("button");
+    btn.textContent=letter;
+    btn.onclick=()=> guessLetter(letter, btn, lang);
+    lettersContainer.appendChild(btn);
+  });
+}
+
+function guessLetter(letter, btn, lang){
+  if(guessedLetters.includes(letter)) return;
+  guessedLetters.push(letter);
+  if(selectedWord.includes(letter)){
+    btn.classList.add("correct"); 
+    score+=10; 
+    correctSound.play(); // ovoz chiqadi
+  }
+  else{ btn.classList.add("wrong"); lives--; }
+  btn.disabled=true; livesDisplay.textContent=lives; scoreDisplay.textContent=score;
+  updateDisplay(lang); checkGameOver(lang);
+}
+
+function updateDisplay(lang){
+  let display="";
+  for(let char of selectedWord){
+    if(guessedLetters.includes(char)){ display+=char+" "; }
+    else{ display+="_ "; }
+  }
+  wordDisplay.textContent=display.trim();
+}
+
+function checkGameOver(lang){
+  const isWin=selectedWord.split("").every(c=>guessedLetters.includes(c));
+  if(isWin) showModal("🎉 Tabriklaymiz! So‘z topildi!", score);
+  else if(lives<=0) showModal("😢 O‘yin tugadi! So‘z: "+selectedWord, score);
+}
+
+function showModal(message, finalScore){
+  modalText.textContent=message;
+  modalScore.textContent="Sizning ballingiz: "+finalScore;
+  modal.style.display="flex";
+}
+function closeModal(){ modal.style.display="none"; startGame(); }
+
+restartBtn.onclick=startGame;
+languageSelect.onchange=startGame;
+
+// --- Musiqa funksiyalari ---
+musicInput.addEventListener("change", (e)=>{
+  for(const file of e.target.files){
+    const url = URL.createObjectURL(file);
+    musicFiles.push({name:file.name,url});
+  }
+  localStorage.setItem("musicFiles",JSON.stringify(musicFiles));
+  loadMusicList();
+  if(bgMusic.paused && musicFiles.length>0){
+    currentMusicIndex=musicFiles.length-1;
+    bgMusic.src=musicFiles[currentMusicIndex].url;
+    bgMusic.play();
+    toggleMusic.textContent="Musiqani O‘chirish";
+  }
+});
+
+toggleMusic.addEventListener("click", ()=>{
+  if(bgMusic.paused){ bgMusic.play(); toggleMusic.textContent="Musiqani O‘chirish"; }
+  else{ bgMusic.pause(); toggleMusic.textContent="Musiqani Yoqish"; }
+});
+
+function loadMusicList(){
+  musicCarousel.innerHTML="";
+  musicFiles.forEach((m,i)=>{
+    const div=document.createElement("div");
+    div.classList.add("carousel-item");
+    if(i===currentMusicIndex) div.classList.add("active");
+    div.textContent=m.name;
+
+    div.onclick=()=>{
+      currentMusicIndex=i;
+      bgMusic.src=m.url;
+      bgMusic.play();
+      toggleMusic.textContent="Musiqani O‘chirish";
+      updateCarouselActive();
+    }
+
+    const deleteBtn=document.createElement("button");
+    deleteBtn.textContent="❌";
+    deleteBtn.onclick=(e)=>{
+      e.stopPropagation();
+      if(bgMusic.src===m.url) bgMusic.pause();
+      musicFiles.splice(i,1);
+      localStorage.setItem("musicFiles",JSON.stringify(musicFiles));
+      loadMusicList();
+    }
+    div.appendChild(deleteBtn);
+    musicCarousel.appendChild(div);
+  });
+}
+
+function updateCarouselActive(){
+  document.querySelectorAll(".carousel-item").forEach((c,i)=>{
+    c.classList.remove("active");
+    if(i===currentMusicIndex) c.classList.add("active");
+  });
+}
+
+bgMusic.onended=()=>{
+  if(musicFiles.length===0) return;
+  currentMusicIndex++;
+  if(currentMusicIndex>=musicFiles.length) currentMusicIndex=0;
+  bgMusic.src=musicFiles[currentMusicIndex].url;
+  bgMusic.play();
+  updateCarouselActive();
+}
+</script>
+</body>
+</html>
