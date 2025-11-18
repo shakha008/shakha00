@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6-Sinf Fanlar Markaziy Boti</title>
+    <style>
+        /* (CSS qismi avvalgidek qoldi, o'zgartirish kiritilmadi) */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e0f7fa 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+
+        .chat-header {
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s;
+            position: relative;
+        }
+        .header-status {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+
+        #fanSelector {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        #fanSelector option {
+            color: #333;
+            background-color: #fff;
+        }
+        
+        .chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+        }
+        .user-wrapper { justify-content: flex-end; }
+        .bot-wrapper { justify-content: flex-start; }
+        
+        .message {
+            max-width: 85%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .user-message {
+            color: white;
+            border-bottom-right-radius: 5px;
+            order: 2;
+        }
+        .bot-message {
+            background-color: #e0e0e0;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            order: 2;
+        }
+
+        .message-time {
+            font-size: 0.65rem;
+            color: #999;
+            white-space: nowrap;
+            order: 1;
+            align-self: flex-end;
+        }
+        .user-wrapper .message-time { order: 1; }
+        .bot-wrapper .message-time { order: 3; }
+
+        .math-formula {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #000; 
+            background-color: #fcfcfc;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        #typingIndicator {
+            align-self: flex-start;
+            padding: 8px 15px;
+            background-color: #f1f1f1;
+            border-radius: 15px;
+            color: #555;
+            font-size: 0.9rem;
+            display: none; 
+            margin-bottom: 10px;
+        }
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #555;
+            margin-left: 2px;
+            animation: dotFlashing 1.2s infinite alternate;
+        }
+        .dot:nth-child(2) { animation-delay: 0.4s; }
+        .dot:nth-child(3) { animation-delay: 0.8s; }
+
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background-color: #f7f7f7;
+        }
+        .chat-input input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .chat-input input[type="text"]:focus {
+            outline: none;
+        }
+        .chat-input button:disabled,
+        .chat-input input:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .chat-input button {
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .chat-input button:hover {
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes dotFlashing {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+        
+        @media (max-width: 600px) {
+            .chat-container {
+                max-width: 100%;
+                margin: 0;
+                height: 100vh;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header" id="chatHeader">
+        <span id="botName">Markaziy Fan Boti</span> 🤖
+        <div class="header-status">6-sinf uchun barcha fanlar bir joyda</div>
+        <select id="fanSelector" onchange="changeFan()">
+            </select>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+        <div id="typingIndicator">
+            <span id="typingText">Bot yozmoqda</span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+        </div>
+
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Savolingizni yozing..." onkeydown="if(event.key === 'Enter') sendMessage()">
+        <button id="sendButton" onclick="sendMessage()">Yuborish</button>
+    </div>
+</div>
+
+<script>
+    const chatHeader = document.getElementById('chatHeader');
+    const botNameElement = document.getElementById('botName');
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const typingText = document.getElementById('typingText');
+    const fanSelector = document.getElementById('fanSelector');
+    
+    let currentFan = "Matematika"; // Boshlang'ich fan
+
+    // =====================================================================
+    // 1. FAN SOZLAMALARI VA RANG PALITRASI
+    // =====================================================================
+    
+    const FAN_COLORS = {
+        "Matematika": "#00bcd4",   
+        "Ona tili": "#4CAF50",     
+        "Adabiyot": "#FF9800",     
+        "Tarixchi": "#F44336",     
+        "Geografiya": "#2196F3",   
+        "Biologiya Bot (Tabiatshunoslik)": "#8BC34A", 
+        "Fizika": "#9C27B0",       
+        "Informatika": "#3F51B5",   
+        "Ingliz tili": "#FFC107",   
+        "Rus tili": "#607D8B",      
+        "Chaqqonlik Bot (Jismoniy Tarbiya)": "#009688", 
+        "San'at Bot (Tasviriy San'at)": "#E91E63", 
+        "Motivator": "#673AB7"     
+    };
+
+    // 📚 6-SINF DARS KLARIDAGI ASOSIY MAVZULAR RO'YXATI (YANGI QO'SHILDI)
+    const FAN_TOPICS = {
+        "Matematika": [
+            "Ratsional sonlar (Manfiy sonlar)",
+            "Oddiy va o'nli kasrlar ustida amallar",
+            "Nisbat va proporsiya, foiz",
+            "Chiziqli tenglamalar va koordinatalar tekisligi",
+            "Geometrik shakllarning yuzasi va hajmi (Doira, Silindrga kirish)"
+        ],
+        "Ona tili": [
+            "Ot so'z turkumi va uning turlari (Atoqli, Tur)",
+            "Sifat va son so'z turkumi (Belgi va miqdor)",
+            "Olmosh (Kishilik va ko'rsatish)",
+            "Fe'l (Zamonlar: o'tgan, hozirgi, kelasi)",
+            "Gap bo'laklari (Ega, Kesim, To'ldiruvchi, Aniqlovchi, Hol)"
+        ],
+        "Adabiyot": [
+            "Adabiy janrlar (Lirika, Epika, Drama)",
+            "Alisher Navoiy hayoti va ijodi",
+            "Zahiriddin Muhammad Bobur va uning 'Boburnoma' asari",
+            "Furqat va boshqa XIX asr adabiyot namoyandalari",
+            "Xalq og'zaki ijodi (Ertaklar, Dostonlar)"
+        ],
+        "Tarixchi": [
+            "Qadimgi dunyo sivilizatsiyalari (Misr, Mesopotamiya)",
+            "Buyuk Ipak yo'li va uning ahamiyati",
+            "O'rta Osiyo xonliklari va davlatlari (Qadimgi Sug'd, Xorazm)",
+            "Islom dinining tarqalishi va Movarounnahr madaniyati",
+            "Amir Temur va Temuriylar davlati (Qisqacha kirish)"
+        ],
+        "Geografiya": [
+            "Yer sharining tuzilishi (Litosfera, Gidrosfera, Atmosfera)",
+            "Materiklar va okeanlar (Ularning joylashuvi)",
+            "Geografik koordinatalar (Kenglik va uzunlik)",
+            "Iqlim va uning turlari",
+            "Xarita va Globusda ishlash, Masshtab"
+        ],
+        "Biologiya Bot (Tabiatshunoslik)": [
+            "Hujayra — hayot birligi (O'simlik va hayvon hujayrasi farqi)",
+            "Fotosintez jarayoni va o'simlikning hayoti",
+            "Hayvonot dunyosi (Umurtqali va umurtqasizlar)",
+            "Inson organizmi (Asosiy organlar sistemasi)",
+            "Ekologiya asoslari (Tabiatni muhofaza qilish)"
+        ],
+        "Fizika": [
+            "Fizik hodisalar va ularning turlari (Mexanik, Optik)",
+            "Tezlik, Yo'l va Vaqt tushunchasi ($v=S/t$)",
+            "Massa, Kuch va Og'irlik (Farqlari)",
+            "Jismning erkin tushishi va tortishish kuchi (Torishish kuchiga kirish)",
+            "Yorug'lik hodisalari (Qaytish va sinish qonunlari)"
+        ],
+        "Informatika": [
+            "Algoritm tushunchasi va turlari (Chiziqli, Tarmoqlanuvchi, Takrorlanuvchi)",
+            "Blok-sxemalar bilan ishlash",
+            "Ma'lumot o'lchov birliklari (Bit, Bayt, KB, MB)",
+            "Dasturlash asoslari (Scratch vizual dasturlash tili)",
+            "Kompyuter qurilmalari va xavfsizlik qoidalari"
+        ],
+        "Ingliz tili": [
+            "Present Simple, Past Simple (Zamonlar)",
+            "Sifat va ravishlar darajalari (Comparative, Superlative)",
+            "Modal fe'llar (Can, Must, Should)",
+            "Lug'at boyligini oshirish (Maktab, oila, sayohat mavzulari)",
+            "Reading va Writing ko'nikmalarini rivojlantirish"
+        ],
+        "Rus tili": [
+            "Rus alifbosi va o'qish qoidalari",
+            "Kelishiklar (Падежи) tushunchasi (Asosiy 3 tasi)",
+            "Sifat va Otlarning jinslarga ko'ra o'zgarishi",
+            "Fe'llarning zamonlari (Прошедшее, Настоящее, Будущее)",
+            "Sodda gaplar tuzish va dialoglar"
+        ],
+        "Chaqqonlik Bot (Jismoniy Tarbiya)": [
+            "Sport o'yinlari qoidalari (Basketbol, Voleybol, Futbol)",
+            "Jismoniy tayyorgarlik elementlari (Yugurish, Sakrash, Otish)",
+            "Organizmni isitish (Razminka) va sovutish mashqlari",
+            "Sog'lom turmush tarzi va parhez asoslari",
+            "Shaxsiy gigiyena qoidalari"
+        ],
+        "San'at Bot (Tasviriy San'at)": [
+            "Rangshunoslik (Asosiy, Ikkilamchi, Qorishma ranglar)",
+            "Kompozitsiya qoidalari",
+            "Rasm chizish texnikalari (Qalam, Akvarel, Bo'yoq)",
+            "Peyzaj (Tabiat) va Natyurmort (Predmet) turlari",
+            "O'zbekistonning mashhur rassomlari"
+        ],
+        "Motivator": [
+            "O'qish motivatsiyasi va maqsad qo'yish",
+            "Vaqtni boshqarish (Kun tartibi va Pomodoro usuli)",
+            "Xotirani mustahkamlash usullari",
+            "O'ziga ishonch va qiyinchiliklarni yengish",
+            "Do'stlar bilan muloqot va jamoada ishlash"
+        ]
+    };
+
+    // Fan tanlash menyusini to'ldirish
+    function populateFanSelector() {
+        fanSelector.innerHTML = '';
+        Object.keys(FAN_COLORS).forEach(fan => {
+            const option = document.createElement('option');
+            option.value = fan;
+            // Qavsli qismini olib tashlab menyuni tozalaymiz
+            option.textContent = fan.replace(/ Bot \(.*\)/, ''); 
+            fanSelector.appendChild(option);
+        });
+        fanSelector.value = currentFan;
+    }
+
+    // Fan o'zgarganda interfeysni yangilash
+    function changeFan() {
+        currentFan = fanSelector.value;
+        applyStyles(currentFan);
+        clearChat();
+        initialMessage();
+    }
+
+    function applyStyles(fan) {
+        const color = FAN_COLORS[fan] || "#00bcd4";
+        
+        chatHeader.style.backgroundColor = color;
+        sendButton.style.backgroundColor = color;
+        
+        let styleElement = document.getElementById('dynamicFanStyle');
+        if (!styleElement) {
+            styleElement = document.createElement('style');
+            styleElement.id = 'dynamicFanStyle';
+            document.head.appendChild(styleElement);
+        }
+        styleElement.innerHTML = `.user-message { background-color: ${color}; } 
+                                  .chat-input input[type="text"]:focus { border-color: ${color}; }`;
+
+        // Bot nomini faqat fan nomi bilan ko'rsatish
+        botNameElement.textContent = `${fan.replace(/ Bot \(.*\)/, '')} Boti`;
+        document.getElementById('pageTitle').textContent = `6-Sinf ${fan.replace(/ Bot \(.*\)/, '')} Boti`;
+    }
+
+    function clearChat() {
+        const indicator = document.getElementById('typingIndicator');
+        Array.from(chatBox.children).forEach(child => {
+            if (child !== indicator) {
+                chatBox.removeChild(child);
+            }
+        });
+    }
+
+
+    // ===========================================
+    // 2. CHAT FUNKSIYALARI
+    // ===========================================
+
+    function setInputDisabled(disabled) {
+        userInput.disabled = disabled;
+        sendButton.disabled = disabled;
+        fanSelector.disabled = disabled;
+    }
+
+    async function sendMessage() {
+        const userText = userInput.value.trim();
+        if (userText === "" || userInput.disabled) return;
+
+        appendMessage(userText, 'user-message');
+        userInput.value = '';
+        setInputDisabled(true);
+        sendButton.textContent = '...';
+
+        typingText.textContent = `${currentFan.replace(/ Bot \(.*\)/, '')} Boti yozmoqda`;
+        typingIndicator.style.display = 'flex';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        await new Promise(resolve => setTimeout(resolve, 1500)); 
+
+        const botResponse = generateBotResponse(userText, currentFan);
+        typingIndicator.style.display = 'none';
+        
+        appendMessage(botResponse, 'bot-message');
+        
+        setInputDisabled(false);
+        sendButton.textContent = 'Yuborish';
+        userInput.focus();
+    }
+
+    function appendMessage(text, className) {
+        const time = new Date().toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('message-wrapper', className === 'user-message' ? 'user-wrapper' : 'bot-wrapper');
+
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', className);
+        
+        // Formulalarni mukammalroq formatlash uchun
+        const formattedText = text.replace(/(\$)([^\$]+)(\$)/g, (match, p1, p2) => {
+            return `<span class="math-formula">${p2.trim()}</span>`;
+        });
+        messageElement.innerHTML = formattedText.replace(/\n/g, '<br>');
+
+        const timeElement = document.createElement('span');
+        timeElement.classList.add('message-time');
+        timeElement.textContent = time;
+
+        if (className === 'user-message') {
+            wrapper.appendChild(timeElement);
+            wrapper.appendChild(messageElement);
+        } else {
+            wrapper.appendChild(messageElement);
+            wrapper.appendChild(timeElement);
+        }
+        
+        chatBox.appendChild(wrapper);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // ===========================================
+    // 3. BOTNING KENGAYTIRILGAN JAVOB BAZASI (DARS KLAR QO'SHILDI)
+    // ===========================================
+
+    function generateBotResponse(userText, fan) {
+        const lowerCaseText = userText.toLowerCase();
+        const fanTopicList = FAN_TOPICS[fan];
+
+        // --- Umumiy salomlashish qoidalari ---
+        if (lowerCaseText.includes("salom") || lowerCaseText.includes("assalomu alaykum") || lowerCaseText.includes("nima qilasan")) {
+            return `Salom! Men sizning 6-sinf **${fan.replace(/ Bot \(.*\)/, '')}** bo'yicha yordamchingizman. **Faqat 6-sinf dasturi bo'yicha** savollarga javob beraman. Keling, o'rganishni boshlaymiz!`;
+        }
+        if (lowerCaseText.includes("yordam ber") || lowerCaseText.includes("mavzu") || lowerCaseText.includes("darslik")) {
+            let topics = `Albatta! ${fan.replace(/ Bot \(.*\)/, '')} fanining 6-sinf darsligidagi asosiy mavzular quyidagilar: \n\n* ` + fanTopicList.join('\n* ');
+            topics += "\n\nQaysi biridan savol berishni xohlaysiz?";
+            return topics;
+        }
+
+        // --- Fan bo'yicha batafsil javoblar ---
+        switch(fan) {
+            case "Matematika":
+                if (lowerCaseText.includes("nisbat") || lowerCaseText.includes("proporsiya")) return "Proporsiya – bu ikki nisbatning tengligi: $a:b = c:d$. Asosiy xususiyati: chetki hadlar ko'paytmasi ($a \\cdot d$) o'rta hadlar ko'paytmasiga ($b \\cdot c$) teng bo'ladi.";
+                if (lowerCaseText.includes("kasr")) return "6-sinfda o'rganiladigan kasrlar: oddiy kasrlar (surat/maxraj), o'nli kasrlar va aralash kasrlar. Kasrlarni qo'shish/ayirish uchun umumiy maxraj topish kerak. Misol yechaymi?";
+                if (lowerCaseText.includes("butun son")) return "Butun sonlar — manfiy sonlar, nol va natural sonlarni o'z ichiga oladi. Manfiy sonlar noldan chapda, musbatlar o'ngda joylashadi. Qanday masalani yechamiz?";
+                return "6-sinf Matematikada asosiy mavzular: ratsional sonlar, foizlar, nisbat, proporsiya va chiziqli tenglamalar. ";
+                
+            case "Ona tili":
+                if (lowerCaseText.includes("ot")) return "Ot – shaxs, narsa, hodisa va o'rin-joy nomini bildiruvchi so'z turkumi. Otlar turkumlarga bo'linadi (atoqli/tur), jonsiz/jonli va so'z yasovchi qo'shimchalar bilan yangi ma'no hosil qiladi. Masalan: 'kitobxon'.";
+                if (lowerCaseText.includes("sifat")) return "Sifat – predmetning belgisini bildiruvchi so'z turkumi. U qanday? qanaqa? so'roqlariga javob beradi. Masalan: 'chiroyli (qanday?) qalam', 'qizil (qanaqa?) atirgul'.";
+                if (lowerCaseText.includes("gap bo'lak")) return "Gapning bosh bo'laklari (ega, kesim) va ikkinchi darajali bo'laklari (aniqlovchi, to'ldiruvchi, hol) bor. Keling, bir gapni tahlil qilib ko'ramiz.";
+                return "Ona tili fanida nutq bo'laklari, gap bo'laklari, tinish belgilari va imlo qoidalari 6-sinf uchun asosiy. Qaysi mavzudan mashq bajarishni xohlaysiz?";
+
+            case "Adabiyot":
+                if (lowerCaseText.includes("navoiy") || lowerCaseText.includes("furqat")) return "6-sinfda siz buyuk ijodkorlar asarlari bilan tanishasiz. Alisher Navoiy (XV asr) - 'Xamsa' muallifi, Furqat esa o'zbek adabiyotining yirik namoyandalaridan. Ularning qaysi asari sizga qiziq?";
+                if (lowerCaseText.includes("janr")) return "Adabiyot janrlari: **Lirika** (hissiyot, she'r), **Epika** (voqea, proza, doston) va **Dramaturgiya** (sahna asari). Sizga qaysi janr ko'proq yoqadi?";
+                if (lowerCaseText.includes("ertak")) return "Ertaklar epik janrga mansub bo'lib, hayotdagi yaxshilik va yomonlik kurashini tasvirlaydi. Siz bilgan eng qiziqarli ertak nima?";
+                return "Adabiyot darsida matn mazmunini tahlil qilish va qahramonlar xususiyatlarini aniqlashga o'rganamiz. Biron bir doston yoki hikoyani muhokama qilaylikmi?";
+
+            case "Tarixchi":
+                if (lowerCaseText.includes("qadimgi dunyo")) return "6-sinf Qadimgi dunyo tarixi: Misr, Mesopotamiya, Qadimgi Xitoy va Hindiston. Masalan, Misrda Piramidalar qanday qurilgan?";
+                if (lowerCaseText.includes("ipak yo'li")) return "Buyuk Ipak yo'li Qadimgi Xitoyni O'rta yer dengizi bilan bog'lagan. O'rta Osiyo shaharlari (Buxoro, Samarqand) ushbu yo'lda muhim rol o'ynagan.";
+                if (lowerCaseText.includes("amir temur")) return "Amir Temur (XIV asr) Temuriylar davlatiga asos solgan buyuk sarkarda. Uning hukmronlik davri Movarounnahrning 'Uyg'onish davri' hisoblanadi.";
+                return "Tarix - bu voqealar ketma-ketligi va ularning sabab-oqibatlari. Menga qaysi davr yoki shaxs haqida savol berasiz?";
+
+            case "Geografiya":
+                if (lowerCaseText.includes("qit'a") || lowerCaseText.includes("materik")) return "Yer yuzida 6 ta qit'a bor: Yevrosiyo, Afrika, Shimoliy Amerika, Janubiy Amerika, Antarktida va Avstraliya. Eng kattasi – Yevrosiyodir.";
+                if (lowerCaseText.includes("iqlim")) return "Iqlim zonalari Yer yuzida quyosh energiyasining notekis taqsimlanishi natijasida hosil bo'ladi. Asosiy zonalar: ekvatorial, tropik, mo'tadil va qutbiy.";
+                if (lowerCaseText.includes("xarita")) return "Xarita - yer yuzasining shartli belgilar yordamida kichraytirilgan tasviri. Xaritadagi masshtab nima uchun kerakligini bilasizmi?";
+                return "Geografiyada suv, havo (atmosfera), quruqlik va iqlim haqida o'rganamiz. Qaysi bo'limdan savol berishga tayyormisiz?";
+
+            case "Biologiya Bot (Tabiatshunoslik)":
+                if (lowerCaseText.includes("hujayra")) return "Hujayra — barcha tirik organizmlarning eng kichik birligi. O'simlik hujayrasi, hayvon hujayrasidan farqli o'laroq, hujayra devori va xloroplastlarga ega.";
+                if (lowerCaseText.includes("fotosintez")) return "Fotosintez — bu o'simliklar quyosh energiyasi yordamida suv va karbonat angidriddan o'zlari uchun ozuqa (glyukoza) hosil qilish jarayonidir.";
+                if (lowerCaseText.includes("hayvon")) return "Hayvonlar turlarga bo'linadi. 6-sinfda siz ko'pincha umurtqali (baliq, qush, sutemizuvchi) va umurtqasizlar (hasharot, qurt) haqida o'rganasiz.";
+                return "Sizga o'simliklar, hayvonlar yoki inson tanasi tuzilishi bo'yicha ma'lumot kerakmi?";
+
+            case "Fizika":
+                if (lowerCaseText.includes("tezlik")) return "Tezlik – jismning vaqt birligi ichida bosib o'tgan masofasi. Formula: $v = S / t$. Masofa $S$ metrda, vaqt $t$ sekundda o'lchanadi.";
+                if (lowerCaseText.includes("massa") || lowerCaseText.includes("og'irlik")) return "Massa jismning o'zgarishga qarshiligini (inersiyasini) ifodalaydi. Og'irlik esa tortishish kuchi tufayli yuzaga keladi. Ularning birliklari nima?";
+                if (lowerCaseText.includes("yorug'lik")) return "Yorug'likning to'g'ri chiziq bo'ylab tarqalishi va yorug'likning qaytish qonuni (ko'zgular) 6-sinf mavzularidir.";
+                return "6-sinf Fizikasi: Mexanika asoslari, issiqlik va elektr hodisalariga kirish. Keling, birgalikda kichik masalani yechamiz.";
+
+            case "Informatika":
+                if (lowerCaseText.includes("algoritm")) return "Algoritm — bu belgilangan natijaga erishish uchun bajarilishi kerak bo'lgan aniq ko'rsatmalar ketma-ketligi. U blok-sxema yoki psevdokod ko'rinishida tasvirlanadi.";
+                if (lowerCaseText.includes("scratch")) return "Scratch – bu bolalar uchun vizual dasturlash tili. U bilan o'yinlar, hikoyalar va animatsiyalar yaratish juda oson. Qaysi blokni ishlatishni bilmoqchisiz?";
+                if (lowerCaseText.includes("ma'lumot")) return "Ma'lumotlar kompyuterda bit (0 yoki 1), bayt, kilobayt kabi birliklarda saqlanadi. 1 Bayt necha bitdan iborat?";
+                return "Informatika darsida kompyuter qurilmalari, algoritm tushunchasi va Scratch asoslari o'rganiladi. Dasturlashga tayyormisiz?";
+
+            case "Ingliz tili":
+                if (lowerCaseText.includes("zamon") || lowerCaseText.includes("present simple")) return "Present Simple – doimiy, takrorlanuvchi ish-harakatlarni ifodalaydi. Tuzilishi: Subject + Verb(s/es). Masalan: 'He goes to school every day.'";
+                if (lowerCaseText.includes("lug'at")) return "Keling, maktabda eng ko'p ishlatiladigan 5 ta so'zni takrorlaymiz: 'study', 'teacher', 'pencil', 'homework', 'library'. Ularni gapda ishlatib ko'ring.";
+                if (lowerCaseText.includes("tarjima")) return "Iltimos, tarjima qilmoqchi bo'lgan so'zingiz yoki jumlani bering. Men uni tarjima qilishga harakat qilaman.";
+                return "What kind of question do you have about English? (Ingliz tilidan qanday savolingiz bor?)";
+
+            case "Rus tili":
+                if (lowerCaseText.includes("kelishik") || lowerCaseText.includes("падеж")) return "Rus tilida 6 ta kelishik (Падеж) mavjud. Eng asosiylari: Именительный (Kim? Nima?), Родительный (Kimning? Nimaning?), Дательный (Kimga? Nimaga?).";
+                if (lowerCaseText.includes("alfavit")) return "Rus alifbosida 33 ta harf bor. Ular orasida tovushsiz harflar: 'ъ' (tverdy znak) va 'ь' (myagkiy znak) alohida ahamiyatga ega.";
+                if (lowerCaseText.includes("so'z")) return "6-sinfda ko'p uchraydigan fe'llar: 'читать' (o'qimoq), 'писать' (yozmoq), 'понимать' (tushunmoq). Bularni o'tmish zamonda qanday ishlatasiz?";
+                return "Давайте начнем урок русского языка! (Rus tili darsini boshlaylik!)";
+
+            case "Chaqqonlik Bot (Jismoniy Tarbiya)":
+                if (lowerCaseText.includes("mashq") || lowerCaseText.includes("isitish")) return "Har qanday jismoniy faoliyatdan oldin **5-10 daqiqa isitish (razminka)** shart. Bu jarohatlanish xavfini kamaytiradi. Sizga bo'yin, yelka va oyoqlar uchun mashqlar ketma-ketligini yozib beraymi?";
+                if (lowerCaseText.includes("sport") || lowerCaseText.includes("o'yin")) return "6-sinf o'quvchilari uchun futbol, voleybol, basketbol va yengil atletika mashqlari muhim. Voleybol o'ynash uchun qanday qoidalar kerak?";
+                if (lowerCaseText.includes("sog'lom")) return "Sog'lom turmush tarzi uchun **to'g'ri ovqatlanish**, **kun tartibiga rioya qilish** va **aktiv bo'lish** kerak. Siz kuniga qancha vaqt sport bilan shug'ullanasiz?";
+                return "Sport, salomatlik, parhez (to'g'ri ovqatlanish) yoki jismoniy mashqlar bo'yicha savol bering. Jismonan faol bo'lishga tayyormisiz?";
+
+            case "San'at Bot (Tasviriy San'at)":
+                if (lowerCaseText.includes("rang") || lowerCaseText.includes("asosiy")) return "Asosiy ranglar (Qizil, Sariq, Moviy) va ikkilamchi ranglar (yashil, binafsha, to'q sariq) bor. Ranglar doirasi nima uchun kerakligini bilasizmi?";
+                if (lowerCaseText.includes("rassom")) return "Mashhur rassomlar: Leonardo da Vinchi, Vinsent van Gog, Pablo Pikasso. Ularning asarlarini bilish tasviriy san'atni tushunishga yordam beradi.";
+                if (lowerCaseText.includes("texnika")) return "Qalam, akvarel, moybo'yoq va haykaltaroshlik - bu asosiy texnikalar. Sizga peyzaj (tabiat) yoki portret (odam yuzi) chizish bo'yicha maslahat beraymi?";
+                return "Tasviriy san'at elementlari (chiziq, shakl, rang) yoki san'at turlari haqida gaplashaylikmi? Keling, birgalikda eskiz chizamiz!";
+
+            case "Motivator":
+                if (lowerCaseText.includes("qanday o'qish")) return "O'qish samaradorligini oshirish uchun 'Pomodoro' usulini qo'llang: 25 daqiqa tinimsiz o'qish, so'ng 5 daqiqa tanaffus. Bu miyangizni charchatmaydi. Keling, bir daqiqali diqqatni jamlash mashqini boshlaymiz.";
+                if (lowerCaseText.includes("maqsad")) return `Katta maqsadga erishish uchun uni kichik, erishish mumkin bo'lgan qismlarga bo'ling. Bugun siz **${fan.replace(/ Bot \(.*\)/, '')}**dan qanday kichik maqsadni qo'yasiz?`;
+                if (lowerCaseText.includes("qiyin") || lowerCaseText.includes("zerikdim")) return `Zerikish yoki qiyinchilik - bu o'rganishning normal qismi. Keling, o'rganishni o'yinga aylantiramiz. Sizga **${fan.replace(/ Bot \(.*\)/, '')}**dan eng sevimli mavzuingiz bo'yicha 3 ta qiziqarli fakt aytaymi?`;
+                return "Sizda ulkan salohiyat bor! Har kuni bir qadam oldinga siljish, ertangi kunga asos soladi. Bugun qanday muvaffaqiyatga erishdingiz?";
+
+            default:
+                // 🔴 FAQQAT 6-SINF CHEKLOVI
+                return `Kechirasiz, men **${fan.replace(/ Bot \(.*\)/, '')}** bo'yicha faqat **6-sinf dasturi doirasidagi** ma'lumotlarni berishga tayyorlanganman. Iltimos, savolingizni darslikdagi mavzu nomi bilan aniqroq bering.`;
+        }
+    }
+    
+    // Boshlang'ich xabarni joylash
+    function initialMessage() {
+        const cleanFanName = currentFan.replace(/ Bot \(.*\)/, '');
+        const welcomeMessage = `Assalomu alaykum! Fan tanlash menyusi (yuqorida) orqali kerakli 6-sinf fanini tanlang. Hozirda **${cleanFanName}** fani faol. \n\n**Menga "mavzu" deb yozing**, men shu fanning asosiy bo'limlarini aytib beraman.`;
+        appendMessage(welcomeMessage, 'bot-message');
+    }
+    
+    // DOM yuklanganda ishga tushirish
+    document.addEventListener('DOMContentLoaded', () => {
+        populateFanSelector();
+        applyStyles(currentFan);
+        initialMessage();
+    });
+
+</script>
+
+</body>
+</html>
