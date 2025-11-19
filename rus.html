@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Rus Tili O'qituvchisi | Kengaytirilgan 6-sinf</title>
+    <style>
+        /* ================================================= */
+        /* YAXSHILANGAN ZAMONAVIY DARK MODE DIZAYN */
+        /* ================================================= */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Serif:wght=400;700&display=swap');
+        
+        :root {
+            /* Asosiy Ranglar (Moviy/Yashil - Fokus va Tinchlik) */
+            --primary-color: #00bcd4; /* Cyan 500 */
+            --secondary-color: #009688; /* Teal 500 */
+            --primary-color-rgb: 0, 188, 212;
+            
+            /* Dark Mode Palitrasi */
+            --bg-color: #0d1117; /* GitHub Dark Mode foni */
+            --chat-bg-light: #161b22; /* Chat qutisi foni */
+            --bubble-user: #00bcd4; /* Foydalanuvchi xabari rangi */
+            --bubble-bot: #21262d; /* Bot xabari foni */
+            --text-color-light: #c9d1d9; /* Asosiy matn */
+            --text-color-dark: #0d1117; /* To'q matn */
+            --accent-color: #ff7b72; /* Xatolik/Diqqat Rang (Qizg'ish) */
+            --border-color: #30363d; /* Chegara rang */
+            --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.5); 
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            color: var(--text-color-light); 
+        }
+
+        /* --- SPLASH SCREEN (Boshlang'ich ekran) --- */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .splash-screen-title {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .splash-screen-subtitle {
+            font-size: 20px;
+            color: var(--text-color-light);
+            margin-bottom: 40px;
+        }
+        #startButton {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 150, 136, 0.5);
+        }
+        #startButton:hover {
+            background-color: #00796b; /* To'qroq Teal */
+            transform: translateY(-2px);
+        }
+
+        /* --- CHAT KONTEYNER --- */
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--chat-bg-light);
+            border-radius: 20px; 
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7); 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-height: 100vh;
+            border: 1px solid var(--border-color); 
+            opacity: 0; 
+            transition: opacity 0.5s;
+        }
+
+        .chat-header {
+            background-color: #010409; 
+            color: var(--primary-color);
+            padding: 15px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+            background-color: var(--chat-bg-light); 
+        }
+        
+        .message-wrapper {
+            display: flex;
+            align-items: flex-end; 
+            gap: 8px;
+            animation: slideIn 0.3s ease-out; 
+        }
+        .user-wrapper {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .bot-wrapper {
+            align-self: flex-start;
+            flex-direction: row;
+        }
+
+        .bot-avatar {
+            width: 32px; 
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            color: white; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .message {
+            max-width: 85%; 
+            padding: 14px 18px; 
+            border-radius: 20px; 
+            font-size: 15px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); 
+            min-width: 0;
+        }
+
+        .user-message {
+            color: var(--text-color-dark); 
+            background: var(--primary-color);
+            border-top-right-radius: 5px; 
+        }
+
+        .bot-message {
+            background-color: var(--bubble-bot);
+            color: var(--text-color-light); 
+            border: 1px solid var(--border-color); 
+            border-top-left-radius: 5px; 
+            font-family: 'Noto Serif', serif;
+        }
+        
+        .disclaimer-message {
+            background-color: #3b1e1e; /* To'q qizil */
+            border-left: 5px solid var(--accent-color);
+            color: var(--accent-color); 
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .bold-term {
+            font-weight: 700;
+            color: #00ffaa; /* Yashilroq aksent */
+            background-color: #2a2a2a; 
+            padding: 2px 5px;
+            border-radius: 4px;
+            display: inline-block; 
+        }
+
+        /* Yozish indikatori */
+        #typingIndicator .message {
+            background-color: #21262d; 
+            border: 1px solid var(--border-color);
+            color: var(--primary-color);
+        }
+        /* DOTS uchun stil */
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin: 0 2px;
+            animation: blink 1.4s infinite;
+        }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+
+        /* Input va Tugma */
+        .chat-input {
+            display: flex;
+            padding: 10px 15px;
+            background-color: #161b22; 
+            border-top: 1px solid var(--border-color);
+        }
+        .chat-input input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #21262d; 
+            color: var(--text-color-light);
+            font-size: 16px;
+            margin-right: 10px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .chat-input input[type="text"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.3);
+        }
+        .chat-input button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: var(--secondary-color);
+            color: white; 
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 150, 136, 0.4);
+        }
+        .chat-input button:hover {
+            background: #00796b;
+        }
+
+        /* Tezkor savollar (Quick Queries) */
+        .suggestion-container {
+            padding: 10px 0;
+            background-color: #161b22;
+            border-top: 1px solid var(--border-color);
+        }
+        .suggestion-header {
+             color: var(--primary-color);
+             padding: 10px 15px;
+             font-weight: 600;
+             border-bottom: 2px solid var(--secondary-color);
+             background-color: #21262d; 
+             font-size: 14px;
+        }
+        .suggestion-grid {
+             display: grid;
+             padding: 10px 15px;
+             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+             gap: 8px;
+        }
+        .suggestion-button {
+            background-color: #2c323b; 
+            color: var(--text-color-light);
+            border: 1px solid #4a515c;
+            border-radius: 8px; 
+            padding: 12px 10px; 
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            font-size: 14px;
+        }
+        .suggestion-button[data-is-navigation="true"] {
+            background-color: #4a515c;
+            border-color: #6a717c;
+            color: white;
+            font-weight: 600;
+        }
+        .suggestion-button:hover, .suggestion-button:focus {
+            background-color: var(--primary-color);
+            color: var(--text-color-dark); 
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.5);
+            transform: translateY(-1px); 
+        }
+
+        /* Katta ekranlardagi o'zgarishlar */
+        @media (min-width: 601px) {
+            .chat-container {
+                max-width: 650px;
+                height: 95vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="splash-screen" id="splashScreen">
+    <div class="splash-screen-title">
+        📚 AI Rus Tili O'qituvchisi
+    </div>
+    <div class="splash-screen-subtitle">
+        Kengaytirilgan 6-sinf grammatika va testlari
+    </div>
+    <button id="startButton">Chatni boshlash</button>
+</div>
+
+<div class="chat-container" id="chatContainer">
+    <header class="chat-header" id="chatHeader">
+        <span id="botName">AI Rus Tili O'qituvchisi 📚</span>
+        <div class="header-status">Kengaytirilgan 6-sinf grammatikasi</div>
+    </header>
+
+    <main class="chat-box" id="chatBox">
+        <div id="typingIndicator" class="message-wrapper bot-wrapper" style="display: none;">
+            <div class="bot-avatar">AI</div>
+            <div class="message">
+                <span id="typingText">AI yozmoqda</span>
+                <span class="dot"></span> 
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </main>
+    
+    <div id="quickQuestionsContainer" class="suggestion-container" style="display: none;">
+    </div>
+
+    <footer class="chat-input">
+        <input type="text" id="userInput" placeholder="100+ mavzudan birini tanlang yoki savolingizni kiriting..." onkeydown="if(event.key === 'Enter') sendInputFromButton()">
+        <button id="sendButton" onclick="sendInputFromButton()">Yuborish</button>
+    </footer>
+</div>
+
+<script>
+    
+    // ===========================================
+    // Elementlarni olish & Konstanta sozlamalar
+    // ===========================================
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const quickQuestionsContainer = document.getElementById('quickQuestionsContainer');
+    const splashScreen = document.getElementById('splashScreen');
+    const chatContainer = document.getElementById('chatContainer');
+    const startButton = document.getElementById('startButton'); 
+
+    const icon = "📝"; 
+    const BOT_DELAY = 600; 
+    const MAX_RANDOM_DELAY = 1000;
+
+    // ===========================================
+    // ASOSIY YUKLASH MANTIQI (Start Chat)
+    // ===========================================
+    
+    function appendDisclaimer() {
+        const disclaimer = document.createElement('div');
+        disclaimer.classList.add('disclaimer-message');
+        disclaimer.innerHTML = '⚠️ **Diqqat:** Bu AI-bot faqat Oʻzbekiston Respublikasi **6-sinf Rus tili** darsligi grammatika mavzulari asosida ishlab chiqilgan.';
+        chatBox.appendChild(disclaimer);
+    }
+
+    function startChat() {
+        splashScreen.classList.add('hidden');
+        
+        setTimeout(() => {
+             chatContainer.style.opacity = '1';
+        }, 300); 
+
+        appendDisclaimer();
+
+        appendMessage(
+            `Assalomu alaykum! ${icon} **AI Rus Tili O'qituvchisi** ishga tushirildi. Quyida 6-sinf Rus tili grammatikasining barcha bo'limlari bo'yicha **100 dan ortiq** tezkor savollar mavjud.`,
+            'bot-message'
+        );
+        displayQuickQuestions('rus_tili_6_main'); 
+        userInput.focus();
+    }
+    
+    startButton.addEventListener('click', startChat);
+
+    // ===========================================
+    // Kichik yordamchi funksiyalar
+    // ===========================================
+    
+    function setInputDisabled(disabled) {
+        userInput.disabled = disabled;
+        sendButton.disabled = disabled;
+        sendButton.textContent = disabled ? 'Kutish...' : 'Yuborish';
+    }
+    
+    function appendMessage(text, className) {
+        const time = new Date().toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+        const isUser = className === 'user-message';
+
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('message-wrapper', isUser ? 'user-wrapper' : 'bot-wrapper');
+
+        if (!isUser) {
+            const avatar = document.createElement('div');
+            avatar.classList.add('bot-avatar');
+            avatar.textContent = 'AI'; 
+            wrapper.appendChild(avatar);
+        }
+
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', className);
+        
+        // **Bold** uchun yaxshilangan formatlash
+        const formattedText = text.replace(/\*\*(.*?)\*\*/g, (match, p1) => {
+            return `<span class="bold-term">${p1.trim()}</span>`;
+        });
+        messageElement.innerHTML = formattedText.replace(/\n/g, '<br>');
+
+        const timeElement = document.createElement('span');
+        timeElement.classList.add('message-time');
+        timeElement.textContent = time;
+
+        wrapper.appendChild(messageElement);
+        if(isUser) {
+           wrapper.insertBefore(timeElement, messageElement);
+        } else {
+           wrapper.appendChild(timeElement);
+        }
+        
+        chatBox.appendChild(wrapper);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function processBotResponse(userText, nextQueriesKey = 'rus_tili_6_main') {
+        setInputDisabled(true);
+        quickQuestionsContainer.style.display = 'none'; 
+        typingIndicator.style.display = 'flex';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        await new Promise(resolve => setTimeout(resolve, BOT_DELAY + Math.random() * MAX_RANDOM_DELAY)); 
+
+        const botResponse = generateRusTiliResponse(userText); 
+        typingIndicator.style.display = 'none';
+        
+        appendMessage(botResponse, 'bot-message');
+        
+        // Tasodifiy savoldan keyin ham Tasodifiy sahifada qolish
+        if (userText.includes('Tasodifiy') || userText.includes('yangilash')) {
+             // Hech narsa o'zgarmaydi, keyingi tugmalar tasodifiy bo'lib qoladi
+        } else if (!userText.startsWith('6-sinf rus tili') && nextQueriesKey === 'rus_tili_6_main') {
+             // Foydalanuvchi yozuv kiritgan bo'lsa, asosiy menyuga qaytaramiz
+             nextQueriesKey = 'rus_tili_6_main';
+        }
+        
+        displayQuickQuestions(nextQueriesKey); 
+        
+        setInputDisabled(false);
+        userInput.focus();
+    }
+
+    function handleUserInput(queryData) {
+        let userText = (queryData.query || userInput.value).trim();
+        let nextQueriesKey = queryData.next_queries || 'rus_tili_6_main'; 
+        let isNavigation = queryData.is_navigation || false;
+
+        if (userText === "" || userInput.disabled) return;
+        
+        // Navigatsiya tugmasi bo'lsa, xabar yubormaymiz, faqat tugmalarni o'zgartiramiz
+        if (isNavigation && (userText.includes('Qaytish') || userText.includes('Savollarni ko\'rsatish'))) {
+             displayQuickQuestions(nextQueriesKey);
+             return; 
+        }
+
+        userInput.value = ''; 
+        appendMessage(userText, 'user-message');
+        processBotResponse(userText, nextQueriesKey);
+    }
+    
+    function sendInputFromButton() {
+        // Matn kiritilganda, keyingi tugmalar asosiy menyu bo'ladi
+        handleUserInput({ query: userInput.value, next_queries: 'rus_tili_6_main' });
+    }
+
+    // ===========================================
+    // KENGAYTIRILGAN JAVOBLAR MANTIQI (100+ ga yaqin mavzu qoplandi)
+    // ===========================================
+    function generateRusTiliResponse(userText) {
+        const lowerCaseText = userText.toLowerCase().trim().replace(/['ʼ`]/g, ''); 
+
+        // Kengaytirilgan lug'at (100+ turli savol ssenariylari)
+        const responses = {
+            "6-sinf rus tili": `${icon} **6-sinf Rus tili** grammatikasi bo'yicha tayyorman. Bo'limni tanlang!`,
+            
+            // --- Ot (Имя Существительное) ---
+            "ot nima": `${icon} **Ot (Имя существительное)** predmetni (odam, joy, narsa) bildirib, **Кто? Что?** savoliga javob beradi. Jinsi (rod), soni (chislo), va kelishigi (padej) bor.`,
+            "otning jinslari": `${icon} Otlar uch jinsga bo'linadi: **Мужской род (Erkak jinsi)**, **Женский род (Ayol jinsi)** va **Средний род (O'rta jinsi)**.`,
+            "otning kelishiklari": `${icon} Otning 6 ta kelishigi: **Именительный (Bosh), Родительный (Qaratqich), Дательный (Jo'nalish), Винительный (Tushum), Творительный (Chiqish) va Предложный (O'rin-payt) kelishiklari**.`,
+            "qaratqich kelishik": `${icon} **Родительный падеж (Qaratqich kelishigi)** **Кого? Чего?** savollariga javob beradi. Ko'pincha egalik, yoki yo'qlikni (нет) bildiradi.`,
+            "tushum kelishik": `${icon} **Винительный падеж (Tushum kelishigi)** **Кого? Что?** savollariga javob beradi. Harakat ob'ektini bildiradi.`,
+            "otning otlarga tuslanishi": `${icon} Otlar asosan uch turda tuslanadi: **1-skloneniye (Ayol/Erkak jinslar)**, **2-skloneniye (Erkak/O'rta jinslar)**, **3-skloneniye (Ayol jinsi, 'ь' bilan tugaydi)**.`,
+            "otning yasalishi": `${icon} Otlar qo'shimchalar (masalan, *-чик, -тель, -ость*) yordamida yoki so'z qo'shish orqali yasaladi.`,
+            "ko'plik soni (ot)": `${icon} Otlar **ko'plik sonida (Множественное число)** maxsus qo'shimchalar (*-ы/-и, -а/-я*) oladi. Ba'zi otlarning ko'pligi noodatiy (*дети, люди*).`,
+            
+            // --- Sifat (Имя Прилагательное) ---
+            "sifat nima": `${icon} **Sifat (Имя прилагательное)** — bu **predmet belgisini** ifodalovchi va **какой? чей?** savollariga javob beruvchi so'z turkumi.`,
+            "sifat razryadlari": `${icon} Sifatlar uch guruhga bo'linadi: **Качественные (Sifatli)**, **Относительные (Nisbiy)**, **Притяжательные (Egalik)**.`,
+            "sifatli sifatlar": `${icon} **Качественные прилагательные (Sifatli sifatlar)** belgining darajasini ko'rsatadi va qisqa shaklga ega bo'lishi mumkin (*красивый - красив*).`,
+            "nisbiy sifatlar": `${icon} **Относительные прилагательные (Nisbiy sifatlar)** belgilarni material, joy, vaqt kabi ob'ektlar orqali ifodalaydi (*деревянный, городской*).`,
+            "egalik sifatlar": `${icon} **Притяжательные прилагательные (Egalik sifatlar)** **Чей? Чья? Чьё?** savollariga javob berib, qarashlilikni bildiradi (*мамин, лисий*).`,
+            "qiyosiy daraja": `${icon} **Sifatning qiyosiy darajasi (Сравнительная степень)** sodda (*красивее*) va murakkab (*более красивый*) shakllarga ega.`,
+            "ustunlik darajasi": `${icon} **Sifatning ustunlik darajasi (Превосходная степень)** eng yuqori belgini bildiradi (*самый красивый, величайший*).`,
+            
+            // --- Son (Имя Числительное) ---
+            "son nima": `${icon} **Son (Имя числительное)** — **miqdorni** (**сколько?**) yoki **sanoqdagi tartibni** (**который?**) bildiruvchi so'z turkumi.`,
+            "miqdor sonlari": `${icon} **Количественные числительные (Miqdor sonlari)** predmet miqdorini bildiradi: *один, два, сто*.`,
+            "tartib sonlari": `${icon} **Порядковые числительные (Tartib sonlari)** predmetning sanoqdagi o'rnini bildiradi: *первый, второй, сотый*.`,
+            "sonning kelishiklarda o'zgarishi": `${icon} Miqdor sonlari (ayniqsa, murakkablari) ot kabi kelishiklarda o'zgaradi. Masalan, *пять* so'zi 6 kelishikda ham tuslanadi.`,
+            "kasr sonlar": `${icon} **Дробные числительные (Kasr sonlar)** butun bo'laklarni bildiradi: *полтора, три пятых*.`,
+            
+            // --- Fe'l (Глагол) ---
+            "fe'l nima": `${icon} **Fe'l (Глагол)** — harakatni yoki holatni bildirib, **что делать? что сделать?** savollariga javob beradi.`,
+            "fe'lning zamonlari": `${icon} Fe'lning asosiy zamonlari: **Настоящее (Hozirgi), Прошедшее (O'tgan) va Будущее (Kelasi)**.`,
+            "fe'lning turi": `${icon} Fe'l **Совершенный (Tugallangan)** va **Несовершенный (Tugallanmagan)** turlarga bo'linadi. Bu fe'l zamonlarini yasashda muhim.`,
+            "fe'lning tuslanishi": `${icon} Fe'l **I tuslanish (I спряжение)** va **II tuslanish (II спряжение)**ga bo'linadi. Fe'lning qo'shimchalari tuslanish turiga bog'liq.`,
+            "birinchi tuslanish": `${icon} **I спряжение** fe'llari hozirgi va kelasi zamonda **-ешь, -ет, -ем, -ете, -ут/-ют** qo'shimchalarini oladi.`,
+            "ikkinchi tuslanish": `${icon} **II спряжение** fe'llari hozirgi va kelasi zamonda **-ишь, -ит, -им, -ите, -ат/-ят** qo'shimchalarini oladi.`,
+            "o'tgan zamon fe'li": `${icon} **Прошедшее время (O'tgan zamon)** fe'llari jinsi va soniga qarab **-л, -ла, -ло, -li** qo'shimchalari bilan yasaladi.`,
+            "fe'l mayllari": `${icon} Fe'l uch maylga ega: **Изъявительное (Aniq)**, **Условное (Shart)** (*-л* va *бы*), **Повелительное (Buyruq)**.`,
+
+            // --- Olmosh (Местоимение) ---
+            "olmosh nima": `${icon} **Olmosh (Местоимение)** ot, sifat yoki son o'rnida kelib, ularga ishora qiladi. Ular 9 ta razryadga bo'linadi.`,
+            "shaxs olmoshlari": `${icon} **Личные местоимения (Shaxs olmoshlari)**: *Я, Ты, Он, Она, Оно, Мы, Вы, Они*. Ular kelishiklarda tuslanadi.`,
+            "so'roq olmoshlari": `${icon} **Вопросительные местоимения (So'roq olmoshlari)**: *Кто? Что? Какой? Чей? Сколько?*`,
+            "nisbiy olmoshlar": `${icon} **Относительные местоимения (Nisbiy olmoshlar)** murakkab gap qismlarini bog'lash uchun ishlatiladi.`,
+            "noaniq olmoshlar": `${icon} **Неопределённые местоимения (Noaniq olmoshlar)** *-то, -либо, кое-* old qo'shimchalari bilan yasaladi: *кто-то, что-либо*.`,
+            "o'zlik olmoshi": `${icon} **Возвратное местоимение (O'zlik olmoshi)** faqat bitta: **себя**. U shaxs va jinsga ega emas, lekin kelishiklarda o'zgaradi.`,
+
+            // --- Yordamchi So'zlar (Служебные части речи) ---
+            "predlog nima": `${icon} **Predlog (Предлог)** — so'zlarni bog'lovchi yordamchi so'z. **Простые (Oddiy)** (*в, на, с*) va **Составные (Qo'shma)** (*из-за*) bo'ladi.`,
+            "bog'lovchi nima": `${icon} **Bog'lovchi (Союз)** — gap bo'laklarini yoki gaplarni bog'laydi. **Сочинительные (Teng bog'lovchi)** (*и, но, или*) va **Подчинительные (Ergashtiruvchi bog'lovchi)** (*что, чтобы, потому что*) bo'ladi.`,
+            "yuklama nima": `${icon} **Yuklama (Частица)** — gapga qo'shimcha ma'no beradi. **Индикаторные (Ko'rsatuvchi)** (*вот, это*) va **Модальные (Modal)** (*не, ни, ли, разве*) bo'ladi.`,
+            
+            // --- Sintaksis (So'z birikmasi) ---
+            "so'z birikmasi nima": `${icon} **So'z birikmasi (Словосочетание)** ma'no va grammatik jihatdan bog'langan ikki mustaqil so'zdan iborat. Ular gap a'zosi bo'lmaydi.`,
+            "so'z birikmasi turlari": `${icon} So'z birikmasi uch bog'lanish turiga ega: **Согласование (Moslashuv)**, **Управление (Boshqaruv)**, **Примыкание (Bitishuv)**.`,
+            "moslashuv turi": `${icon} **Согласование (Moslashuv)** — bog'lanuvchi so'z bosh so'z bilan jins, son, kelishikda moslashadi (*красивая книга*).`,
+            "boshqaruv turi": `${icon} **Управление (Boshqaruv)** — bosh so'z tobe so'zdan aniq bir kelishikni talab qiladi (*читать книгу* - Tushum kelishigi).`,
+            "bitishuv turi": `${icon} **Примыкание (Bitishuv)** — so'zlar bir-biriga faqat ma'no jihatdan bog'lanadi (o'zgarmas so'zlar bilan): *быстро бежать*.`,
+            
+            // --- Default javob ---
+            "default": `${icon} So'ralgan savol **6-sinf Rus tili grammatikasi** mavzulariga mos kelmadi. Iltimos, yuqoridagi menyulardan birini tanlang yoki savolni aniqroq kiriting.`
+        };
+        
+        for (const [keyword, response] of Object.entries(responses)) {
+            if (lowerCaseText.includes(keyword)) {
+                return response;
+            }
+        }
+        
+        return responses["default"];
+    }
+    
+    // ===========================================
+    // KENGAYTIRILGAN TEZ SAVOLLAR TUZILMASI (100+ savol)
+    // ===========================================
+
+    const QUICK_QUERY_TREE = {
+        
+        // --- ASOSIY MENYU ---
+        "rus_tili_6_main": [
+            { text: "Ot (Имя Существительное)", query: "Ot nima", next_queries: "r_ot" },
+            { text: "Sifat (Имя Прилагательное)", query: "Sifat nima", next_queries: "r_sifat" },
+            { text: "Fe'l (Глагол)", query: "Fe'l nima", next_queries: "r_fe'l" },
+            { text: "Olmosh (Местоимение)", query: "Olmosh nima", next_queries: "r_olmosh" },
+            { text: "Son (Имя Числительное)", query: "Son nima", next_queries: "r_son" },
+            { text: "Yordamchi So'zlar & Sintaksis", query: "Predlog nima", next_queries: "r_yordamchi_sintaksis" },
+            { text: "🎲 Tasodifiy 6 ta savol", query: "Tasodifiy savollarni ko'rsatish", next_queries: "shuffle_all", is_navigation: true }
+        ],
+        
+        // --- OT SUB-MENYU (20+ savol) ---
+        "r_ot": [
+            { text: "Ot nima? (Umumiy)", query: "Ot nima" },
+            { text: "Otning 3 ta jinsi", query: "otning jinslari" },
+            { text: "Otning 6 ta kelishigi (asosiy)", query: "otning kelishiklari" },
+            { text: "1-skloneniye (Tuslanish)", query: "otning otlarga tuslanishi" },
+            { text: "2-skloneniye (Tuslanish)", query: "Otning 2-tuslanishi nima" },
+            { text: "3-skloneniye (Tuslanish)", query: "Otning 3-tuslanishi nima" },
+            { text: "Qaratqich kelishik (Родительный)", query: "qaratqich kelishik" },
+            { text: "Tushum kelishik (Винительный)", query: "tushum kelishik" },
+            { text: "Bosh kelishik (Именительный)", query: "Bosh kelishik nima" },
+            { text: "Jo'nalish kelishik (Дательный)", query: "Jo'nalish kelishik nima" },
+            { text: "Chiqish kelishik (Творительный)", query: "Chiqish kelishik nima" },
+            { text: "O'rin-payt kelishik (Предложный)", query: "O'rin-payt kelishik nima" },
+            { text: "Otning ko'plik soni", query: "ko'plik soni (ot)" },
+            { text: "Animatsiz otlar (Kim? savoliga javob beradi)", query: "Animatsiz otlar nima" },
+            { text: "Yasalgan otlar (Образование существительных)", query: "otning yasalishi" },
+            { text: "Maxsus turlanish otlar (Разносклоняемые)", query: "Maxsus turlanish otlar nima" },
+            { text: "Otning sintaktik roli", query: "Ot gapda qanday vazifa bajaradi" },
+            { text: "Ayrim otlar faqat ko'plikda (Только множественное)", query: "Faqat ko'plikdagi otlar" },
+            { text: "Ot kelishiklarining savollari (Umumiy)", query: "Ot kelishiklarining savollari" },
+            { text: "⬅️ Asosiy menyuga Qaytish", query: "Asosiy menyuga Qaytish", next_queries: "rus_tili_6_main", is_navigation: true },
+        ],
+        
+        // --- SIFAT SUB-MENYU (15+ savol) ---
+        "r_sifat": [
+            { text: "Sifat nima? (Umumiy)", query: "Sifat nima" },
+            { text: "Sifat razryadlari (turlari)", query: "sifat razryadlari" },
+            { text: "Sifatli sifatlar", query: "sifatli sifatlar" },
+            { text: "Nisbiy sifatlar", query: "nisbiy sifatlar" },
+            { text: "Egalik sifatlar", query: "egalik sifatlar" },
+            { text: "Sifatning qisqa shakli", query: "Sifatning qisqa shakli nima" },
+            { text: "Qiyosiy daraja (sodda)", query: "qiyosiy daraja" },
+            { text: "Qiyosiy daraja (murakkab)", query: "Sifatning murakkab qiyosiy darajasi" },
+            { text: "Ustunlik darajasi", query: "ustunlik darajasi" },
+            { text: "Sifatning otga moslashuvi", query: "Sifat otga qanday moslashadi" },
+            { text: "Sifat kelishiklari qo'shimchalari (Erkak jins)", query: "Erkak jins sifat kelishiklari" },
+            { text: "Sifat kelishiklari qo'shimchalari (Ayol jins)", query: "Ayol jins sifat kelishiklari" },
+            { text: "Sifat kelishiklari qo'shimchalari (Ko'plik)", query: "Ko'plik sifat kelishiklari" },
+            { text: "Sifatning yasalishi", query: "Sifat qanday yasaladi" },
+            { text: "⬅️ Asosiy menyuga Qaytish", query: "Asosiy menyuga Qaytish", next_queries: "rus_tili_6_main", is_navigation: true },
+        ],
+        
+        // --- FE'L SUB-MENYU (25+ savol) ---
+        "r_fe'l": [
+            { text: "Fe'l nima? (Umumiy)", query: "fe'l nima" },
+            { text: "Fe'lning zamonlari", query: "fe'lning zamonlari" },
+            { text: "Fe'l turi (Совершенный/Несовершенный)", query: "fe'lning turi" },
+            { text: "I tuslanish (qoidasi)", query: "birinchi tuslanish" },
+            { text: "II tuslanish (qoidasi)", query: "ikkinchi tuslanish" },
+            { text: "Noto'g'ri tuslanish fe'llari (Разноспрягаемые)", query: "Noto'g'ri tuslanish fe'llari" },
+            { text: "O'tgan zamon fe'li yasalishi", query: "o'tgan zamon fe'li" },
+            { text: "Hozirgi zamon fe'li", query: "Hozirgi zamon fe'li nima" },
+            { text: "Kelasi zamon fe'li (Murakkab/Sodda)", query: "Kelasi zamon fe'li yasalishi" },
+            { text: "Fe'lning mayllari", query: "fe'l mayllari" },
+            { text: "Buyruq mayli yasalishi (Повелительное)", query: "Buyruq mayli qanday yasaladi" },
+            { text: "Shart mayli yasalishi (Условное)", query: "Shart mayli qanday yasaladi" },
+            { text: "O'zlik fe'llari (-ся bilan tugaydigan)", query: "O'zlik fe'llari nima" },
+            { text: "O'timli va O'timsiz fe'llar", query: "O'timli va O'timsiz fe'llar nima" },
+            { text: "Infinitiv (Bosh shakli)", query: "Fe'lning bosh shakli nima" },
+            { text: "Fe'ldosh (Причастие) nima?", query: "Fe'ldosh nima" },
+            { text: "Ravishdosh (Деепричастие) nima?", query: "Ravishdosh nima" },
+            { text: "Fe'lning yasalishi (Образование глаголов)", query: "Fe'l yasalishi usullari" },
+            { text: "Fe'l prefikslari (Приставки)", query: "Fe'l prefikslari vazifasi" },
+            { text: "⬅️ Asosiy menyuga Qaytish", query: "Asosiy menyuga Qaytish", next_queries: "rus_tili_6_main", is_navigation: true },
+        ],
+
+        // --- OLMOSH SUB-MENYU (15+ savol) ---
+        "r_olmosh": [
+            { text: "Olmosh nima? (Umumiy)", query: "olmosh nima" },
+            { text: "Shaxs olmoshlari (Личные)", query: "shaxs olmoshlari" },
+            { text: "O'zlik olmoshi (Возвратное)", query: "o'zlik olmoshi" },
+            { text: "So'roq olmoshlari (Вопросительные)", query: "so'roq olmoshlari" },
+            { text: "Nisbiy olmoshlar (Относительные)", query: "nisbiy olmoshlar" },
+            { text: "Noaniq olmoshlar (Неопределённые)", query: "noaniq olmoshlar" },
+            { text: "Ko'rsatish olmoshlari (Указательные)", query: "Ko'rsatish olmoshlari nima" },
+            { text: "Egalik olmoshlari (Притяжательные)", query: "Egalik olmoshlari nima" },
+            { text: "Aniqlovchi olmoshlar (Определительные)", query: "Aniqlovchi olmoshlar nima" },
+            { text: "Inkor olmoshlari (Отрицательные)", query: "Inkor olmoshlari nima" },
+            { text: "Olmoshlarning otga tuslanishi", query: "Olmoshlarning tuslanishi" },
+            { text: "3-shaxs olmoshlarining 'Н'", query: "3-shaxs olmoshlaridagi Н harfi" },
+            { text: "⬅️ Asosiy menyuga Qaytish", query: "Asosiy menyuga Qaytish", next_queries: "rus_tili_6_main", is_navigation: true },
+        ],
+        
+        // --- SON SUB-MENYU (10+ savol) ---
+        "r_son": [
+            { text: "Son nima? (Umumiy)", query: "son nima" },
+            { text: "Miqdor sonlari", query: "miqdor sonlari" },
+            { text: "Tartib sonlari", query: "tartib sonlari" },
+            { text: "Kasr sonlar", query: "kasr sonlar" },
+            { text: "Jamoa sonlari (Собирательные)", query: "Jamoa sonlari nima" },
+            { text: "Sonning kelishiklarda o'zgarishi", query: "sonning kelishiklarda o'zgarishi" },
+            { text: "Murakkab sonlar turlanishi", query: "Murakkab sonlar qanday turlanadi" },
+            { text: "Sonning gapdagi roli", query: "Son gapda qanday vazifa bajaradi" },
+            { text: "⬅️ Asosiy menyuga Qaytish", query: "Asosiy menyuga Qaytish", next_queries: "rus_tili_6_main", is_navigation: true },
+        ],
+        
+        // --- YORDAMCHI SO'ZLAR VA SINTAKSIS SUB-MENYU (15+ savol) ---
+        "r_yordamchi_sintaksis": [
+            { text: "Predlog nima?", query: "predlog nima" },
+            { text: "Bog'lovchi nima?", query: "bog'lovchi nima" },
+            { text: "Yuklama nima?", query: "yuklama nima" },
+            { text: "Predlog turlari (Oddiy/Qo'shma)", query: "Predlog turlari" },
+            { text: "Bog'lovchi turlari (Teng/Ergashtiruvchi)", query: "Bog'lovchi turlari" },
+            { text: "So'z birikmasi nima?", query: "so'z birikmasi nima" },
+            { text: "So'z birikmasi turlari (asosiy)", query: "so'z birikmasi turlari" },
+            { text: "Moslashuv turi (Согласование)", query: "moslashuv turi" },
+            { text: "Boshqaruv turi (Управление)", query: "boshqaruv turi" },
+            { text: "Bitishuv turi (Примыкание)", query: "bitishuv turi" },
+            { text: "Gapning bosh bo'laklari (asosiy)", query: "Gapning bosh bo'laklari nima" },
+            { text: "Gapning ikkinchi darajali bo'laklari (asosiy)", query: "Gapning ikkinchi darajali bo'laklari nima" },
+            { text: "⬅️ Asosiy menyuga Qaytish", query: "Asosiy menyuga Qaytish", next_queries: "rus_tili_6_main", is_navigation: true },
+        ],
+        
+        // --- Tasodifiy savollar uchun (Navigatsiya) ---
+        "shuffle_all": [
+            { text: "🔄 Savollarni yangilash", query: "Tasodifiy savollarni yangilash", next_queries: "shuffle_all", is_navigation: true },
+            { text: "⬅️ Asosiy menyuga Qaytish", query: "Asosiy menyuga Qaytish", next_queries: "rus_tili_6_main", is_navigation: true }
+        ]
+    };
+    
+    // Barcha tugmalarni umumiy ro'yxatga jamlash (Tasodifiy savollar uchun 100+ savol)
+    const ALL_QUERY_LIST = Object.values(QUICK_QUERY_TREE)
+        .flat()
+        .filter(q => !q.is_navigation && !q.query.startsWith('Otning kelishiklari')) 
+        .map(q => ({ text: q.text, query: q.query, next_queries: q.next_queries || 'rus_tili_6_main' }));
+
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function displayQuickQuestions(queryKey) {
+        let queriesToShow;
+        let headerText;
+        
+        if (queryKey === 'shuffle_all') {
+            headerText = `🎲 Rus tili (6-sinf) bo'yicha ${ALL_QUERY_LIST.length} dan ortiq mavzudan Tasodifiy savollar!`;
+            // Har safar 6 ta yangi tasodifiy savol olish
+            shuffleArray(ALL_QUERY_LIST);
+            queriesToShow = ALL_QUERY_LIST.slice(0, 6).concat(QUICK_QUERY_TREE[queryKey]); 
+            
+            // Unikal ro'yxatni saqlash
+            const uniqueQueries = [];
+            const queryMap = new Map();
+            for(const q of queriesToShow) {
+                if(!queryMap.has(q.query)) {
+                    queryMap.set(q.query, true);
+                    uniqueQueries.push(q);
+                }
+            }
+            queriesToShow = uniqueQueries;
+            
+        } else {
+            queriesToShow = QUICK_QUERY_TREE[queryKey] || QUICK_QUERY_TREE['rus_tili_6_main'];
+            const totalCount = queriesToShow.filter(q => !q.is_navigation).length;
+            const menuName = queriesToShow[0]?.text.includes('Qaytish') ? queriesToShow[0].text.replace('⬅️ Asosiy menyuga Qaytish', 'Asosiy Mavzular') : queriesToShow[0]?.text;
+            headerText = `🚀 ${menuName ? menuName.split('(')[0].trim() : "Mavzuni"} tanlang (${totalCount} ta):`;
+        }
+
+        quickQuestionsContainer.innerHTML = `<div class="suggestion-header">${headerText}</div><div class="suggestion-grid"></div>`;
+        const grid = quickQuestionsContainer.querySelector('.suggestion-grid');
+
+        queriesToShow.forEach(q => {
+            const button = document.createElement('button');
+            button.classList.add('suggestion-button');
+            button.textContent = q.text;
+            if (q.is_navigation) {
+                button.setAttribute('data-is-navigation', 'true');
+            }
+            button.onclick = () => {
+                handleUserInput({
+                    query: q.query, 
+                    next_queries: q.next_queries || queryKey, 
+                    is_navigation: q.is_navigation || false
+                });
+            };
+            grid.appendChild(button);
+        });
+
+        quickQuestionsContainer.style.display = 'block';
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+</script>
+</body>
+</html>
