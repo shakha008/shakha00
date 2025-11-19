@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Ona tili va Adabiyot Ustozi| Boshlash Tugmasi</title>
+    <title>AI Ona tili va Adabiyot Ustozi| 6-sinf</title>
     <style>
         /* ================================================= */
         /* TUZATILGAN VA BARQAROR DARK MODE CSS QISMI */
@@ -14,14 +14,13 @@
             --primary-color: #00bcd4; /* Asosiy Yorqin Rang (Teal) */
             --primary-color-rgb: 0, 188, 212;
             --secondary-color: #0097a7; /* To'qroq Teal */
-            --bg-color: #1a1a1a; /* Umumiy To'q Fon */
-            --chat-bg-light: #242424; /* Chat Box orqa foni */
+            --bg-color: #121212; /* Umumiy Kuchsiz To'q Fon */
+            --chat-bg-light: #1e1e1e; /* Chat Box orqa foni */
             --bubble-user: #00bcd4; /* User xabari */
-            --bubble-bot: #333333; /* Bot xabari */
+            --bubble-bot: #2c2c2c; /* Bot xabari */
             --text-color-light: #f0f0f0; /* Yorqin matn */
             --text-color-dark: #121212; /* To'q matn */
-            --button-border: #444;
-            --accent-color: #ff5722; /* Kichik aksent */
+            --accent-color: #ff5722; /* Kichik aksent (Orange) */
             --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.5); 
             --chat-gradient: linear-gradient(135deg, var(--bubble-user), var(--secondary-color));
         }
@@ -53,7 +52,6 @@
             height: 100vh;
             max-height: 100vh;
             border: 1px solid #3a3a3a; 
-            /* Dastlab yashiriladi, splash screen ketgach ko'rinadi */
             opacity: 0; 
             transition: opacity 0.5s;
         }
@@ -84,6 +82,17 @@
             flex-direction: column;
             gap: 15px; 
             background-color: var(--chat-bg-light); 
+            /* Scrollbar uslubi (Chrome/Edge/Safari) */
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+            &::-webkit-scrollbar-thumb {
+                background: var(--secondary-color);
+                border-radius: 3px;
+            }
+            &::-webkit-scrollbar-track {
+                background: #2a2a2a;
+            }
         }
         
         .message-wrapper {
@@ -142,17 +151,31 @@
             border-top-left-radius: 5px; 
             font-family: 'Noto Serif', serif;
         }
+        
+        .disclaimer-message {
+            background-color: #ff572240; /* Yorqinroq fon */
+            border-left: 5px solid var(--accent-color);
+            color: #ff5722; 
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-family: 'Poppins', sans-serif;
+        }
 
         .bold-term {
             font-weight: 700;
-            color: var(--primary-color); 
+            color: #00ffaa; /* Yashil-Teal aksenti */
             background-color: #383838; 
             border: 1px solid #555;
             padding: 2px 5px;
             border-radius: 5px;
-            display: inline;
+            display: inline-block; /* O'zini tutishini yaxshilaydi */
             white-space: normal;
             font-size: 15px;
+            line-height: 1.6;
         }
 
         .message-time {
@@ -198,7 +221,7 @@
             display: flex;
             padding: 10px;
             border-top: 1px solid #333;
-            background-color: #1e1e1e; 
+            background-color: #1a1a1a; 
             flex-shrink: 0;
             z-index: 10;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
@@ -246,7 +269,7 @@
             width: 100%;
             padding: 10px;
             flex-shrink: 0;
-            background-color: #1e1e1e;
+            background-color: #1a1a1a;
             border-top: 1px solid #333;
             margin-top: auto;
             max-height: 40vh;
@@ -300,7 +323,7 @@
             outline: none;
         }
         
-        /* Splash Screen (YANGI QISM) */
+        /* Splash Screen (YANGILANGAN QISM) */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -309,7 +332,7 @@
             height: 100%;
             background: linear-gradient(45deg, #000000, #1a1a1a);
             display: flex;
-            flex-direction: column; /* Matn va tugmani ustma-ust qo'yish uchun */
+            flex-direction: column; 
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -322,13 +345,18 @@
             visibility: hidden;
             pointer-events: none;
         }
-        .spinner-3d {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 30px; /* Tugmadan ajratish */
-            text-align: center;
-            padding: 20px;
-            animation: none; /* Animatsiyani o'chirib qo'yamiz */
+        .splash-screen-title {
+            font-family: 'Noto Serif', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 188, 212, 0.7);
+        }
+        .splash-screen-subtitle {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 30px; 
+            color: #ccc;
         }
         
         #startButton {
@@ -339,7 +367,7 @@
             border-radius: 50px;
             cursor: pointer;
             color: var(--text-color-dark);
-            background: linear-gradient(45deg, #00bcd4, #00ffaa); /* Yorqinroq effekt */
+            background: linear-gradient(45deg, #00bcd4, #00ffaa); 
             box-shadow: 0 8px 20px rgba(var(--primary-color-rgb), 0.7);
             transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -349,7 +377,7 @@
             box-shadow: 0 10px 25px rgba(var(--primary-color-rgb), 0.9);
         }
 
-        /* Kattaroq ekranlarda o'zgarish (SAQLANGAN) */
+        /* Kattaroq ekranlarda o'zgarish */
         @media (min-width: 551px) {
             body {
                 padding: 20px;
@@ -370,24 +398,30 @@
 <body>
 
 <div class="splash-screen" id="splashScreen">
-    <div class="spinner-3d">
-        AI Ona tili va Adabiyot Ustozi.
+    <div class="splash-screen-title">
+        📚 Ona tili va Adabiyot Ustozi
     </div>
-    <button id="startButton">Boshlash</button>
+    <div class="splash-screen-subtitle">
+        6-sinf mavzulari bo'yicha sun'iy intellekt yordamchisi
+    </div>
+    <button id="startButton">Chatni Boshlash</button>
 </div>
 
 <div class="chat-container" id="chatContainer">
     <header class="chat-header" id="chatHeader">
-        <span id="botName">AI Ona tili va Adabiyot Ustozi 📖 (6-sinf)</span>
+        <span id="botName">AI Ona tili va Adabiyot Ustozi 📚</span>
         <div class="header-status">Faqat 6-sinf mavzulari bo'yicha yordam beradi</div>
     </header>
 
     <main class="chat-box" id="chatBox">
-        <div id="typingIndicator">
-            <span id="typingText">AI yozmoqda</span>
-            <span class="dot"></span> 
-            <span class="dot"></span>
-            <span class="dot"></span>
+        <div id="typingIndicator" class="message-wrapper bot-wrapper" style="display: none;">
+            <div class="bot-avatar">AI</div>
+            <div class="message" style="background-color: #383838; border: 1px solid #555; color: var(--primary-color); border-radius: 25px; padding: 10px 18px;">
+                <span id="typingText">AI yozmoqda</span>
+                <span class="dot"></span> 
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
         </div>
     </main>
     
@@ -395,7 +429,7 @@
     </div>
 
     <footer class="chat-input">
-        <input type="text" id="userInput" placeholder="Fe'l, Bog'lovchi yoki Adiblar bo'yicha savolingizni yozing..." onkeydown="if(event.key === 'Enter') sendInputFromButton()">
+        <input type="text" id="userInput" placeholder="Fe'l nisbati, Bobur ijodi yoki Maqol nima?..." onkeydown="if(event.key === 'Enter') sendInputFromButton()">
         <button id="sendButton" onclick="sendInputFromButton()">Yuborish</button>
     </footer>
 </div>
@@ -403,7 +437,7 @@
 <script>
     
     // ===========================================
-    // Elementlarni olish (SAQLANGAN)
+    // Elementlarni olish
     // ===========================================
     const chatBox = document.getElementById('chatBox');
     const userInput = document.getElementById('userInput');
@@ -414,14 +448,21 @@
     const chatContainer = document.getElementById('chatContainer');
     const startButton = document.getElementById('startButton'); 
 
-    const icon = "📚"; 
+    const icon = "📝"; 
     const BOT_DELAY = 800; 
-    const MAX_RANDOM_DELAY = 800;
+    const MAX_RANDOM_DELAY = 1200;
 
     // ===========================================
-    // ASOSIY YUKLASH MANTIQI (O'ZGARTIRILDI)
+    // ASOSIY YUKLASH MANTIQI
     // ===========================================
     
+    function appendDisclaimer() {
+        const disclaimer = document.createElement('div');
+        disclaimer.classList.add('disclaimer-message');
+        disclaimer.innerHTML = '⚠️ **Ogohlantirish:** Ushbu AI bot faqat Oʻzbekiston Respublikasi 6-sinf **Ona tili va Adabiyot** darsliklari asosida tayyorlangan. Berilgan maʼlumotlar shu doiradagi oʻquv materiallariga mos keladi.';
+        chatBox.appendChild(disclaimer);
+    }
+
     function startChat() {
         // 1. Splash screen'ni yashirish
         splashScreen.classList.add('hidden');
@@ -429,11 +470,14 @@
         // 2. Asosiy chat oynasini ko'rsatish
         setTimeout(() => {
              chatContainer.style.opacity = '1';
-        }, 300); // Yashirish animatsiyasidan so'ng
+        }, 300); 
 
-        // 3. Birinchi xabarni yuklash
+        // 3. Ogohlantirish xabarini chiqarish
+        appendDisclaimer();
+
+        // 4. Birinchi xabarni yuklash
         appendMessage(
-            `Assalomu alaykum! **AI Ona tili va Adabiyot Boti** ishga tushdi. Marhamat, 6-sinf mavzulari bo'yicha savollaringizni bering!`,
+            `Assalomu alaykum! ${icon} **AI Ona tili va Adabiyot Ustozi** ishga tushdi. Marhamat, 6-sinf mavzulari bo'yicha savollaringizni bering!`,
             'bot-message'
         );
         document.getElementById('sendButton').onclick = sendInputFromButton;
@@ -445,7 +489,7 @@
     startButton.addEventListener('click', startChat);
 
     // ===========================================
-    // QOLGAN FUNKSIYALAR (SAQLANGAN)
+    // QOLGAN FUNKSIYALAR
     // ===========================================
     
     function setInputDisabled(disabled) {
@@ -471,6 +515,7 @@
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', className);
         
+        // Bold-term formatlash
         const formattedText = text.replace(/\*\*(.*?)\*\*/g, (match, p1) => {
             return `<span class="bold-term">${p1.trim()}</span>`;
         });
@@ -480,13 +525,8 @@
         timeElement.classList.add('message-time');
         timeElement.textContent = time;
 
-        if (isUser) {
-            wrapper.appendChild(messageElement);
-            wrapper.appendChild(timeElement); 
-        } else {
-            wrapper.appendChild(messageElement);
-            wrapper.appendChild(timeElement);
-        }
+        wrapper.appendChild(messageElement);
+        wrapper.appendChild(timeElement); 
         
         chatBox.appendChild(wrapper);
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -540,35 +580,36 @@
 
 
     // ===========================================
-    // JAVOB MANTIQI (SAQLANGAN)
+    // JAVOB MANTIQI (YANGILANDI)
     // ===========================================
     function generateLangLitResponse(userText) {
         const lowerCaseText = userText.toLowerCase().trim().replace(/['ʼ`]/g, ''); 
 
         const responses = {
             "felning qaysi turlari 6-sinfda otiladi": `${icon} 6-sinfda asosan **Fe'lning mayllari, nisbatlari** va **Fe'lning asosiy shakllari** (harakat nomi, sifatdosh, ravishdosh) o'tiladi.`,
-            "fel mayllari nima": `${icon} **Fe'l mayllari** (Xabar, Buyruq-istak, Shart-istak) harakatning voqelikka munosabatini bildiradi. Masalan: **o'qiydi** (xabar), **o'qisin** (buyruq).`,
-            "fel nisbatlari nima": `${icon} **Fe'l nisbatlari** (Aniq, O'zlik, Majhul, Birgalik) harakatning bajaruvchi (ega)ga munosabatini ko'rsatadi.`,
+            "fel mayllari nima": `${icon} **Fe'l mayllari** harakatning voqelikka munosabatini ifodalaydi. Bular: \n1. **Xabar mayli** (Harakatning oddiy bajarilishini bildiradi: **bordi, keladi**). \n2. **Buyruq-istak mayli** (Harakatni bajarishga undash: **boring, kelsin**). \n3. **Shart-istak mayli** (Shart yoki istakni bildiradi: **borsa, kelsa edi**).`,
+            "fel nisbatlari nima": `${icon} **Fe'l nisbatlari** harakatning bajaruvchi (ega)ga munosabatini ko'rsatadi. 6-sinfda o'tiladiganlari: \n* **Aniq nisbat:** Harakat egasi tomonidan bajariladi. \n* **O'zlik nisbat:** Harakat o'z ustida bajariladi (**-in, -il**). \n* **Majhul nisbat:** Harakatning egasi noma'lum (**-il, -n**). \n* **Birgalik nisbat:** Harakat birgalikda bajariladi (**-ish**).`,
             "harakat nomi nima": `${icon} **Harakat nomi** fe'lning ish-harakatini ot kabi nomlab ko'rsatadi. Qo'shimchalari: **-ish, -moq, -uv** (Masalan: **yozish, o'qimoq**).`,
-            "sifatdosh nima": `${icon} **Sifatdosh** harakatni bajaruvchi yoki harakatga uchragan narsaning belgisini sifat kabi ifodalaydi. (Masalan: **kelgan** odam, **o'qiladigan** kitob).`,
-            "ravishdosh nima": `${icon} **Ravishdosh** asosiy fe'lga bog'lanib, uning bajarilish tarzi, payti, sababini bildiradi. (Masalan: **yugurib** keldi, **o'qiganimdan so'ng**).`,
-            "felning otgan zamoni": `${icon} **Fe'lning o'tgan zamoni** harakatning gapirilish paytidan avval sodir bo'lganini bildiradi. Asosan **-di, -gan, -ib edi** kabi shakllarda ifodalanadi.`,
-            "felning hozirgi zamoni": `${icon} **Fe'lning hozirgi zamoni** harakatning gapirilish paytida davom etayotganini bildiradi. **-moqda, -yap, -a(y)otir** qo'shimchalari orqali yasaladi.`,
-            "otning kelishiklari nima": `${icon} **Otning kelishiklari** Otlarning boshqa so'zlarga bo'lgan munosabatini bildiradi. O'zbek tilida **6 ta kelishik** bor (Bosh, Qaratqich, Tushum, Jo'nalish, O'rin-payt, Chiqish).`,
-            "kelishiklar vazifasi": `${icon} **Kelishiklar** otlarni gapda ega, to'ldiruvchi, aniqlovchi yoki hol vazifasida kelishini ta'minlaydi.`,
-            "ko'makchi so'zlar nima": `${icon} **Ko'makchilar** (uchun, bilan, kabi, to'g'risida) mustaqil so'zlarga qo'shilib, ularning boshqa so'zlar bilan bog'lanishini ta'minlaydi.`,
-            "boglovchi nima": `${icon} **Bog'lovchi** so'zlarni yoki gaplarni bir-biriga bog'lash uchun ishlatiladi. (Masalan: **va, ham, ammo**).`,
-            "yuklamalar turlari nima": `${icon} **Yuklamalar** (mi, u/yu, faqat, ham, na) gapga qo'shimcha ma'no (so'roq, ta'kid, gumon) beruvchi yordamchi so'z turkumidir.`,
-            "bobur hayoti va ijodi": `${icon} **Zahiriddin Muhammad Bobur** (1483-1530) — buyuk shoh, shoir va olim. Asosiysi: **"Boburnoma"** (tarixiy-memuar asar).`,
-            "g'afur g'ulom asarlari": `${icon} **G'afur G'ulom** (1903-1966) — Xalq shoiri. 6-sinfda uning **"Shum bola"** qissasi, **"Vaqt"** kabi she'rlari o'tiladi.`,
-            "shum bola bosh qahramoni kim": `${icon} G'afur G'ulomning **"Shum bola"** qissasining bosh qahramoni — **Qoravoy**dir. Uning sarguzashtlari orqali yozuvchi davrni ko'rsatadi.`,
-            "furqat va muqimiy ijodi": `${icon} **Furqat va Muqimiy** XIX asr oxiri, XX asr boshidagi ma'rifatparvar shoirlar. Ijodlarida ijtimoiy haqsizlik va adolat mavzulari yoritilgan.`,
-            "navoiy bobur aloqasi": `${icon} **Alisher Navoiy** (XV asr) Boburning bobosi **Amir Temur** davrida yashagan. Bobur o'zining she'riyat va adabiyotga bo'lgan muhabbatida Navoiy ijodini yuksak qadrlagan.`,
-            "ertak nima": `${icon} **Ertak** — to'qima syujetga asoslangan, sehrli yoki hayotiy voqealarni hikoya qiluvchi xalq og'zaki ijodi janri.`,
-            "maqol nima": `${icon} **Maqol** — qisqa, obrazli, chuqur mazmunli, asosan hayotiy xulosa va ta'limotni ifodalovchi turg'un gap. (Masalan: "Mehnat – rohat").`,
-            "doston nima": `${icon} **Doston** — Qahramonlik, tarixiy yoki sevgi mavzusidagi she'riy shaklda yozilgan katta hajmli epik asar. Masalan: **"Alpomish"**.`,
-            "maqol va matal farqi": `${icon} **Maqol** tugallangan fikrni beradi (**"Bilim olar yoshdan"**), **Matal** esa o'xshatish, taqqoslash ma'nosini bildiradi, ammo mustaqil fikrni yakunlamaydi (**"Qizil olma kabi"**).`,
-            "default": `${icon} Berilgan savol 6-sinf ona tili va adabiyot mavzulariga mos kelmadi. Iltimos, **Fe'l, Bog'lovchi, Bobur, G'afur G'ulom, Ertak** kabi mavzular doirasida so'rov yuboring.`,
+            "sifatdosh nima": `${icon} **Sifatdosh** harakatni bajaruvchi yoki harakatga uchragan narsaning belgisini sifat kabi ifodalaydi. Asosiy qo'shimchalari: **-gan, -ayotgan, -adigan, -r** (Masalan: **yozgan** bola, **o'qiladigan** kitob).`,
+            "ravishdosh nima": `${icon} **Ravishdosh** asosiy fe'lga bog'lanib, uning bajarilish tarzi, payti, sababini bildiradi. Qo'shimchalari: **-b, -ib, -a, -y, -gach, -gani** (Masalan: **yugurib** keldi, **o'qiganimdan so'ng**).`,
+            
+            "felning otgan zamoni": `${icon} **Fe'lning o'tgan zamoni** harakatning gapirilish paytidan avval sodir bo'lganini bildiradi. Asosiy turlari: \n* **Guvohli o'tgan zamon** (-di): Harakatni ko'rgan holda aytish (**keldi**). \n* **Guvohsiz o'tgan zamon** (-gan): Harakatni bilvosita aytish (**kelgan**).`,
+            "felning hozirgi zamoni": `${icon} **Fe'lning hozirgi zamoni** harakatning gapirilish paytida davom etayotganini bildiradi. Qo'shimchalari: \n* **-moqda** (Men **o'qimoqdaman**). \n* **-yap** (Ular **kelishyapti**). \n* **-a(y)otir** (U **yozayotir**).`,
+            "felning kelasi zamoni": `${icon} **Fe'lning kelasi zamoni** harakatning nutq so'zlanayotgan paytdan keyin sodir bo'lishini bildiradi. Qo'shimchalari: **-adi, -r, -moqchi** (Masalan: **yozadi, aytar, bormoqchiman**).`,
+            
+            "otning kelishiklari nima": `${icon} **Otning kelishiklari** Otlarning boshqa so'zlarga bo'lgan munosabatini bildiradi. O'zbek tilida **6 ta kelishik** bor.`,
+            "boglovchi nima": `${icon} **Bog'lovchi** so'zlarni yoki gaplarni bir-biriga bog'lash uchun ishlatiladigan yordamchi so'z turkumidir. Turlari: **Teng bog'lovchilar** (**va, ammo**) va **Ergashtiruvchi bog'lovchilar** (**chunki, agar**).`,
+            "yuklamalar turlari nima": `${icon} **Yuklamalar** (mi, u/yu, faqat, ham, na, -ku) gapga qo'shimcha ma'no (so'roq, ta'kid, gumon) beruvchi yordamchi so'z turkumidir.`,
+            
+            "bobur hayoti va ijodi": `${icon} **Zahiriddin Muhammad Bobur** (1483-1530) — buyuk shoh, shoir va olim. Asosiysi: **"Boburnoma"** (tarixiy-memuar asar). U temuriy shahzodalardan bo'lib, Hindistonda Boburiylar davlatiga asos solgan.`,
+            "g'afur g'ulom asarlari": `${icon} **G'afur G'ulom** (1903-1966) — Xalq shoiri. 6-sinfda uning **"Shum bola"** qissasi, **"Vaqt"** kabi she'rlari o'tiladi. U o'zbek adabiyotining eng yirik namoyandalaridan biri.`,
+            "shum bola bosh qahramoni kim": `${icon} G'afur G'ulomning **"Shum bola"** qissasining bosh qahramoni — **Qoravoy**dir. Asar o'zbek xalqining o'tmishdagi turmush tarzini yorqin aks ettirgan.`,
+            "furqat va muqimiy ijodi": `${icon} **Furqat va Muqimiy** XIX asr oxiri, XX asr boshidagi ma'rifatparvar shoirlar. Ijodlarida ijtimoiy haqsizlik, ma'rifatga chaqiriq va adolat mavzulari yoritilgan.`,
+            
+            "ertak nima": `${icon} **Ertak** — to'qima syujetga asoslangan, sehrli yoki hayotiy voqealarni hikoya qiluvchi xalq og'zaki ijodi janri. Ertaklar asosan **sehrli, hayvonlar haqidagi** va **maishiy-hayotiy** turlarga bo'linadi.`,
+            "maqol va matal farqi": `${icon} **Maqol** tugallangan fikrni, hikmatli xulosani beradi (masalan: **"Bilim olar yoshdan"**). **Matal** esa o'xshatish, taqqoslash ma'nosini bildiradi, mustaqil hukm yoki fikrni yakunlamaydi (masalan: **"Qizil olma kabi"**).`,
+            
+            "default": `${icon} Berilgan savol 6-sinf ona tili va adabiyot mavzulariga mos kelmadi. Iltimos, **Fe'lning zamonlari, Bog'lovchilar, Boburning "Boburnoma"si** kabi mavzular doirasida so'rov yuboring.`
         };
         
         for (const [keyword, response] of Object.entries(responses)) {
@@ -581,7 +622,7 @@
     }
     
     // ===========================================
-    // TEZKOR TUGMALAR STRUKTURASI (SAQLANGAN)
+    // TEZKOR TUGMALAR STRUKTURASI
     // ===========================================
     
     const QUICK_QUERY_TREE = {
@@ -593,23 +634,22 @@
             { text: "Tasodifiy savollar", query: "Tasodifiy savollarni ko'rsat", next_queries: "shuffle_all", is_navigation: true }
         ],
         "tilshunoslik_6": [
-            { text: "Fe'l bo'yicha savollar", query: "Fe'lning qaysi turlari 6-sinfda o'tiladi?", next_queries: "fel_6" },
-            { text: "Ot (Takrorlash va Kelishiklar)", query: "Ot kelishiklari haqida", next_queries: "ot_6" }, 
-            { text: "Fe'lning shakllari", query: "Fe'lning shakllari nima?", next_queries: "fel_shakllari_6" },
-            { text: "Yordamchi so'zlar", query: "Ko'makchi so'zlar nima?", next_queries: "yordamchi_sozlar_6" },
+            { text: "Fe'lning asosiy mavzulari", query: "Fe'lning qaysi turlari 6-sinfda o'tiladi?", next_queries: "fel_6" },
+            { text: "Fe'lning zamonlari", query: "Fe'l zamonlari qanday?" , next_queries: "fel_zamonlari_6" },
+            { text: "Fe'lning shakllari (Harakat nomi, Sifatdosh, Ravishdosh)", query: "Fe'lning shakllari nima?", next_queries: "fel_shakllari_6" },
+            { text: "Yordamchi so'zlar (Bog'lovchi, Yuklama)", query: "Ko'makchi so'zlar nima?", next_queries: "yordamchi_sozlar_6" },
             { text: "⬅️ Bosh menyuga qaytish", query: "6-sinf mavzularini ko'rsat", next_queries: "main_menu", is_navigation: true },
-        ],
-        "ot_6": [
-            { text: "Otning kelishiklari", query: "Otning kelishiklari nima" },
-            { text: "Kelishiklar vazifasi", query: "Kelishiklar vazifasi" },
-            { text: "Ot turkumi umumiy", query: "Ot turkumi qanday so'z turkumi" },
-            { text: "⬅️ Orqaga (Tilshunoslik)", query: "6-sinf grammatikasi", next_queries: "tilshunoslik_6", is_navigation: true },
         ],
         "fel_6": [
             { text: "Fe'l mayllari", query: "Fe'l mayllari nima?" },
             { text: "Fe'l nisbatlari", query: "Fe'l nisbatlari nima?" },
-            { text: "Fe'lning o'tgan zamoni", query: "Fe'lning otgan zamoni" }, 
-            { text: "Fe'lning hozirgi zamoni", query: "Fe'lning hozirgi zamoni" }, 
+            { text: "Fe'l turkumi umumiy", query: "Fe'l turkumi qanday so'z turkumi" },
+            { text: "⬅️ Orqaga (Grammatika)", query: "6-sinf grammatikasi", next_queries: "tilshunoslik_6", is_navigation: true },
+        ],
+        "fel_zamonlari_6": [
+            { text: "O'tgan zamon", query: "Fe'lning otgan zamoni" }, 
+            { text: "Hozirgi zamon", query: "Fe'lning hozirgi zamoni" }, 
+            { text: "Kelasi zamon", query: "Fe'lning kelasi zamoni" }, 
             { text: "⬅️ Orqaga (Grammatika)", query: "6-sinf grammatikasi", next_queries: "tilshunoslik_6", is_navigation: true },
         ],
         "fel_shakllari_6": [
@@ -628,24 +668,24 @@
             { text: "Zahiriddin Muhammad Bobur", query: "Bobur hayoti va ijodi" },
             { text: "G'afur G'ulom asarlari", query: "G'afur G'ulom asarlari" },
             { text: "Shum bola bosh qahramoni", query: "Shum bola bosh qahramoni kim" }, 
-            { text: "Navoiy va Bobur aloqasi", query: "Navoiy Bobur aloqasi" }, 
             { text: "Furqat va Muqimiy ijodi", query: "Furqat va Muqimiy ijodi" },
             { text: "⬅️ Bosh menyuga qaytish", query: "6-sinf mavzularini ko'rsat", next_queries: "main_menu", is_navigation: true },
         ],
         "xalq_ijodi_6": [
             { text: "Ertak turlari", query: "Ertak nima?" },
+            { text: "Maqol nima?", query: "Maqol nima" },
             { text: "Doston nima?", query: "Doston nima" }, 
             { text: "Maqol va matal farqi", query: "Maqol va matal farqi" }, 
-            { text: "Topishmoq va Afsona", query: "Afsona nima?" },
             { text: "⬅️ Bosh menyuga qaytish", query: "6-sinf mavzularini ko'rsat", next_queries: "main_menu", is_navigation: true },
         ],
         "shuffle_all": [
+             // Navigatsiya tugmalari doim yuqorida turishi uchun
             { text: "🔄 Boshqa tasodifiy savollar", query: "Tasodifiy savollarni yangilash", next_queries: "shuffle_all", is_navigation: true },
-            { text: "⬅️ Bosh menyuga qaytish", query: "6-sinf mavzularini ko'rsat", next_queries: "main_menu", is_navigation: true },
+            { text: "⬅️ Bosh menyuga qaytish", query: "6-sinf mavzularini ko'rsat", next_queries: "main_menu", is_navigation: true }
         ]
     };
     
-    // Barcha so'rovlarni yig'ish
+    // Barcha so'rovlarni yig'ish (Shuffle uchun)
     const ALL_QUERY_LIST = Object.values(QUICK_QUERY_TREE)
         .flat()
         .filter(q => !q.is_navigation) 
@@ -662,19 +702,26 @@
     function displayQuickQuestions(key = 'main_menu') {
         let headerText = "6-sinf mavzularini tanlang:";
         let buttonsToDisplay = [];
+        let navigationButtons = QUICK_QUERY_TREE[key] ? QUICK_QUERY_TREE[key].filter(btn => btn.is_navigation) : [];
+        let contentButtons = QUICK_QUERY_TREE[key] ? QUICK_QUERY_TREE[key].filter(btn => !btn.is_navigation) : [];
         
         if (key === 'shuffle_all') {
             headerText = "📚 6-sinf bo'yicha tasodifiy mavzular (15 ta):";
             shuffleArray(ALL_QUERY_LIST);
             const randomQueries = ALL_QUERY_LIST.slice(0, 15);
             
+            // Navigatsiya tugmalarini alohida qo'shish
             buttonsToDisplay = [
-                ...randomQueries,
-                ...QUICK_QUERY_TREE[key]
+                ...navigationButtons, 
+                ...randomQueries
             ];
             
         } else {
             buttonsToDisplay = QUICK_QUERY_TREE[key] || QUICK_QUERY_TREE['main_menu'];
+            // Navigatsiya tugmalari oxirida turishi uchun
+            navigationButtons = buttonsToDisplay.filter(btn => btn.is_navigation);
+            contentButtons = buttonsToDisplay.filter(btn => !btn.is_navigation);
+            buttonsToDisplay = [...contentButtons, ...navigationButtons];
         }
 
         let html = `<div class="suggestion-header">${headerText}</div>`;
@@ -683,14 +730,16 @@
         buttonsToDisplay.forEach(btn => {
             const nextQueriesAttr = btn.next_queries ? `data-next-queries="${btn.next_queries}"` : 'data-next-queries="main_menu"';
             const isNavigationAttr = btn.is_navigation ? 'data-is-navigation="true"' : '';
+            const navClass = btn.is_navigation ? ' style="order: 99; background-color: #555; border-color: #777;"' : ''; // Navigatsiyani pastga tushirish
 
             html += `<button class="suggestion-button" 
-                        data-query="${btn.query}" 
-                        ${nextQueriesAttr} 
-                        ${isNavigationAttr}
-                    >
-                        ${btn.text}
-                    </button>`;
+                                data-query="${btn.query}" 
+                                ${nextQueriesAttr} 
+                                ${isNavigationAttr}
+                                ${navClass}
+                            >
+                                ${btn.text}
+                            </button>`;
         });
         
         html += '</div>';
@@ -716,10 +765,10 @@
     }
     
     // ===========================================
-    // INIT (BOSHLANISH) - Endi faqat tugmaga ulanadi
+    // INIT (BOSHLANISH)
     // ===========================================
     window.onload = () => {
-        // Chat oynasi avval yashirin bo'ladi, tugma bosilgach ko'rinadi.
+        // Hozircha bu yer bo'sh qoladi, chunki `startButton` bilan boshlanadi.
     };
 </script>
 
